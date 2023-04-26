@@ -8,7 +8,7 @@ public class MyTaxiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MyTaxiApplication.class, args);
-        System.out.println("asdadasasd");
+        System.out.println("asdadasd");
     }
 
 }
