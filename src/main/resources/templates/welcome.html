@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome to MyTaxi</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
-    <script src="../static/scripts/main.js"></script>
-    <script src="../static/scripts/welcome.js"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{js/main.js}"></script>
+    <script th:src="@{js/welcome.js}"></script>
 </head>
 <body>
 
@@ -20,7 +20,7 @@
 
 <div class="login-panel">
     <h1 id="h1-login-to-mytaxi">Login to MyTaxi</h1>
-    <img id="info" src="../static/images/information.png" alt="info"/>
+    <img id="info" th:src="@{/image/information.png}" alt="info"/>
     <form class="login-form" style="left: 33%">
 
         <div style="display: flex; align-items: center; margin-bottom: 10px;">

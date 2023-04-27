@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
-  <link rel="stylesheet" href="../static/css/styles.css">
-  <script src="../static/scripts/main.js"></script>
-  <script src="../static/scripts/register.js"></script>
+  <link rel="stylesheet" th:href="@{css/styles.css}">
+  <script th:src="@{js/main.js}"></script>
+  <script th:src="@{js/register.js}"></script>
 </head>
 <body>
   <div class="main-header">
@@ -18,7 +18,7 @@
 
   <div class="login-panel"  style="height: 400px;">
     <h1 id="h1-login-to-mytaxi">Register to MyTaxi</h1>
-    <img id="info" src="../static/images/information.png" alt="info"/>
+    <img id="info" th:src="@{/image/information.png}" alt="info"/>
     <form class="login-form" style="left: 32%; top: 20%;">
 
       <div style="display: flex; align-items: center; margin-bottom: 10px;">

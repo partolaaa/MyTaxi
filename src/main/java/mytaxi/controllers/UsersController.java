@@ -14,7 +14,7 @@ public class UsersController {
     @Value("${googleMapsAPIKey}")
     private String googleMapsAPIKey;
 
-    @GetMapping("/")
+    @GetMapping({"/", "/welcome"})
     public String welcome () {
         return "welcome";
     }
