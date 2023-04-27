@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+  <link rel="stylesheet" href="../static/css/styles.css">
+  <script src="../static/scripts/main.js"></script>
+  <script src="../static/scripts/register.js"></script>
+</head>
+<body>
+  <div class="main-header">
+    <h1 id="h1-mytaxi">MyTaxi</h1>
+    <div>
+      <h3 id="register-button" class="h3-head-buttons">Register</h3>
+      <h3 id="login-button" class="h3-head-buttons">Login</h3>
+    </div>
+  </div>
+
+  <div class="login-panel"  style="height: 400px;">
+    <h1 id="h1-login-to-mytaxi">Register to MyTaxi</h1>
+    <img id="info" src="../static/images/information.png" alt="info"/>
+    <form class="login-form" style="left: 32%; top: 20%;">
+
+      <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <input class="input-fields" type="text" id="name-input" name="name" placeholder="Username">
+      </div>
+
+      <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <input class="input-fields" type="text" id="login-input" name="login" placeholder="Email">
+      </div>
+
+      <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <input class="input-fields" type="password" id="password-input" name="password" placeholder="Password">
+      </div>
+
+      <div style="display: flex; align-items: center; margin-bottom: 20px;">
+        <input class="input-fields" type="password" id="repeat-password-input" name="repeat-password" placeholder="Repeat Password">
+      </div>
+
+      <button type="submit" class="login-submit">Register</button>
+
+      <div style="margin-top: 20px;">
+        <span id="login-span" class="under-login-span">Login</span>
+      </div>
+    </form>
+  </div>
+
+
+</body>
+</html>

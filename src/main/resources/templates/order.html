@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Taxi</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDlwV6b_hqFDVAvTo05XuB-CwHWVaCDwSA&libraries=places&callback=initMap" async defer></script>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <script src="../static/scripts/main.js"></script>
+    <script src="../static/scripts/order.js"></script>
+</head>
+<body>
+<div class="main-header">
+    <h1 id="h1-mytaxi">MyTaxi</h1>
+    <div>
+        <h3 class="greetings">Hello, ${username}</h3>
+    </div>
+</div>
+<div class="login-panel"  style="height: 50%; width: 90%">
+    <h1 id="h1-login-to-mytaxi">Order</h1>
+    <img id="info" style="right: unset" src="../static/images/information.png" alt="info"/>
+
+    <form class="login-form" style="left: 10%; top: 20%;">
+        <table>
+            <tr class="form-field">
+                <td><label for="datetime-input" class="input-label">Booking Date/Time:</label></td>
+                <td><input class="input-fields" type="datetime-local" id="datetime-input" name="datetime"></td>
+            </tr>
+
+            <tr class="form-field">
+                <td><label for="pickup-input" class="input-label">Pickup Address:</label></td>
+                <td><input class="input-fields" type="text" id="pickup-input" name="pickup"></td>
+            </tr>
+
+            <tr class="form-field">
+                <td><label for="destination-input" class="input-label">Destination Address:</label></td>
+                <td><input class="input-fields" type="text" id="destination-input" name="destination"></td>
+            </tr>
+
+            <tr class="form-field">
+                <td><label for="note-input" class="input-label">Notes:</label></td>
+                <td><input class="input-fields" type="text" id="note-input" name="note" placeholder="Some special request?"></td>
+            </tr>
+
+            <tr class="form-field">
+                <td><label for="price" class="input-label">Estimated price:</label></td>
+                <td><span id="price" class="estimated-price">XXX.xx ₴</span></td>
+            </tr>
+        </table>
+
+        <div style="margin-right: 260px;">
+            <label for="pay-with-bonuses" style="color: darkorange; font-family: Chakra,sans-serif;">
+                Pay with bonuses
+            </label>
+            <input type="checkbox" id="pay-with-bonuses" >
+        </div>
+
+
+        <button style="margin-top: 30px; margin-left: 13px" type="submit" class="login-submit">Order</button>
+    </form>
+
+    <div id="map"></div>
+</div>
+</body>
+</html>
