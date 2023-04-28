@@ -1,6 +1,6 @@
 package mytaxi.partola.models;
 
-public class User implements Account{
+public class User implements Account {
 
     @Override
     public void signIn() {
