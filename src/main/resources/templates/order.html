@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Order Taxi</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}" async defer></script>
+    <script th:src="@{https://maps.googleapis.com/maps/api/js?key=${key}}" async defer></script>
     <link rel="stylesheet" th:href="@{css/styles.css}">
     <script th:src="@{js/main.js}"></script>
     <script th:src="@{js/order.js}"></script>
@@ -18,7 +18,6 @@
 <div class="login-panel"  style="height: 50%; width: 90%">
     <h1 id="h1-login-to-mytaxi">Order</h1>
     <img id="info" style="right: unset" th:src="@{image/information.png}" alt="info"/>
-
     <form class="login-form" style="left: 10%; top: 20%;">
         <table>
             <tr class="form-field">
