@@ -26,7 +26,7 @@ public class UsersController {
 
     @GetMapping("order")
     public String order (Model model) {
-        model.addAttribute("key", googleMapsAPIKey);
+        model.addAttribute("googleMapsAPIKey", googleMapsAPIKey);
         return "order";
     }
 }
