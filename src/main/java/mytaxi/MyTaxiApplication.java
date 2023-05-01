@@ -1,4 +1,4 @@
-package com.partola.mytaxi;
+package mytaxi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,6 +7,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MyTaxiApplication {
     public static void main(String[] args) {
         SpringApplication.run(MyTaxiApplication.class, args);
-        System.out.println("test");
     }
 }
