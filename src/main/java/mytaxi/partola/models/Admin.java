@@ -1,13 +1,5 @@
 package mytaxi.partola.models;
 
-public class Admin implements Account {
-    @Override
-    public void signIn() {
+public class Admin {
 
-    }
-
-    @Override
-    public void logOut() {
-
-    }
 }

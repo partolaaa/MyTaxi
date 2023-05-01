@@ -1,16 +1,19 @@
 function loadMain () {
-    document.getElementById("register-button").onclick = function() {
-        window.open("register");
-        //console.log("register");
-    };
+    let registerButton = document.getElementById("register-button");
+    let loginButton = document.getElementById("login-button");
+    let infoButton = document.getElementById("info");
+    let myTaxiButton = document.getElementById("h1-mytaxi");
 
-    document.getElementById("login-button").onclick = function() {
-        //window.open("https://www.youtube.com/watch?v=NK2ERgfrdj8");
-        console.log("login");
-    };
+    setButtonOnClick(registerButton, "/register");
+    setButtonOnClick(loginButton, "/login");
+    setButtonOnClick(infoButton, "/info");
+    setButtonOnClick(myTaxiButton, "/");
+}
 
-    document.getElementById("info").onclick = function() {
-        //window.open("https://www.youtube.com/watch?v=NK2ERgfrdj8");
-        console.log("info");
-    };
+function setButtonOnClick(button, path) {
+    if (button != null) {
+        button.onclick = function() {
+            window.location.replace(path);
+        };
+    }
 }

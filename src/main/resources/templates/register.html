@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
@@ -8,34 +8,35 @@
   <script th:src="@{js/register.js}"></script>
 </head>
 <body>
-  <div class="main-header">
-    <h1 id="h1-mytaxi">MyTaxi</h1>
-    <div>
-      <h3 id="register-button" class="h3-head-buttons">Register</h3>
-      <h3 id="login-button" class="h3-head-buttons">Login</h3>
-    </div>
-  </div>
+  <th:block th:insert="~{/_menu.html}"></th:block>
 
   <div class="login-panel"  style="height: 400px;">
     <h1 id="h1-login-to-mytaxi">Register to MyTaxi</h1>
-    <img id="info" th:src="@{/image/information.png}" alt="info"/>
-    <form class="login-form" style="left: 32%; top: 20%;">
-
+    <img id="info" th:src="@{images/info.png}" alt="info"/>
+    <form class="login-form" style="left: 32%; top: 20%;" th:action="@{/register}" th:method="POST" th:object="${customUser}">
       <div style="display: flex; align-items: center; margin-bottom: 10px;">
-        <input class="input-fields" type="text" id="name-input" name="name" placeholder="Username">
+        <input th:field="*{name}" class="input-fields" type="text" id="name-input" name="name" placeholder="Username">
+        <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Username Error</div>
       </div>
 
       <div style="display: flex; align-items: center; margin-bottom: 10px;">
-        <input class="input-fields" type="text" id="login-input" name="login" placeholder="Email">
+        <input class="input-fields" th:field="*{email}" type="text" id="email-input" name="email" placeholder="Email">
+        <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
       </div>
 
       <div style="display: flex; align-items: center; margin-bottom: 10px;">
-        <input class="input-fields" type="password" id="password-input" name="password" placeholder="Password">
+        <input class="input-fields" th:field="*{phoneNumber}" type="text" id="phone-input" name="phoneNumber" placeholder="Phone number">
+        <div style="color:red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Number Error</div>
       </div>
 
       <div style="display: flex; align-items: center; margin-bottom: 20px;">
-        <input class="input-fields" type="password" id="repeat-password-input" name="repeat-password" placeholder="Repeat Password">
+        <input class="input-fields" th:field="*{password}" type="password" id="password-input" name="password" placeholder="Password">
+        <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Pass Error</div>
       </div>
+
+      <!--<div style="display: flex; align-items: center; margin-bottom: 20px;">
+        <input class="input-fields" type="password" id="repeat-password-input" name="repeat-password" placeholder="Repeat Password">
+      </div>-->
 
       <button type="submit" class="login-submit">Register</button>
 

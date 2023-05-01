@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Order Taxi</title>
@@ -12,12 +12,12 @@
 <div class="main-header">
     <h1 id="h1-mytaxi">MyTaxi</h1>
     <div>
-        <h3 class="greetings">Hello, ${username}</h3>
+        <h3 class="greetings" th:text="'Hello, ' + ${username}">Template</h3>
     </div>
 </div>
 <div class="login-panel"  style="height: 50%; width: 90%">
     <h1 id="h1-login-to-mytaxi">Order</h1>
-    <img id="info" style="right: unset" th:src="@{image/information.png}" alt="info"/>
+    <img id="info" style="right: unset" th:src="@{images/info.png}" alt="info"/>
     <form class="login-form" style="left: 10%; top: 20%;">
         <table>
             <tr class="form-field">
@@ -46,11 +46,11 @@
             </tr>
         </table>
 
-        <div style="margin-right: 260px;">
-            <label for="pay-with-bonuses" style="color: darkorange; font-family: Chakra,sans-serif;">
+        <div style="margin-right: 240px;">
+            <label for="pay-with-bonuses" style="color: darkorange; font-family: Chakra, sans-serif;">
                 Pay with bonuses
             </label>
-            <input type="checkbox" id="pay-with-bonuses" >
+            <input type="checkbox" id="pay-with-bonuses" style="cursor: pointer">
         </div>
 
 
