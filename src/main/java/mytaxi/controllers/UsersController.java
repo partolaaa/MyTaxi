@@ -27,7 +27,7 @@ public class UsersController {
     }
 
     @GetMapping("order")
-    public String order (Model model) {
+    public String order(Model model) {
         model.addAttribute("googleMapsAPIKey", googleMapsAPIKey);
         // getUsername() method returns email in our case
         String currentUserEmail = ((CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();

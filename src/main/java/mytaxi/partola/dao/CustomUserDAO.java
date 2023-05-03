@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -25,7 +26,7 @@ public class CustomUserDAO {
         customUser.setPassword(passwordEncoder.encode(customUser.getPassword()));
 
         jdbcTemplate.update(
-                "INSERT INTO \"user\" (name, password, email, phone_number) VALUES (?, ?, ?, ?)",
+                "INSERT INTO \"user\" (name, password, email, role) VALUES (?, ?, ?, ?)",
                 customUser.getName(),
                 customUser.getPassword(),
                 customUser.getEmail(),
@@ -33,9 +34,22 @@ public class CustomUserDAO {
     }
 
     public Optional<CustomUser> findUserByEmail(String email) {
-        return Optional.ofNullable(jdbcTemplate.query("select * from \"user\" where email=?",
+        return jdbcTemplate.query("select * from \"user\" where email=?",
                         new Object[]{email},
                         new BeanPropertyRowMapper<>(CustomUser.class))
-                .stream().findAny().orElse(null));
+                .stream().findAny();
     }
+
+    public String getUserPasswordById(int user_id){
+        return jdbcTemplate.queryForObject(
+                "SELECT password FROM \"User\" user_id = ?",
+                new Object[]{user_id}, String.class);
+    }
+
+    public String getUserEmailById(int user_id){
+        return jdbcTemplate.queryForObject(
+                "SELECT email FROM \"User\" user_id = ?",
+                new Object[]{user_id}, String.class);
+    }
+
 }
