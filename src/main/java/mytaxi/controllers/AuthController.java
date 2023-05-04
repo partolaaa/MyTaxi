@@ -1,7 +1,8 @@
 package mytaxi.controllers;
 
-import mytaxi.partola.dao.CustomUserDAO;
-import mytaxi.partola.models.CustomUser;
+import mytaxi.partola.dao.ClientDAO;
+import mytaxi.partola.dao.UserDAO;
+import mytaxi.partola.models.Client;
 import mytaxi.partola.util.CustomUserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,32 +20,32 @@ import javax.validation.Valid;
  */
 @Controller
 public class AuthController {
-    private final CustomUserDAO customUserDAO;
+    private final ClientDAO clientDAO;
     private final CustomUserValidator customUserValidator;
 
     @Autowired
-    public AuthController(CustomUserDAO customUserDAO, CustomUserValidator customUserValidator) {
-        this.customUserDAO = customUserDAO;
+    public AuthController(ClientDAO clientDAO, CustomUserValidator customUserValidator) {
+        this.clientDAO = clientDAO;
         this.customUserValidator = customUserValidator;
     }
 
     @GetMapping("register")
-    public String register (@ModelAttribute("customUser") CustomUser customUser) {
+    public String register (@ModelAttribute("client") Client client) {
         return "register";
     }
 
     @PostMapping("register")
-    public String registerNewUser(@ModelAttribute("customUser") @Valid CustomUser customUser,
+    public String registerNewUser(@ModelAttribute("client") @Valid Client client,
                                   BindingResult bindingResult,
                                   Model model) {
 
-        customUserValidator.validate(customUser, bindingResult);
+        customUserValidator.validate(client, bindingResult);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("error", bindingResult.getAllErrors());
             return "register";
         }
-        customUserDAO.createUser(customUser);
+        clientDAO.createClient(client);
         return "redirect:/login";
     }
 

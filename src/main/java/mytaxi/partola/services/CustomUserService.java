@@ -1,6 +1,6 @@
 package mytaxi.partola.services;
 
-import mytaxi.partola.dao.CustomUserDAO;
+import mytaxi.partola.dao.UserDAO;
 import mytaxi.partola.models.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,14 +11,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CustomUserService {
-    private final CustomUserDAO customUserDAO;
+    private final UserDAO userDAO;
 
     @Autowired
-    public CustomUserService(CustomUserDAO customUserDAO) {
-        this.customUserDAO = customUserDAO;
+    public CustomUserService(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
-    public boolean exists (CustomUser customUser) {
-        return customUserDAO.findUserByEmail(customUser.getEmail()).isPresent();
+    public boolean userExistsWithEmail(CustomUser customUser) {
+        return userDAO.findUserByEmail(customUser.getEmail()).isPresent();
+    }
+    public boolean userExistsWithPhoneNumber(CustomUser customUser) {
+        // TODO:
+        return false;
     }
 }

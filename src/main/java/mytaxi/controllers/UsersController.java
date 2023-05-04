@@ -1,6 +1,6 @@
 package mytaxi.controllers;
 
-import mytaxi.partola.dao.CustomUserDAO;
+import mytaxi.partola.dao.UserDAO;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class UsersController {
 
-    private final CustomUserDAO customUserDAO;
+    private final UserDAO userDAO;
     @Value("${googleMapsAPIKey}")
     private String googleMapsAPIKey;
 
     @Autowired
-    public UsersController(CustomUserDAO customUserDAO) {
-        this.customUserDAO = customUserDAO;
+    public UsersController(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @GetMapping("order")
@@ -32,7 +32,7 @@ public class UsersController {
         // getUsername() method returns email in our case
         String currentUserEmail = ((CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
 
-        CustomUser currentUser = customUserDAO.findUserByEmail(currentUserEmail).get();
+        CustomUser currentUser = userDAO.findUserByEmail(currentUserEmail).get();
         model.addAttribute("username", currentUser.getName());
         return "order";
     }

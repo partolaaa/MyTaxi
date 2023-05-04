@@ -13,7 +13,7 @@
   <div class="login-panel"  style="height: 400px;">
     <h1 id="h1-login-to-mytaxi">Register to MyTaxi</h1>
     <img id="info" th:src="@{images/info.png}" alt="info"/>
-    <form class="login-form" style="left: 32%; top: 20%;" th:action="@{/register}" th:method="POST" th:object="${customUser}">
+    <form class="login-form" style="left: 32%; top: 20%;" th:action="@{/register}" th:method="POST" th:object="${client}">
       <div style="display: flex; align-items: center; margin-bottom: 10px;">
         <input th:field="*{name}" class="input-fields" type="text" id="name-input" name="name" placeholder="Username">
         <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Username Error</div>

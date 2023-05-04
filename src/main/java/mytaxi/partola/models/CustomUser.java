@@ -11,6 +11,8 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomUser {
+    private long id;
+
     @NotBlank(message = "Name is required")
     @Length(min = 2, max = 100, message = "Name must be at most 100 characters and at least 2")
     private String name;
@@ -23,11 +25,9 @@ public class CustomUser {
     //@Length(min = 8, max = 30, message = "Password must be between 8 and 30 characters")
     private String password;
 
-    @NotBlank(message = "Phone number is required")
+    /*@NotBlank(message = "Phone number is required")
     //@Pattern(regexp = "\\d{10}", message = "Phone number must be 10 digits")
-    private String phoneNumber;
+    private String phoneNumber;*/
 
-    private Integer bonusAmount;
-    private Integer clientRating;
     private String role;
 }

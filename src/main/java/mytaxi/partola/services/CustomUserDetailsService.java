@@ -1,6 +1,6 @@
 package mytaxi.partola.services;
 
-import mytaxi.partola.dao.CustomUserDAO;
+import mytaxi.partola.dao.UserDAO;
 import mytaxi.partola.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,15 +15,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final CustomUserDAO customUserDAO;
+    private final UserDAO userDAO;
 
     @Autowired
-    public CustomUserDetailsService(CustomUserDAO customUserDAO) {
-        this.customUserDAO = customUserDAO;
+    public CustomUserDetailsService(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return new CustomUserDetails(customUserDAO.findUserByEmail(s).get());
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return new CustomUserDetails(userDAO.findUserByEmail(email).get());
     }
 }

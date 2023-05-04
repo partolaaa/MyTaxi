@@ -30,7 +30,7 @@ public class CustomUserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         CustomUser customUser = (CustomUser) o;
 
-        if (customUserService.exists(customUser)) {
+        if (customUserService.userExistsWithEmail(customUser)) {
             errors.rejectValue("email", "", "User with this email already exists");
         }
     }
