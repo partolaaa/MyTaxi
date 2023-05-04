@@ -15,17 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClientDAO {
     private final JdbcTemplate jdbcTemplate;
     private final UserDAO userDAO;
-    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public ClientDAO(JdbcTemplate jdbcTemplate, UserDAO userDAO, PasswordEncoder passwordEncoder) {
+    public ClientDAO(JdbcTemplate jdbcTemplate, UserDAO userDAO) {
         this.jdbcTemplate = jdbcTemplate;
         this.userDAO = userDAO;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
     public void createClient(Client client) {
-        client.setPassword(passwordEncoder.encode(client.getPassword()));
         userDAO.createUser(client);
 
         int userId = jdbcTemplate.queryForObject("SELECT currval('user_id_seq')", Integer.class);

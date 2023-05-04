@@ -1,6 +1,7 @@
 package mytaxi.partola.services;
 
 import mytaxi.partola.dao.UserDAO;
+import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +24,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return new CustomUserDetails(userDAO.findUserByEmail(email).get());
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        if (userDAO.findUserByEmail(s).isPresent()) {
+            CustomUser customUser = userDAO.findUserByEmail(s).get();
+            return new CustomUserDetails(customUser);
+        } else {
+            throw new UsernameNotFoundException("User with such email not found!");
+        }
     }
 }

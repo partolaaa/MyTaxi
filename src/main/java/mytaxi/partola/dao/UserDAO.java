@@ -33,9 +33,9 @@ public class UserDAO {
     }
 
     public Optional<CustomUser> findUserByEmail(String email) {
-        return Optional.ofNullable(jdbcTemplate.query("select * from \"User\" where email=?",
+        return jdbcTemplate.query("select * from \"User\" where email=?",
                         new Object[]{email},
                         new BeanPropertyRowMapper<>(CustomUser.class))
-                .stream().findAny().orElse(null));
+                .stream().findAny();
     }
 }
