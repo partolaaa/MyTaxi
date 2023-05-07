@@ -18,47 +18,47 @@
 <div class="login-panel"  style="height: 50%; width: 90%">
     <h1 id="h1-login-to-mytaxi">Order</h1>
     <img id="info" style="right: unset" th:src="@{images/info.png}" alt="info"/>
-    <form class="login-form" style="left: 10%; top: 20%;" th:action="@{/createNewOrder}" method="post">
+    <form class="login-form" style="left: 10%; top: 20%;" th:action="@{/createNewOrder}" th:object="${order}" method="post">
         <table>
             <!-- Booking datetime field -->
 
             <tr class="form-field">
                 <td><label for="datetime-input" class="input-label">Booking Date/Time:</label></td>
-                <td><input class="input-fields" type="datetime-local" id="datetime-input" name="booking_datetime"></td>
+                <td><input class="input-fields" type="datetime-local" id="datetime-input" th:field="*{bookingDateTime}" name="booking_datetime"></td>
             </tr>
 
             <!-- Pickup address field -->
             <tr class="form-field">
                 <td><label for="pickup-input" class="input-label">Pickup Address:</label></td>
-                <td><input class="input-fields" type="text" id="pickup-input" name="pickup_address"></td>
+                <td><input class="input-fields" type="text" id="pickup-input" th:field="*{pickupAddress}" name="pickup_address"></td>
             </tr>
 
             <!-- Destination address field -->
 
             <tr class="form-field">
                 <td><label for="destination-input" class="input-label">Destination Address:</label></td>
-                <td><input class="input-fields" type="text" id="destination-input" name="destination_address"></td>
+                <td><input class="input-fields" type="text" id="destination-input" th:field="*{destinationAddress}" name="destination_address"></td>
             </tr>
 
             <!-- Passenger name field -->
 
             <tr class="form-field">
                 <td><label for="passenger-name-input" class="input-label">Passenger Name:</label></td>
-                <td><input class="input-fields" type="text" id="passenger-name-input" name="passenger_name"></td>
+                <td><input class="input-fields" type="text" id="passenger-name-input" th:field="*{passengerName}" name="passenger_name"></td>
             </tr>
 
             <!-- Passenger phone number field -->
 
             <tr class="form-field">
                 <td><label for="passenger-phone-input" class="input-label">Passenger Phone Number:</label></td>
-                <td><input class="input-fields" type="text" id="passenger-phone-input" name="passenger_phone_number"></td>
+                <td><input class="input-fields" type="text" id="passenger-phone-input" th:field="*{passengerPhoneNumber}" name="passenger_phone_number"></td>
             </tr>
 
             <!-- Booking notes field -->
 
             <tr class="form-field">
                 <td><label for="note-input" class="input-label">Notes:</label></td>
-                <td><input class="input-fields" type="text" id="note-input" name="booking_notes" placeholder="Some special request?"></td>
+                <td><input class="input-fields" type="text" id="note-input" th:field="*{bookingNotes}" name="booking_notes" placeholder="Some special request?"></td>
             </tr>
 
             <!-- Payment type field -->
@@ -66,9 +66,9 @@
             <tr class="form-field">
                 <td><label class="input-label">Payment Type:</label></td>
                 <td>
-                    <input type="radio" id="payment-type-cash" name="payment_type" value="CASH" checked>
+                    <input type="radio" id="payment-type-cash" th:field="*{paymentType}" name="payment_type" value="CASH" checked>
                     <label for="payment-type-cash">Cash</label>
-                    <input type="radio" id="payment-type-card" name="payment_type" value="CARD">
+                    <input type="radio" id="payment-type-card" th:field="*{paymentType}" name="payment_type" value="CARD">
                     <label for="payment-type-card">Card</label>
                 </td>
             </tr>
@@ -88,7 +88,7 @@
             <label for="pay-with-bonuses" style="color: darkorange; font-family: Chakra, sans-serif;">
                 Pay with bonuses
             </label>
-            <input type="checkbox" id="pay-with-bonuses" style="cursor: pointer" name="pay_with_bonuses">
+            <input type="checkbox" id="pay-with-bonuses" th:field="*{payWithBonuses}" style="cursor: pointer" name="pay_with_bonuses">
         </div>
 
 

@@ -24,7 +24,7 @@ public class OrderController {
         this.orderDAO = orderDAO;
     }
     @PostMapping("/createNewOrder")
-    public String  createNewOrder(@Valid @ModelAttribute Order order,
+    public String  createNewOrder(@ModelAttribute("order") @Valid Order order,
                                   BindingResult bindingResult,
                                   Model model
                                ){
@@ -33,10 +33,6 @@ public class OrderController {
             model.addAttribute("error", bindingResult.getAllErrors());
             return "order";
         }
-
-        order.setOrderId(null); // Will be auto-incremented in DB
-        order.setDriverId(null); // Current order status - not accepted by any driver, so driver - null
-        order.setOrderStatus(null); // Current order status - not accepted by any driver
 
         orderDAO.createNewOrder(order);
 
