@@ -15,50 +15,82 @@
         <h3 class="greetings" th:text="'Hello, ' + ${username}">Template</h3>
     </div>
 </div>
-<div class="login-panel"  style="height: 50%; width: 90%">
+<div class="login-panel" style="height: 70%; width: 90%;min-height: 430px;">
     <h1 id="h1-login-to-mytaxi">Order</h1>
     <img id="info" style="right: unset" th:src="@{images/info.png}" alt="info"/>
-    <form class="login-form" style="left: 10%; top: 20%;" th:action="@{/createNewOrder}" th:object="${order}" method="post">
+    <form class="order-form" th:action="@{/createNewOrder}" th:object="${order}" method="post">
         <table>
             <!-- Booking datetime field -->
 
             <tr class="form-field">
                 <td><label for="datetime-input" class="input-label">Booking Date/Time:</label></td>
-                <td><input class="input-fields" type="datetime-local" id="datetime-input" th:field="*{bookingDateTime}" name="booking_datetime"></td>
+                <td>
+                    <div style="color:red" th:if="${#fields.hasErrors('bookingDateTime')}" th:errors="*{bookingDateTime}"></div>
+                    <input class="input-fields" type="datetime-local" id="datetime-input" th:field="*{bookingDateTime}" name="booking_datetime">
+
+                </td>
             </tr>
 
             <!-- Pickup address field -->
             <tr class="form-field">
                 <td><label for="pickup-input" class="input-label">Pickup Address:</label></td>
-                <td><input class="input-fields" type="text" id="pickup-input" th:field="*{pickupAddress}" name="pickup_address"></td>
+                <td>
+                    <div style="color:red" th:if="${#fields.hasErrors('pickupAddress')}" th:errors="*{pickupAddress}"></div>
+                    <input class="input-fields" type="text" id="pickup-input" th:field="*{pickupAddress}" name="pickup_address">
+                </td>
             </tr>
 
             <!-- Destination address field -->
 
             <tr class="form-field">
                 <td><label for="destination-input" class="input-label">Destination Address:</label></td>
-                <td><input class="input-fields" type="text" id="destination-input" th:field="*{destinationAddress}" name="destination_address"></td>
+                <td>
+                    <div style="color:red" th:if="${#fields.hasErrors('destinationAddress')}" th:errors="*{destinationAddress}"></div>
+                    <input class="input-fields" type="text" id="destination-input" th:field="*{destinationAddress}" name="destination_address">
+                </td>
             </tr>
+
+            <!-- ... -->
+            <tr>
+                <td colspan="2">
+                    <div>
+                        <label for="order-for-another-person" style="color: darkorange; font-family: Chakra, sans-serif;">
+                    Order for another person
+                        </label>
+                        <input type="checkbox" id="order-for-another-person" name="order-for-another-person" style="cursor: pointer; margin-left: 5px;" th:checked="${#fields.hasErrors('passengerName')} or ${#fields.hasErrors('passengerPhoneNumber')}">
+            </div>
+                </td>
+            </tr>
+
 
             <!-- Passenger name field -->
 
-            <tr class="form-field">
+            <tr class="form-field" id="passenger-name-row" th:classappend="${#fields.hasErrors('passengerName')}? 'has-error' : ''" hidden>
                 <td><label for="passenger-name-input" class="input-label">Passenger Name:</label></td>
-                <td><input class="input-fields" type="text" id="passenger-name-input" th:field="*{passengerName}" name="passenger_name"></td>
+                <td>
+                    <div style="color:red" th:if="${#fields.hasErrors('passengerName')}" th:errors="*{passengerName}"></div>
+                    <input class="input-fields" type="text" id="passenger-name-input" placeholder="Passenger name" th:field="*{passengerName}" name="passenger_name">
+                </td>
             </tr>
 
             <!-- Passenger phone number field -->
-
-            <tr class="form-field">
+            <tr class="form-field" id="passenger-phone-row" th:classappend="${#fields.hasErrors('passengerPhoneNumber')}? 'has-error' : ''" hidden>
                 <td><label for="passenger-phone-input" class="input-label">Passenger Phone Number:</label></td>
-                <td><input class="input-fields" type="text" id="passenger-phone-input" th:field="*{passengerPhoneNumber}" name="passenger_phone_number"></td>
+                <td>
+                    <div style="color:red" th:if="${#fields.hasErrors('passengerPhoneNumber')}" th:errors="*{passengerPhoneNumber}"></div>
+                    <input class="input-fields" type="text" id="passenger-phone-input" placeholder="Passenger phone number" th:field="*{passengerPhoneNumber}" name="passenger_phone_number">
+                </td>
             </tr>
+
 
             <!-- Booking notes field -->
 
             <tr class="form-field">
                 <td><label for="note-input" class="input-label">Notes:</label></td>
-                <td><input class="input-fields" type="text" id="note-input" th:field="*{bookingNotes}" name="booking_notes" placeholder="Some special request?"></td>
+                <td>
+                    <div style="color:red" th:if="${#fields.hasErrors('bookingNotes')}" th:errors="*{bookingNotes}"></div>
+                    <input class="input-fields" type="text" id="note-input" th:field="*{bookingNotes}" name="booking_notes" placeholder="Some special request?">
+                </td>
             </tr>
 
             <!-- Payment type field -->
@@ -83,14 +115,12 @@
 
         <!-- Pay with bonuses button -->
 
-
         <div style="margin-right: 240px;">
             <label for="pay-with-bonuses" style="color: darkorange; font-family: Chakra, sans-serif;">
                 Pay with bonuses
             </label>
             <input type="checkbox" id="pay-with-bonuses" th:field="*{payWithBonuses}" style="cursor: pointer" name="pay_with_bonuses">
         </div>
-
 
         <button style="margin-top: 30px; margin-left: 13px" type="submit" class="login-submit">Order</button>
     </form>

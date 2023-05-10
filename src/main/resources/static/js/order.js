@@ -95,6 +95,27 @@ function initMap() {
     });
 }
 
+function modifyPageAccordingToTheOrderInfo() {
+    const passengerNameRow = document.getElementById("passenger-name-row");
+    const passengerPhoneRow = document.getElementById("passenger-phone-row");
+    const orderForAnotherPerson = document.getElementById("order-for-another-person");
+
+    if (!orderForAnotherPerson.checked) {
+        passengerNameRow.setAttribute("hidden", "");
+        passengerPhoneRow.setAttribute("hidden", "");
+    } else {
+        passengerNameRow.removeAttribute("hidden");
+        passengerPhoneRow.removeAttribute("hidden");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const orderForAnotherPerson = document.getElementById("order-for-another-person");
+    orderForAnotherPerson.addEventListener("change", modifyPageAccordingToTheOrderInfo);
+});
 
 
-window.onload = initMap;
+window.onload = function (){
+    modifyPageAccordingToTheOrderInfo();
+    initMap();
+};

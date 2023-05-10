@@ -132,7 +132,7 @@ h2 {
     left: 60%;
     top: 5%;
     height: 90%;
-    width: 600px;
+    width: 38%;
     border-radius: 20px;
 }
 
@@ -174,4 +174,24 @@ input[type="checkbox"]:checked:before {
     border-width: 0 2px 2px 0;
 }
 
+.main-header {
+    position: fixed;
+    width: 99%;
+    background: darkslateblue;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.order-form {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    left: 10%;
+    top: 10%;
+    padding: 30px;
+    border-radius: 20px;
+    height: 70%;
+}

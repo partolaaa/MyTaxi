@@ -11,7 +11,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomUser {
-    private long id;
+    private long userId;
 
     @NotBlank(message = "Name is required")
     @Length(min = 2, max = 100, message = "Name must be at most 100 characters and at least 2")
