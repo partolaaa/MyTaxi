@@ -24,7 +24,7 @@ import javax.validation.Validator;
 import java.util.Set;
 
 @Controller
-public class OrderController {
+public class OrdersController {
     private final OrderDAO orderDAO;
     private final UserDAO userDAO;
     private Validator validator;
@@ -34,7 +34,7 @@ public class OrderController {
     private String googleMapsAPIKey;
 
     @Autowired
-    public OrderController(OrderDAO orderDAO, UserDAO userDAO, Validator validator) {
+    public OrdersController(OrderDAO orderDAO, UserDAO userDAO, Validator validator) {
         this.orderDAO = orderDAO;
         this.userDAO = userDAO;
         this.validator = validator;
@@ -48,7 +48,7 @@ public class OrderController {
         String currentUserEmail = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
 
         CustomUser currentUser = userDAO.findUserByEmail(currentUserEmail).get();
-        model.addAttribute("username", currentUser.getName());
+        model.addAttribute("user", currentUser);
         return "order";
     }
 
@@ -74,23 +74,24 @@ public class OrderController {
                 bindingResult.rejectValue(violation.getPropertyPath().toString(), null, violation.getMessage());
             }
         }
+        //Getting email of user
+        String currentUserEmail = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        //Finding a user
+        CustomUser currentUser = userDAO.findUserByEmail(currentUserEmail).get();
 
         //Processing validation errors
         if(bindingResult.hasErrors()){
             //Re-adding Google Maps API key to avoid problems with map crash
             model.addAttribute("googleMapsAPIKey", googleMapsAPIKey);
 
+            model.addAttribute("user", currentUser);
             model.addAttribute("error", bindingResult.getAllErrors());
             return "order";
         }
 
-        //Getting email of user
-        String currentUserEmail = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        //Finding a user
-        CustomUser currentUser = userDAO.findUserByEmail(currentUserEmail).get();
 
         orderDAO.createNewOrder(order, currentUser);
 
-        return "redirect:/client-orders";
+        return "redirect:/my-orders";
     }
 }

@@ -5,6 +5,8 @@
 }
 body {
     background: #1F1B30;
+    height: 800px;
+    overflow: auto;
 }
 #h1-mytaxi {
     margin-left: 40px;
@@ -41,8 +43,12 @@ h2 {
 
 .greetings {
     font-family: Chakra, sans-serif;
-    color: snow;
     margin-right: 20px;
+    cursor: pointer;
+    color: white;
+    padding: 5px;
+    border: solid 3px white;
+    border-radius: 10px;
 }
 
 .login-form {
@@ -109,6 +115,7 @@ h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 10;
 }
 
 .input-label {
@@ -194,4 +201,73 @@ input[type="checkbox"]:checked:before {
     padding: 30px;
     border-radius: 20px;
     height: 70%;
+}
+
+.payment-type {
+    display: inline-block;
+    margin-right: 10px;
+    color: white;
+    font-family: Chakra, sans-serif;
+}
+
+.payment-type input[type="radio"] {
+    display: none;
+}
+
+.payment-type label {
+    display: inline-block;
+    border: 1px solid darkorange;
+    border-radius: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.payment-type input[type="radio"]:checked + label {
+    background-color: darkorange;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table th,
+.orders-table td {
+    padding: 8px;
+    text-align: center;
+}
+
+.orders-table th {
+    font-weight: bold;
+}
+
+.orders-table tr:nth-child(even) {
+    /*background-color: #f2f2f2;*/
+}
+
+#orders {
+    position: absolute;
+    margin-top: 10%;
+    left: 20%;
+    width: 75%;
+    font-family: 'Chakra', sans-serif;
+    color: white;
+    background: darkslateblue;
+    border-radius: 20px;
+    padding: 25px;
+    border: 2px solid darkorange;
+}
+
+#info-about-me{
+    position: absolute;
+    margin-top: 10%;
+    left: 1%;
+    width: 15%;
+    min-height: 300px;
+    font-family: 'Chakra', sans-serif;
+    color: white;
+    background: darkslateblue;
+    border-radius: 20px;
+    padding: 25px;
+    border: 2px solid darkorange;
 }

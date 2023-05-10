@@ -1,11 +1,15 @@
 package mytaxi.partola.dao;
 
 import mytaxi.partola.models.Client;
+import mytaxi.partola.models.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * @author Ivan Partola
@@ -31,5 +35,12 @@ public class ClientDAO {
                 "INSERT INTO \"Client\" (client_id, phone_number) VALUES (?, ?)",
                 userId,
                 client.getPhoneNumber());
+    }
+
+    public Optional<Client> getClientByUserId(long id) {
+        return jdbcTemplate.query("select * from \"Client\" where client_id=?",
+                        new Object[]{id},
+                        new BeanPropertyRowMapper<>(Client.class))
+                .stream().findAny();
     }
 }

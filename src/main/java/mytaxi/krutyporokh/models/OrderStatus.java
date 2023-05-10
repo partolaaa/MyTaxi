@@ -11,7 +11,7 @@ public enum OrderStatus {
         this.orderStatus = orderStatus;
     }
 
-    public String getOrderStatus(){
+    public String getValue(){
         return orderStatus;
     }
 }

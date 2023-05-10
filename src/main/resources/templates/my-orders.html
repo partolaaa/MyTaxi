@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Taxi</title>
+    <link rel="stylesheet" th:href="@{css/styles.css}">
+    <script th:src="@{js/main.js}"></script>
+</head>
+<body onload="loadMain();">
+<div class="main-header">
+    <h1 id="h1-mytaxi">MyTaxi</h1>
+    <div>
+        <h3 id="my-cabinet-btn" class="greetings" th:text="'Hello, ' + ${user.getName()}">Template</h3>
+    </div>
+</div>
+<div>
+    <div id="info-about-me">
+        <h3 style="font-size: 30px; position: absolute; left: 45%; top: 0;">Me</h3>
+
+        <div style="position: absolute; top: 20%; font-size: 18px;">
+            <h4>Name: <span th:text="${user.getName()}"></span></h4>
+            <h4>Phone number: <span th:text="${client.getPhoneNumber()}"></span></h4>
+            <h4>Email: <span th:text="${user.getEmail()}"></span></h4>
+            <h4>Rating: <span th:text="${client.getRating()}"></span></h4>
+            <h4>Bonuses: <span th:text="${client.getBonusAmount()}"></span> ₴</h4>
+        </div>
+    </div>
+    <div id="orders">
+        <h3 style="margin-top: 0; margin-left: 45%; font-size: 30px;">My Orders</h3>
+        <table class="orders-table">
+            <thead>
+            <tr>
+                <th>Booking Date/Time</th>
+                <th>Price</th>
+                <th>Pickup Address</th>
+                <th>Destination Address</th>
+                <th>Payment Type</th>
+                <th>Order Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(orders)}">
+                <td style="font-weight: bold; font-size: 30px;" colspan="6">
+                    Oops, looks like you are new here! Go and
+                    <span id="order-please" style="color: darkorange;cursor: pointer;">order</span> cool taxi :)
+                </td>
+            </tr>
+            <tr th:each="order: ${orders}">
+                <td th:text="${order.getBookingDatetime()}"></td>
+                <td th:text="${order.getPrice()}"></td>
+                <td th:text="${order.getPickupAddress()}"></td>
+                <td th:text="${order.getDestinationAddress()}"></td>
+                <td th:text="${order.getPaymentType().getValue()}"></td>
+                <td th:text="${order.getOrderStatus().getValue()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -111,11 +111,20 @@ function modifyPageAccordingToTheOrderInfo() {
 
 document.addEventListener("DOMContentLoaded", function() {
     const orderForAnotherPerson = document.getElementById("order-for-another-person");
-    orderForAnotherPerson.addEventListener("change", modifyPageAccordingToTheOrderInfo);
+    orderForAnotherPerson.addEventListener("change", function() {
+        modifyPageAccordingToTheOrderInfo();
+        if (document.getElementById("order-for-another-person").checked) {
+            document.getElementById("order-form").style.minHeight = "666px";
+        } else {
+            document.getElementById("order-form").style.minHeight = "555px";
+        }
+    });
 });
 
 
 window.onload = function (){
+    // TODO: checked doesn't work ????
+    document.getElementById("payment-type-cash").checked = true;
     modifyPageAccordingToTheOrderInfo();
     initMap();
 };

@@ -8,14 +8,14 @@
     <script th:src="@{js/main.js}"></script>
     <script th:src="@{js/order.js}"></script>
 </head>
-<body>
+<body onload="loadMain();">
 <div class="main-header">
     <h1 id="h1-mytaxi">MyTaxi</h1>
     <div>
-        <h3 class="greetings" th:text="'Hello, ' + ${username}">Template</h3>
+        <h3 id="my-cabinet-btn" class="greetings" th:text="'Hello, ' + ${user.getName()}">Template</h3>
     </div>
 </div>
-<div class="login-panel" style="height: 70%; width: 90%;min-height: 430px;">
+<div id="order-form" class="login-panel" style="top: 500px; left: 50%; height: 70%; width: 90%;min-height: 555px; z-index: 5;">
     <h1 id="h1-login-to-mytaxi">Order</h1>
     <img id="info" style="right: unset" th:src="@{images/info.png}" alt="info"/>
     <form class="order-form" th:action="@{/createNewOrder}" th:object="${order}" method="post">
@@ -25,8 +25,8 @@
             <tr class="form-field">
                 <td><label for="datetime-input" class="input-label">Booking Date/Time:</label></td>
                 <td>
-                    <div style="color:red" th:if="${#fields.hasErrors('bookingDateTime')}" th:errors="*{bookingDateTime}"></div>
-                    <input class="input-fields" type="datetime-local" id="datetime-input" th:field="*{bookingDateTime}" name="booking_datetime">
+                    <div style="color:red" th:if="${#fields.hasErrors('bookingDatetime')}" th:errors="*{bookingDatetime}"></div>
+                    <input class="input-fields" type="datetime-local" id="datetime-input" th:field="*{bookingDatetime}" name="booking_datetime">
 
                 </td>
             </tr>
@@ -98,10 +98,14 @@
             <tr class="form-field">
                 <td><label class="input-label">Payment Type:</label></td>
                 <td>
-                    <input type="radio" id="payment-type-cash" th:field="*{paymentType}" name="payment_type" value="CASH" checked>
-                    <label for="payment-type-cash">Cash</label>
-                    <input type="radio" id="payment-type-card" th:field="*{paymentType}" name="payment_type" value="CARD">
-                    <label for="payment-type-card">Card</label>
+                    <div class="payment-type">
+                        <input type="radio" id="payment-type-cash" th:field="*{paymentType}" name="payment_type" value="CASH">
+                        <label for="payment-type-cash">Cash</label>
+                    </div>
+                    <div class="payment-type">
+                        <input type="radio" id="payment-type-card" th:field="*{paymentType}" name="payment_type" value="CARD">
+                        <label for="payment-type-card">Card</label>
+                    </div>
                 </td>
             </tr>
 
@@ -109,7 +113,7 @@
 
             <tr class="form-field">
                 <td><label for="price" class="input-label">Estimated price:</label></td>
-                <td><span id="price" class="estimated-price">XXX.xx ₴</span></td>
+                <td class="estimated-price"><span th:field="*{price}" id="price">0</span> ₴</td>
             </tr>
         </table>
 
