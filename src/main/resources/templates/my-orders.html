@@ -7,12 +7,7 @@
     <script th:src="@{js/main.js}"></script>
 </head>
 <body onload="loadMain();">
-<div class="main-header">
-    <h1 id="h1-mytaxi">MyTaxi</h1>
-    <div>
-        <h3 id="my-cabinet-btn" class="greetings" th:text="'Hello, ' + ${user.getName()}">Template</h3>
-    </div>
-</div>
+<th:block th:insert="~{/_menu_logged.html}"></th:block>
 <div>
     <div id="info-about-me">
         <h3 style="font-size: 30px; position: absolute; left: 45%; top: 0;">Me</h3>
@@ -22,7 +17,7 @@
             <h4>Phone number: <span th:text="${client.getPhoneNumber()}"></span></h4>
             <h4>Email: <span th:text="${user.getEmail()}"></span></h4>
             <h4>Rating: <span th:text="${client.getRating()}"></span></h4>
-            <h4>Bonuses: <span th:text="${client.getBonusAmount()}"></span> ₴</h4>
+            <h4>Bonuses: <span th:with="roundedBonus=${T(java.lang.Math).round(client.getBonusAmount() * 100.0) / 100.0}" th:text="${roundedBonus}"></span> ₴</h4>
         </div>
     </div>
     <div id="orders">
@@ -57,7 +52,6 @@
         </table>
     </div>
 </div>
-
 
 </body>
 </html>

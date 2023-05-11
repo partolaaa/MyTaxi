@@ -4,9 +4,12 @@ import mytaxi.krutyporokh.dao.OrderDAO;
 import mytaxi.krutyporokh.models.Order;
 import mytaxi.krutyporokh.validation.groups.OrderForAnotherPerson;
 import mytaxi.krutyporokh.validation.groups.OrderForSelf;
+import mytaxi.partola.dao.ClientDAO;
 import mytaxi.partola.dao.UserDAO;
+import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.security.CustomUserDetails;
+import mytaxi.partola.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,17 +30,21 @@ import java.util.Set;
 public class OrdersController {
     private final OrderDAO orderDAO;
     private final UserDAO userDAO;
-    private Validator validator;
+    private final ClientDAO clientDAO;
+    private final Validator validator;
+    private final ClientService clientService;
 
 
     @Value("${googleMapsAPIKey}")
     private String googleMapsAPIKey;
 
     @Autowired
-    public OrdersController(OrderDAO orderDAO, UserDAO userDAO, Validator validator) {
+    public OrdersController(OrderDAO orderDAO, UserDAO userDAO, ClientDAO clientDAO, Validator validator, ClientService clientService) {
         this.orderDAO = orderDAO;
         this.userDAO = userDAO;
+        this.clientDAO = clientDAO;
         this.validator = validator;
+        this.clientService = clientService;
     }
 
     @GetMapping("order")
@@ -49,6 +56,8 @@ public class OrdersController {
 
         CustomUser currentUser = userDAO.findUserByEmail(currentUserEmail).get();
         model.addAttribute("user", currentUser);
+        Client client = clientDAO.getClientByUserId(currentUser.getUserId()).get();
+        model.addAttribute("bonusesAmount", client.getBonusAmount());
         return "order";
     }
 
@@ -78,6 +87,7 @@ public class OrdersController {
         String currentUserEmail = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         //Finding a user
         CustomUser currentUser = userDAO.findUserByEmail(currentUserEmail).get();
+        Client client = clientDAO.getClientByUserId(currentUser.getUserId()).get();
 
         //Processing validation errors
         if(bindingResult.hasErrors()){
@@ -85,10 +95,12 @@ public class OrdersController {
             model.addAttribute("googleMapsAPIKey", googleMapsAPIKey);
 
             model.addAttribute("user", currentUser);
+            model.addAttribute("client", client);
             model.addAttribute("error", bindingResult.getAllErrors());
             return "order";
         }
 
+        clientService.addBonusesByUserAndOrderPrice(currentUser, order.getPrice());
 
         orderDAO.createNewOrder(order, currentUser);
 

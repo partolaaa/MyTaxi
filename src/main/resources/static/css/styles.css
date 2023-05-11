@@ -270,6 +270,18 @@ input[type="checkbox"]:checked:before {
     border: 2px solid darkorange;
 }
 
+.header-buttons {
+    display: flex;
+    align-items: center;
+}
+
+#log-out-btn {
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
 #info-about-me{
     position: absolute;
     margin-top: 10%;

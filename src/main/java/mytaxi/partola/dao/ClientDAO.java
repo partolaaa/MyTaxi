@@ -1,11 +1,9 @@
 package mytaxi.partola.dao;
 
 import mytaxi.partola.models.Client;
-import mytaxi.partola.models.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,5 +47,12 @@ public class ClientDAO {
                         new Object[]{phoneNumber},
                         new BeanPropertyRowMapper<>(Client.class))
                 .stream().findAny();
+    }
+
+    public void setBonusesByClientId(long clientId, float bonusesAmount) {
+        jdbcTemplate.update(
+                "update \"Client\" set bonus_amount = ? where client_id = ?;",
+                bonusesAmount,
+                clientId);
     }
 }

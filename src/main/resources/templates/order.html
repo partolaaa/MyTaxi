@@ -9,12 +9,7 @@
     <script th:src="@{js/order.js}"></script>
 </head>
 <body onload="loadMain();modifyPageAccordingToTheOrderInfo();initMap();">
-<div class="main-header">
-    <h1 id="h1-mytaxi">MyTaxi</h1>
-    <div>
-        <h3 id="my-cabinet-btn" class="greetings" th:text="'Hello, ' + ${user.getName()}">Template</h3>
-    </div>
-</div>
+<th:block th:insert="~{/_menu_logged.html}"></th:block>
 <div id="order-form" class="login-panel" style="top: 500px; left: 50%; height: 70%; width: 90%;min-height: 555px; z-index: 5;">
     <h1 id="h1-login-to-mytaxi">Order</h1>
     <img id="info" style="right: unset" th:src="@{images/info.png}" alt="info"/>
@@ -112,18 +107,19 @@
 
             <tr class="form-field">
                 <td><label for="price" class="input-label">Estimated price:</label></td>
-                <td class="estimated-price"><span th:field="*{price}" id="price">0</span> ₴</td>
+                <td class="estimated-price"><span id="display-price">0</span> ₴</td>
+                <input type="hidden" id="price" th:field="*{price}" />
+            </tr>
+
+            <!-- Pay with bonuses field -->
+            <tr class="form-field">
+                <td><label for="pay-with-bonuses" style="color: darkorange; font-family: Chakra, sans-serif;">Pay with bonuses:</label></td>
+                <td>
+                    <input type="checkbox" id="pay-with-bonuses" th:field="*{payWithBonuses}" style="cursor: pointer" name="pay_with_bonuses"
+                           th:attr="onclick=|payWithBonuses('${bonusesAmount}')|">
+                </td>
             </tr>
         </table>
-
-        <!-- Pay with bonuses button -->
-
-        <div style="margin-right: 240px;">
-            <label for="pay-with-bonuses" style="color: darkorange; font-family: Chakra, sans-serif;">
-                Pay with bonuses
-            </label>
-            <input type="checkbox" id="pay-with-bonuses" th:field="*{payWithBonuses}" style="cursor: pointer" name="pay_with_bonuses">
-        </div>
 
         <button style="margin-top: 30px; margin-left: 13px" type="submit" class="login-submit">Order</button>
     </form>
