@@ -6,6 +6,7 @@ function loadMain () {
     let orderPlease = document.getElementById("order-please");
     let myCabinetButton = document.getElementById("my-cabinet-btn");
     let paymentTypeCash = document.getElementById('payment-type-cash');
+    let luffyGif = document.getElementById('luffy-doesnt-know');
 
     setButtonRedirectOnClick(registerButton, "/register");
     setButtonRedirectOnClick(loginButton, "/login");
@@ -13,6 +14,7 @@ function loadMain () {
     setButtonRedirectOnClick(myTaxiButton, "/order");
     setButtonRedirectOnClick(orderPlease, "/order");
     setButtonRedirectOnClick(myCabinetButton, "/my-orders");
+    setButtonRedirectOnClick(luffyGif, "https://www.youtube.com/watch?v=HRaoYuRKBaA&t=3s");
 
     if (paymentTypeCash != null) {
         paymentTypeCash.checked = true;

@@ -123,8 +123,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 window.onload = function (){
-    // TODO: checked doesn't work ????
-    document.getElementById("payment-type-cash").checked = true;
     modifyPageAccordingToTheOrderInfo();
     initMap();
 };

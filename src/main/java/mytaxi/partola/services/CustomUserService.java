@@ -1,5 +1,6 @@
 package mytaxi.partola.services;
 
+import mytaxi.partola.dao.ClientDAO;
 import mytaxi.partola.dao.UserDAO;
 import mytaxi.partola.models.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,5 @@ public class CustomUserService {
 
     public boolean userExistsWithEmail(CustomUser customUser) {
         return userDAO.findUserByEmail(customUser.getEmail()).isPresent();
-    }
-    public boolean userExistsWithPhoneNumber(CustomUser customUser) {
-        // TODO:
-        return false;
     }
 }

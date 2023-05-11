@@ -1,7 +1,5 @@
-window.onload = function() {
-    loadMain();
+function loadRegister () {
+    let loginSpan = document.getElementById("login-span");
 
-    document.getElementById("login-span").onclick = function() {
-        window.location.replace("/login");
-    };
+    setButtonRedirectOnClick(loginSpan, "/login")
 }

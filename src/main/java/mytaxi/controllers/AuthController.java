@@ -1,8 +1,8 @@
 package mytaxi.controllers;
 
 import mytaxi.partola.dao.ClientDAO;
-import mytaxi.partola.dao.UserDAO;
 import mytaxi.partola.models.Client;
+import mytaxi.partola.util.ClientValidator;
 import mytaxi.partola.util.CustomUserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,11 +22,13 @@ import javax.validation.Valid;
 public class AuthController {
     private final ClientDAO clientDAO;
     private final CustomUserValidator customUserValidator;
+    private final ClientValidator clientValidator;
 
     @Autowired
-    public AuthController(ClientDAO clientDAO, CustomUserValidator customUserValidator) {
+    public AuthController(ClientDAO clientDAO, CustomUserValidator customUserValidator, ClientValidator clientValidator) {
         this.clientDAO = clientDAO;
         this.customUserValidator = customUserValidator;
+        this.clientValidator = clientValidator;
     }
 
     @GetMapping("register")
@@ -40,6 +42,7 @@ public class AuthController {
                                   Model model) {
 
         customUserValidator.validate(client, bindingResult);
+        clientValidator.validate(client, bindingResult);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("error", bindingResult.getAllErrors());

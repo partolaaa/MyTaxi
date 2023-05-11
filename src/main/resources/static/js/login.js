@@ -5,3 +5,9 @@ window.onload = function () {
         window.location.replace("/register");
     };
 }
+
+function loadLogin () {
+    let registerSpan = document.getElementById("register-span");
+
+    setButtonRedirectOnClick(registerSpan, "/register")
+}

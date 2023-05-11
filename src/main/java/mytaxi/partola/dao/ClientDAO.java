@@ -43,4 +43,11 @@ public class ClientDAO {
                         new BeanPropertyRowMapper<>(Client.class))
                 .stream().findAny();
     }
+
+    public Optional<Client> getClientByPhoneNumber(String phoneNumber) {
+        return jdbcTemplate.query("select * from \"Client\" where phone_number=?",
+                        new Object[]{phoneNumber},
+                        new BeanPropertyRowMapper<>(Client.class))
+                .stream().findAny();
+    }
 }

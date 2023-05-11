@@ -7,7 +7,7 @@
     <script th:src="@{js/main.js}"></script>
     <script th:src="@{js/login.js}"></script>
 </head>
-<body onload="loadMain();">
+<body onload="loadMain();loadLogin();">
 
 <th:block th:insert="~{/_menu.html}"></th:block>
 
@@ -15,7 +15,7 @@
 <div class="login-panel">
     <h1 id="h1-login-to-mytaxi">Login to MyTaxi</h1>
     <img id="info" th:src="@{images/info.png}" alt="info"/>
-    <form class="login-form" style="left: 33%" method="POST" action="/process_login">
+    <form class="login-form" method="POST" action="/process_login">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
         <div style="display: flex; align-items: center; margin-bottom: 10px;">
             <!-- This field must be called 'username', otherwise Spring Security will not find username -->

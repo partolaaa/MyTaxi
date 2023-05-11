@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to MyTaxi</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{js/main.js}"></script>
+</head>
+<body onload="loadMain();">
+<th:block th:insert="~{/_menu.html}"></th:block>
+
+<div id="error-container">
+    <h2 id="error-message">Chill, it's just an error <span style="color: darkred; font-size: 45px;" th:text="${errorType}">type</span></h2>
+    <img id="luffy-doesnt-know" style="cursor: pointer;" th:src="${errorType == 404 ? 'images/luffy-i-dont-know.gif' : 'images/luffy-flying.gif'}" alt="Even Luffy doesn't know :(">
+</div>
+</body>
+</html>
