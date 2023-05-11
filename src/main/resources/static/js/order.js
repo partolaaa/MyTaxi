@@ -103,9 +103,11 @@ function modifyPageAccordingToTheOrderInfo() {
     if (!orderForAnotherPerson.checked) {
         passengerNameRow.setAttribute("hidden", "");
         passengerPhoneRow.setAttribute("hidden", "");
+        document.getElementById("order-form").style.minHeight = "555px";
     } else {
         passengerNameRow.removeAttribute("hidden");
         passengerPhoneRow.removeAttribute("hidden");
+        document.getElementById("order-form").style.minHeight = "600px";
     }
 }
 
@@ -113,16 +115,5 @@ document.addEventListener("DOMContentLoaded", function() {
     const orderForAnotherPerson = document.getElementById("order-for-another-person");
     orderForAnotherPerson.addEventListener("change", function() {
         modifyPageAccordingToTheOrderInfo();
-        if (document.getElementById("order-for-another-person").checked) {
-            document.getElementById("order-form").style.minHeight = "666px";
-        } else {
-            document.getElementById("order-form").style.minHeight = "555px";
-        }
     });
 });
-
-
-window.onload = function (){
-    modifyPageAccordingToTheOrderInfo();
-    initMap();
-};

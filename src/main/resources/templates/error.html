@@ -11,7 +11,7 @@
 
 <div id="error-container">
     <h2 id="error-message">Chill, it's just an error <span style="color: darkred; font-size: 45px;" th:text="${errorType}">type</span></h2>
-    <img id="luffy-doesnt-know" style="cursor: pointer;" th:src="${errorType == 404 ? 'images/luffy-i-dont-know.gif' : 'images/luffy-flying.gif'}" alt="Even Luffy doesn't know :(">
+    <img id="luffy-doesnt-know" style="cursor: pointer; border-radius: 20px;" th:src="${errorType == 404 ? 'images/luffy-i-dont-know.gif' : 'images/luffy-flying.gif'}" alt="Even Luffy doesn't know :(">
 </div>
 </body>
 </html>
