@@ -2,6 +2,7 @@ let departureMarker;
 let arrivalMarker;
 let directionsRenderer;
 let journeyDistance;
+let carClass = "ECONOMY"; // TODO:
 
 function initMap() {
     let map = new google.maps.Map(document.getElementById('map'), {
@@ -93,11 +94,18 @@ function initMap() {
 
                 //console.log('Journey Distance: ' + (distance / 1000) + ' kilometers');
                 journeyDistance = distance;
-                document.getElementById("display-price").innerHTML = ((journeyDistance / 1000) * 15).toFixed(2);
-                document.getElementById("price").value = ((journeyDistance / 1000) * 15).toFixed(2);
+                calculateEstimatedPrice(0);
             }
         });
     }
+}
+
+function calculateEstimatedPrice (bonusesAmount) {
+    let pricePerKm = 15;
+    pricePerKm = carClass === "BUSINESS" ? pricePerKm * 2 : pricePerKm;
+
+    document.getElementById("display-price").innerHTML = (((journeyDistance / 1000) * pricePerKm) - bonusesAmount).toFixed(2);
+    document.getElementById("price").value = (((journeyDistance / 1000) * pricePerKm) - bonusesAmount).toFixed(2);
 }
 
 function modifyPageAccordingToTheOrderInfo() {
@@ -123,12 +131,10 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-function payWithBonuses (bonusesAmount) {
+function subtractBonuses (bonusesAmount) {
     if (document.getElementById("pay-with-bonuses").checked) {
-        document.getElementById("display-price").innerHTML = (((journeyDistance / 1000) * 15) - bonusesAmount).toFixed(2);
-        document.getElementById("price").value = (((journeyDistance / 1000) * 15) - bonusesAmount).toFixed(2);
+        calculateEstimatedPrice(bonusesAmount);
     } else {
-        document.getElementById("display-price").innerHTML = (((journeyDistance / 1000) * 15)).toFixed(2);
-        document.getElementById("price").value = (((journeyDistance / 1000) * 15)).toFixed(2);
+        calculateEstimatedPrice(0);
     }
 }

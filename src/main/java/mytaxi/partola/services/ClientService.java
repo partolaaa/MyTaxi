@@ -44,4 +44,8 @@ public class ClientService {
             clientDAO.setBonusesByClientId(customUser.getUserId(), bonusesAmount);
         }
     }
+
+    public void subtractBonuses(Client client) {
+        clientDAO.setBonusesByClientId(client.getClientId(), 0);
+    }
 }

@@ -2,6 +2,7 @@ package mytaxi.krutyporokh.dao;
 
 import mytaxi.krutyporokh.models.Order;
 import mytaxi.partola.dao.UserDAO;
+import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -26,7 +27,7 @@ public class OrderDAO {
         this.userDAO = userDAO;
     }
 
-    public void createNewOrder(Order order, CustomUser customUser) {
+    public void createNewOrder(Order order, Client client) {
         String query = "INSERT INTO \"Order\" " +
                 "(client_id, booking_datetime, pickup_address, destination_address, passenger_name, passenger_phone_number, booking_notes, payment_type, pay_with_bonuses, price) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?::payment_type, ?, ?)";
@@ -38,7 +39,7 @@ public class OrderDAO {
         order.setBookingDatetime(dateTime.format(formatter));
 
         jdbcTemplate.update(query,
-                customUser.getUserId(),
+                client.getClientId(),
                 order.getBookingDatetime(),
                 order.getPickupAddress(),
                 order.getDestinationAddress(),

@@ -116,14 +116,13 @@
                 <td><label for="pay-with-bonuses" style="color: darkorange; font-family: Chakra, sans-serif;">Pay with bonuses:</label></td>
                 <td>
                     <input type="checkbox" id="pay-with-bonuses" th:field="*{payWithBonuses}" style="cursor: pointer" name="pay_with_bonuses"
-                           th:attr="onclick=|payWithBonuses('${bonusesAmount}')|">
+                           th:onclick="'subtractBonuses(' + ${bonusesAmount} + ')'">
                 </td>
             </tr>
         </table>
 
         <button style="margin-top: 30px; margin-left: 13px" type="submit" class="login-submit">Order</button>
     </form>
-
     <div id="map"></div>
 </div>
 </body>

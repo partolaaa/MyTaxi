@@ -95,14 +95,16 @@ public class OrdersController {
             model.addAttribute("googleMapsAPIKey", googleMapsAPIKey);
 
             model.addAttribute("user", currentUser);
-            model.addAttribute("client", client);
+            model.addAttribute("bonusesAmount", client.getBonusAmount());
             model.addAttribute("error", bindingResult.getAllErrors());
             return "order";
         }
-
+        // If user pays with bonuses, we remove them from their account
+        if (order.isPayWithBonuses()) {
+            clientService.subtractBonuses(client);
+        }
         clientService.addBonusesByUserAndOrderPrice(currentUser, order.getPrice());
-
-        orderDAO.createNewOrder(order, currentUser);
+        orderDAO.createNewOrder(order, client);
 
         return "redirect:/my-orders";
     }
