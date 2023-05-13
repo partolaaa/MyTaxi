@@ -13,11 +13,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Driver extends CustomUser {
-    private long driverId;
-    private String licenseNumber;
-    private float driverRating;
-    private String phoneNumber;
-    private boolean isBusy;
+public class Car {
     private long carId;
+    private String licensePlate;
+    private String model;
+    private String color;
+    private CarClass carClass;
+    private VehicleType vehicleType;
 }
