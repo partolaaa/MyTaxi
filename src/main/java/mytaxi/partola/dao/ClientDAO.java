@@ -49,6 +49,7 @@ public class ClientDAO {
                 .stream().findAny();
     }
 
+    @Transactional
     public void setBonusesByClientId(long clientId, float bonusesAmount) {
         jdbcTemplate.update(
                 "update \"Client\" set bonus_amount = ? where client_id = ?;",

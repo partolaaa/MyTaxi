@@ -10,7 +10,7 @@
 </head>
 <body onload="loadMain();modifyPageAccordingToTheOrderInfo();initMap();">
 <th:block th:insert="~{/_menu_logged.html}"></th:block>
-<div id="order-form" class="login-panel" style="top: 500px; left: 50%; height: 70%; width: 90%;min-height: 555px; z-index: 5;">
+<div id="order-form" class="login-panel" style="top: 500px; left: 50%; height: 70%; width: 90%;min-height: 580px; z-index: 5;">
     <h1 id="h1-login-to-mytaxi">Order</h1>
     <img id="info" style="right: unset" th:src="@{images/info.png}" alt="info"/>
     <form class="order-form" th:action="@{/createNewOrder}" th:object="${order}" method="post">
@@ -87,6 +87,16 @@
                 </td>
             </tr>
 
+            <tr class="form-field">
+                <td><label class="input-label">Vehicle Type:</label></td>
+                <td>
+                    <select th:field="*{vehicleType}" name="vehicle-type" class="custom-select">
+                        <option th:each="vehicleType : ${T(mytaxi.partola.models.VehicleType).values()}"
+                                th:value="${vehicleType}" th:text="${vehicleType}"></option>
+                    </select>
+                </td>
+            </tr>
+
             <!-- Payment type field -->
 
             <tr class="form-field">
@@ -99,6 +109,22 @@
                     <div class="payment-type">
                         <input type="radio" id="payment-type-card" th:field="*{paymentType}" name="payment_type" value="CARD">
                         <label for="payment-type-card">Card</label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="form-field">
+                <td><label class="input-label">Car Class:</label></td>
+                <td>
+                    <div class="payment-type">
+                        <input type="radio" id="car-class-economy" th:field="*{carClass}" name="car_class" value="ECONOMY"
+                               th:onclick="'handleCarClassSelection(' + ${bonusesAmount} + ', this)'">
+                        <label for="car-class-economy">Economy</label>
+                    </div>
+                    <div class="payment-type">
+                        <input type="radio" id="car-class-business" th:field="*{carClass}" name="car_class" value="BUSINESS"
+                               th:onclick="'handleCarClassSelection(' + ${bonusesAmount} + ', this)'">
+                        <label for="car-class-business">Business</label>
                     </div>
                 </td>
             </tr>
@@ -119,6 +145,8 @@
                            th:onclick="'subtractBonuses(' + ${bonusesAmount} + ')'">
                 </td>
             </tr>
+
+            <input type="hidden" id="journey-distance" th:field="*{journeyDistance}">
         </table>
 
         <button style="margin-top: 30px; margin-left: 13px" type="submit" class="login-submit">Order</button>

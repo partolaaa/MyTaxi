@@ -1,4 +1,5 @@
 package mytaxi.krutyporokh.models;
 
-public enum VehicleType {
+public class Admin {
+
 }

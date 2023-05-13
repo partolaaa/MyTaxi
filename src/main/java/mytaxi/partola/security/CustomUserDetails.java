@@ -1,6 +1,8 @@
 package mytaxi.partola.security;
 
+import mytaxi.partola.dao.UserDAO;
 import mytaxi.partola.models.CustomUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,9 +18,12 @@ import java.util.Collections;
 public class CustomUserDetails implements UserDetails {
 
     private final CustomUser customUser;
+    private final UserDAO userDAO;
 
-    public CustomUserDetails(CustomUser customUser) {
+    @Autowired
+    public CustomUserDetails(CustomUser customUser, UserDAO userDAO) {
         this.customUser = customUser;
+        this.userDAO = userDAO;
     }
 
     @Override
@@ -53,6 +58,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !customUser.isBanned();
     }
 }

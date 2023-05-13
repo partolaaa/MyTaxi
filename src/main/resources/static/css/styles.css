@@ -315,3 +315,17 @@ input[type="checkbox"]:checked:before {
     height: 35%;
     max-width: 100%;
 }
+
+.custom-select {
+    font-size: 15px;
+    font-family: 'CHAKRA', sans-serif;
+    color: white;
+    border: solid darkorange;
+    border-radius: 8px;
+    background-color: darkslateblue;
+}
+
+.custom-select select option:focus {
+    outline: none;
+    border: none;
+}

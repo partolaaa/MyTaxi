@@ -1,4 +1,4 @@
-package mytaxi.controllers;
+package mytaxi.krutyporokh.controller;
 
 import mytaxi.krutyporokh.dao.OrderDAO;
 import mytaxi.krutyporokh.models.Order;
@@ -10,6 +10,7 @@ import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.security.CustomUserDetails;
 import mytaxi.partola.services.ClientService;
+import mytaxi.partola.services.CustomUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,18 +34,20 @@ public class OrdersController {
     private final ClientDAO clientDAO;
     private final Validator validator;
     private final ClientService clientService;
+    private final CustomUserService customUserService;
 
 
     @Value("${googleMapsAPIKey}")
     private String googleMapsAPIKey;
 
     @Autowired
-    public OrdersController(OrderDAO orderDAO, UserDAO userDAO, ClientDAO clientDAO, Validator validator, ClientService clientService) {
+    public OrdersController(OrderDAO orderDAO, UserDAO userDAO, ClientDAO clientDAO, Validator validator, ClientService clientService, CustomUserService customUserService) {
         this.orderDAO = orderDAO;
         this.userDAO = userDAO;
         this.clientDAO = clientDAO;
         this.validator = validator;
         this.clientService = clientService;
+        this.customUserService = customUserService;
     }
 
     @GetMapping("order")
@@ -52,9 +55,8 @@ public class OrdersController {
                          Model model) {
         model.addAttribute("googleMapsAPIKey", googleMapsAPIKey);
         // getUsername() method returns email in our case
-        String currentUserEmail = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
 
-        CustomUser currentUser = userDAO.findUserByEmail(currentUserEmail).get();
+        CustomUser currentUser = customUserService.getCurrentUserFromSession().get();
         model.addAttribute("user", currentUser);
         Client client = clientDAO.getClientByUserId(currentUser.getUserId()).get();
         model.addAttribute("bonusesAmount", client.getBonusAmount());
@@ -83,10 +85,7 @@ public class OrdersController {
                 bindingResult.rejectValue(violation.getPropertyPath().toString(), null, violation.getMessage());
             }
         }
-        //Getting email of user
-        String currentUserEmail = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        //Finding a user
-        CustomUser currentUser = userDAO.findUserByEmail(currentUserEmail).get();
+        CustomUser currentUser = customUserService.getCurrentUserFromSession().get();
         Client client = clientDAO.getClientByUserId(currentUser.getUserId()).get();
 
         //Processing validation errors

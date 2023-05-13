@@ -1,4 +1,4 @@
-package mytaxi.controllers;
+package mytaxi.partola.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 

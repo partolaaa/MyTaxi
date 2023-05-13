@@ -1,5 +1,5 @@
 package mytaxi.partola.models;
 
-public class Admin {
+public class Driver {
 
 }

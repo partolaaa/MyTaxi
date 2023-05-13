@@ -29,5 +29,6 @@ public class CustomUser {
     //@Pattern(regexp = "\\d{10}", message = "Phone number must be 10 digits")
     private String phoneNumber;*/
 
+    private boolean isBanned;
     private Role role;
 }

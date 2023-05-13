@@ -6,6 +6,7 @@ function loadMain () {
     let orderPlease = document.getElementById("order-please");
     let myCabinetButton = document.getElementById("my-cabinet-btn");
     let paymentTypeCash = document.getElementById('payment-type-cash');
+    let carClassEconomy = document.getElementById('car-class-economy');
     let luffyGif = document.getElementById('luffy-doesnt-know');
 
     setButtonRedirectOnClick(registerButton, "/register");
@@ -18,6 +19,9 @@ function loadMain () {
 
     if (paymentTypeCash != null) {
         paymentTypeCash.checked = true;
+    }
+    if (carClassEconomy != null) {
+        carClassEconomy.checked = true;
     }
 }
 

@@ -2,7 +2,8 @@ let departureMarker;
 let arrivalMarker;
 let directionsRenderer;
 let journeyDistance;
-let carClass = "ECONOMY"; // TODO:
+let carClass = "ECONOMY";
+let pricePerKm = 15;
 
 function initMap() {
     let map = new google.maps.Map(document.getElementById('map'), {
@@ -95,17 +96,16 @@ function initMap() {
                 //console.log('Journey Distance: ' + (distance / 1000) + ' kilometers');
                 journeyDistance = distance;
                 calculateEstimatedPrice(0);
+                document.getElementById("journey-distance").value = journeyDistance;
             }
         });
     }
 }
 
 function calculateEstimatedPrice (bonusesAmount) {
-    let pricePerKm = 15;
-    pricePerKm = carClass === "BUSINESS" ? pricePerKm * 2 : pricePerKm;
-
-    document.getElementById("display-price").innerHTML = (((journeyDistance / 1000) * pricePerKm) - bonusesAmount).toFixed(2);
-    document.getElementById("price").value = (((journeyDistance / 1000) * pricePerKm) - bonusesAmount).toFixed(2);
+    let tempPricePerKm = carClass === "BUSINESS" ? pricePerKm * 2 : pricePerKm;
+    document.getElementById("display-price").innerHTML = (((journeyDistance / 1000) * tempPricePerKm) - bonusesAmount).toFixed(2);
+    document.getElementById("price").value = (((journeyDistance / 1000) * tempPricePerKm) - bonusesAmount).toFixed(2);
 }
 
 function modifyPageAccordingToTheOrderInfo() {
@@ -116,11 +116,11 @@ function modifyPageAccordingToTheOrderInfo() {
     if (!orderForAnotherPerson.checked) {
         passengerNameRow.setAttribute("hidden", "");
         passengerPhoneRow.setAttribute("hidden", "");
-        document.getElementById("order-form").style.minHeight = "555px";
+        document.getElementById("order-form").style.minHeight = "580px";
     } else {
         passengerNameRow.removeAttribute("hidden");
         passengerPhoneRow.removeAttribute("hidden");
-        document.getElementById("order-form").style.minHeight = "600px";
+        document.getElementById("order-form").style.minHeight = "700px";
     }
 }
 
@@ -137,4 +137,8 @@ function subtractBonuses (bonusesAmount) {
     } else {
         calculateEstimatedPrice(0);
     }
+}
+function handleCarClassSelection (bonusesAmount, selectedCarClass) {
+    carClass = selectedCarClass.value;
+    subtractBonuses(bonusesAmount);
 }
