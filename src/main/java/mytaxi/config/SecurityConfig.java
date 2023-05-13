@@ -30,19 +30,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .antMatchers( "/fonts/**", "/images/**").permitAll()
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/fonts/**", "/images/**").permitAll()
                 .antMatchers("/login", "/register", "/error").permitAll()
-                .anyRequest().hasAnyRole("CLIENT", "ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/driver/**").hasRole("DRIVER")
+                .anyRequest().authenticated() // assuming all other requests need to be authenticated
                 .and()
                 .formLogin().loginPage("/login")
                 .loginProcessingUrl("/process_login")
-                .defaultSuccessUrl("/order", true)
+                .successHandler(new CustomAuthenticationSuccessHandler())  // use custom success handler instead of defaultSuccessUrl
                 .failureUrl("/login?error")
                 .and()
                 .logout()
-                .logoutUrl("/logout").logoutSuccessUrl("/login");
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login");
     }
+
 
     @Override
     protected void configure (AuthenticationManagerBuilder auth) throws Exception {

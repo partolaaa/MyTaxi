@@ -270,6 +270,18 @@ input[type="checkbox"]:checked:before {
     border: 2px solid darkorange;
 }
 
+.header-buttons {
+    display: flex;
+    align-items: center;
+}
+
+#log-out-btn {
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
 #info-about-me{
     position: absolute;
     margin-top: 10%;
@@ -302,4 +314,18 @@ input[type="checkbox"]:checked:before {
 #luffy-doesnt-know {
     height: 35%;
     max-width: 100%;
+}
+
+.custom-select {
+    font-size: 15px;
+    font-family: 'CHAKRA', sans-serif;
+    color: white;
+    border: solid darkorange;
+    border-radius: 8px;
+    background-color: darkslateblue;
+}
+
+.custom-select select option:focus {
+    outline: none;
+    border: none;
 }

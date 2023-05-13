@@ -2,6 +2,7 @@ package mytaxi.partola.dao;
 
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
+import mytaxi.partola.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;

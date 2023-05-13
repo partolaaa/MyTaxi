@@ -4,14 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mytaxi.krutyporokh.validation.groups.OrderForAnotherPerson;
+import mytaxi.partola.models.CarClass;
+import mytaxi.partola.models.PaymentType;
+import mytaxi.partola.models.VehicleType;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,6 +30,8 @@ public class Order {
     @Size(max = 100, message = "Destination address must be less than or equal to 100 characters")
     private String destinationAddress;
 
+    private double journeyDistance;
+
     @Size(min=2, max = 100, message = "Passenger name must be less than or equal to 100 characters", groups = OrderForAnotherPerson.class)
     private String passengerName;
 
@@ -42,6 +42,8 @@ public class Order {
     @Size(max = 300, message = "Booking notes must be less than or equal to 300 characters")
     private String bookingNotes;
     private PaymentType paymentType;
+    private VehicleType vehicleType;
+    private CarClass carClass;
 
     private boolean payWithBonuses;
 

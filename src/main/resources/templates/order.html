@@ -8,14 +8,9 @@
     <script th:src="@{js/main.js}"></script>
     <script th:src="@{js/order.js}"></script>
 </head>
-<body onload="loadMain();">
-<div class="main-header">
-    <h1 id="h1-mytaxi">MyTaxi</h1>
-    <div>
-        <h3 id="my-cabinet-btn" class="greetings" th:text="'Hello, ' + ${user.getName()}">Template</h3>
-    </div>
-</div>
-<div id="order-form" class="login-panel" style="top: 500px; left: 50%; height: 70%; width: 90%;min-height: 555px; z-index: 5;">
+<body onload="loadMain();modifyPageAccordingToTheOrderInfo();initMap();">
+<th:block th:insert="~{/_menu_logged.html}"></th:block>
+<div id="order-form" class="login-panel" style="top: 500px; left: 50%; height: 70%; width: 90%;min-height: 580px; z-index: 5;">
     <h1 id="h1-login-to-mytaxi">Order</h1>
     <img id="info" style="right: unset" th:src="@{images/info.png}" alt="info"/>
     <form class="order-form" th:action="@{/createNewOrder}" th:object="${order}" method="post">
@@ -92,6 +87,16 @@
                 </td>
             </tr>
 
+            <tr class="form-field">
+                <td><label class="input-label">Vehicle Type:</label></td>
+                <td>
+                    <select th:field="*{vehicleType}" name="vehicle-type" class="custom-select">
+                        <option th:each="vehicleType : ${T(mytaxi.partola.models.VehicleType).values()}"
+                                th:value="${vehicleType}" th:text="${vehicleType}"></option>
+                    </select>
+                </td>
+            </tr>
+
             <!-- Payment type field -->
 
             <tr class="form-field">
@@ -108,26 +113,44 @@
                 </td>
             </tr>
 
+            <tr class="form-field">
+                <td><label class="input-label">Car Class:</label></td>
+                <td>
+                    <div class="payment-type">
+                        <input type="radio" id="car-class-economy" th:field="*{carClass}" name="car_class" value="ECONOMY"
+                               th:onclick="'handleCarClassSelection(' + ${bonusesAmount} + ', this)'">
+                        <label for="car-class-economy">Economy</label>
+                    </div>
+                    <div class="payment-type">
+                        <input type="radio" id="car-class-business" th:field="*{carClass}" name="car_class" value="BUSINESS"
+                               th:onclick="'handleCarClassSelection(' + ${bonusesAmount} + ', this)'">
+                        <label for="car-class-business">Business</label>
+                    </div>
+                </td>
+            </tr>
+
             <!-- Estimated price field -->
 
             <tr class="form-field">
                 <td><label for="price" class="input-label">Estimated price:</label></td>
-                <td class="estimated-price"><span th:field="*{price}" id="price">0</span> ₴</td>
+                <td class="estimated-price"><span id="display-price">0</span> ₴</td>
+                <input type="hidden" id="price" th:field="*{price}" />
             </tr>
+
+            <!-- Pay with bonuses field -->
+            <tr class="form-field">
+                <td><label for="pay-with-bonuses" style="color: darkorange; font-family: Chakra, sans-serif;">Pay with bonuses:</label></td>
+                <td>
+                    <input type="checkbox" id="pay-with-bonuses" th:field="*{payWithBonuses}" style="cursor: pointer" name="pay_with_bonuses"
+                           th:onclick="'subtractBonuses(' + ${bonusesAmount} + ')'">
+                </td>
+            </tr>
+
+            <input type="hidden" id="journey-distance" th:field="*{journeyDistance}">
         </table>
-
-        <!-- Pay with bonuses button -->
-
-        <div style="margin-right: 240px;">
-            <label for="pay-with-bonuses" style="color: darkorange; font-family: Chakra, sans-serif;">
-                Pay with bonuses
-            </label>
-            <input type="checkbox" id="pay-with-bonuses" th:field="*{payWithBonuses}" style="cursor: pointer" name="pay_with_bonuses">
-        </div>
 
         <button style="margin-top: 30px; margin-left: 13px" type="submit" class="login-submit">Order</button>
     </form>
-
     <div id="map"></div>
 </div>
 </body>

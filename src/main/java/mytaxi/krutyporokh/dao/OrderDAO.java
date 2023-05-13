@@ -2,11 +2,13 @@ package mytaxi.krutyporokh.dao;
 
 import mytaxi.krutyporokh.models.Order;
 import mytaxi.partola.dao.UserDAO;
+import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,10 +28,12 @@ public class OrderDAO {
         this.userDAO = userDAO;
     }
 
-    public void createNewOrder(Order order, CustomUser customUser) {
+    @Transactional
+    public void createNewOrder(Order order, Client client) {
         String query = "INSERT INTO \"Order\" " +
-                "(client_id, booking_datetime, pickup_address, destination_address, passenger_name, passenger_phone_number, booking_notes, payment_type, pay_with_bonuses, price) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?::payment_type, ?, ?)";
+                "(client_id, booking_datetime, pickup_address, destination_address, journey_distance, passenger_name, " +
+                "passenger_phone_number, booking_notes, payment_type, car_class, vehicle_type, pay_with_bonuses, price) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?::payment_type, ?::car_class, ?::vehicle_type, ?, ?)";
 
         LocalDateTime dateTime = LocalDateTime.parse(order.getBookingDatetime());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -38,14 +42,17 @@ public class OrderDAO {
         order.setBookingDatetime(dateTime.format(formatter));
 
         jdbcTemplate.update(query,
-                customUser.getUserId(),
+                client.getClientId(),
                 order.getBookingDatetime(),
                 order.getPickupAddress(),
                 order.getDestinationAddress(),
+                order.getJourneyDistance(),
                 order.getPassengerName(),
                 order.getPassengerPhoneNumber(),
                 order.getBookingNotes(),
                 order.getPaymentType().getValue(),
+                order.getCarClass().getValue(),
+                order.getVehicleType().getValue(),
                 order.isPayWithBonuses(),
                 order.getPrice()
         );

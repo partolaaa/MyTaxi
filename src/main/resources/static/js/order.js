@@ -1,24 +1,27 @@
-var departureMarker;
-var arrivalMarker;
-var directionsRenderer;
+let departureMarker;
+let arrivalMarker;
+let directionsRenderer;
+let journeyDistance;
+let carClass = "ECONOMY";
+let pricePerKm = 15;
 
 function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 49.988358, lng: 36.232845},
+    let map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 49.988358, lng: 36.232845 },
         zoom: 10
     });
 
-    var departureInput = document.getElementById('pickup-input');
-    var arrivalInput = document.getElementById('destination-input');
+    let departureInput = document.getElementById('pickup-input');
+    let arrivalInput = document.getElementById('destination-input');
 
-    var departureAutocomplete = new google.maps.places.Autocomplete(departureInput);
-    var arrivalAutocomplete = new google.maps.places.Autocomplete(arrivalInput);
+    let departureAutocomplete = new google.maps.places.Autocomplete(departureInput);
+    let arrivalAutocomplete = new google.maps.places.Autocomplete(arrivalInput);
 
     directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
 
-    departureAutocomplete.addListener('place_changed', function() {
-        var place = departureAutocomplete.getPlace();
-        console.log(place);
+    departureAutocomplete.addListener('place_changed', function () {
+        let place = departureAutocomplete.getPlace();
+        //console.log(place);
 
         // Set map center to selected location
         map.setCenter(place.geometry.location);
@@ -37,26 +40,14 @@ function initMap() {
 
         // If both markers have been set, calculate and display route
         if (departureMarker && arrivalMarker) {
-            var directionsService = new google.maps.DirectionsService();
-
-            var request = {
-                origin: departureMarker.getPosition(),
-                destination: arrivalMarker.getPosition(),
-                travelMode: 'DRIVING'
-            };
-
-            directionsService.route(request, function(result, status) {
-                if (status === 'OK') {
-                    directionsRenderer.setDirections(result);
-                }
-            });
+            calculateAndDisplayRoute();
         } else {
             directionsRenderer.setDirections(null); // remove previous route
         }
     });
 
-    arrivalAutocomplete.addListener('place_changed', function() {
-        var place = arrivalAutocomplete.getPlace();
+    arrivalAutocomplete.addListener('place_changed', function () {
+        let place = arrivalAutocomplete.getPlace();
         console.log(place);
 
         // Set map center to selected location
@@ -76,23 +67,45 @@ function initMap() {
 
         // If both markers have been set, calculate and display route
         if (departureMarker && arrivalMarker) {
-            var directionsService = new google.maps.DirectionsService();
-
-            var request = {
-                origin: departureMarker.getPosition(),
-                destination: arrivalMarker.getPosition(),
-                travelMode: 'DRIVING'
-            };
-
-            directionsService.route(request, function(result, status) {
-                if (status === 'OK') {
-                    directionsRenderer.setDirections(result);
-                }
-            });
+            calculateAndDisplayRoute();
         } else {
             directionsRenderer.setDirections(null); // remove previous route
         }
     });
+
+    function calculateAndDisplayRoute() {
+        let directionsService = new google.maps.DirectionsService();
+
+        let request = {
+            origin: departureMarker.getPosition(),
+            destination: arrivalMarker.getPosition(),
+            travelMode: 'DRIVING'
+        };
+
+        directionsService.route(request, function (result, status) {
+            if (status === 'OK') {
+                directionsRenderer.setDirections(result);
+                let route = result.routes[0];
+                let distance = 0;
+
+                // Calculate total distance of all legs
+                for (let i = 0; i < route.legs.length; i++) {
+                    distance += route.legs[i].distance.value;
+                }
+
+                //console.log('Journey Distance: ' + (distance / 1000) + ' kilometers');
+                journeyDistance = distance;
+                calculateEstimatedPrice(0);
+                document.getElementById("journey-distance").value = journeyDistance;
+            }
+        });
+    }
+}
+
+function calculateEstimatedPrice (bonusesAmount) {
+    let tempPricePerKm = carClass === "BUSINESS" ? pricePerKm * 2 : pricePerKm;
+    document.getElementById("display-price").innerHTML = (((journeyDistance / 1000) * tempPricePerKm) - bonusesAmount).toFixed(2);
+    document.getElementById("price").value = (((journeyDistance / 1000) * tempPricePerKm) - bonusesAmount).toFixed(2);
 }
 
 function modifyPageAccordingToTheOrderInfo() {
@@ -103,9 +116,11 @@ function modifyPageAccordingToTheOrderInfo() {
     if (!orderForAnotherPerson.checked) {
         passengerNameRow.setAttribute("hidden", "");
         passengerPhoneRow.setAttribute("hidden", "");
+        document.getElementById("order-form").style.minHeight = "580px";
     } else {
         passengerNameRow.removeAttribute("hidden");
         passengerPhoneRow.removeAttribute("hidden");
+        document.getElementById("order-form").style.minHeight = "700px";
     }
 }
 
@@ -113,16 +128,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const orderForAnotherPerson = document.getElementById("order-for-another-person");
     orderForAnotherPerson.addEventListener("change", function() {
         modifyPageAccordingToTheOrderInfo();
-        if (document.getElementById("order-for-another-person").checked) {
-            document.getElementById("order-form").style.minHeight = "666px";
-        } else {
-            document.getElementById("order-form").style.minHeight = "555px";
-        }
     });
 });
 
-
-window.onload = function (){
-    modifyPageAccordingToTheOrderInfo();
-    initMap();
-};
+function subtractBonuses (bonusesAmount) {
+    if (document.getElementById("pay-with-bonuses").checked) {
+        calculateEstimatedPrice(bonusesAmount);
+    } else {
+        calculateEstimatedPrice(0);
+    }
+}
+function handleCarClassSelection (bonusesAmount, selectedCarClass) {
+    carClass = selectedCarClass.value;
+    subtractBonuses(bonusesAmount);
+}
