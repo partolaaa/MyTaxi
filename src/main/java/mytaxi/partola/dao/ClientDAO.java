@@ -35,19 +35,27 @@ public class ClientDAO {
                 client.getPhoneNumber());
     }
 
-    public Optional<Client> getClientByUserId(long id) {
-        return jdbcTemplate.query("select * from \"Client\" where client_id=?",
+    public void setHasActiveOrderStatus(Client client, boolean status) {
+        jdbcTemplate.update(
+                "update \"Client\" set has_active_order = ? where client_id = ?",
+                status,
+                client.getClientId());
+    }
+
+    public Optional<Client> findClientById(long id) {
+        return jdbcTemplate.query("select * from \"User\" u inner join \"Client\" c on u.user_id = c.client_id where c.client_id=?",
                         new Object[]{id},
                         new BeanPropertyRowMapper<>(Client.class))
                 .stream().findAny();
     }
 
-    public Optional<Client> getClientByPhoneNumber(String phoneNumber) {
-        return jdbcTemplate.query("select * from \"Client\" where phone_number=?",
+    public Optional<Client> findClientByPhoneNumber(String phoneNumber) {
+        return jdbcTemplate.query("select * from \"User\" u inner join \"Client\" c on u.user_id = c.client_id where c.phone_number=?",
                         new Object[]{phoneNumber},
                         new BeanPropertyRowMapper<>(Client.class))
                 .stream().findAny();
     }
+
 
     @Transactional
     public void setBonusesByClientId(long clientId, float bonusesAmount) {

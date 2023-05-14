@@ -1,13 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Order Taxi</title>
-    <link rel="stylesheet" th:href="@{../css/styles.css}">
-    <script th:src="@{../js/main.js}"></script>
+    <title>Orders</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/driver.js}"></script>
 </head>
-<body>
+<body onload="loadDriver();">
 <th:block th:insert="~{/_menu_logged.html}"></th:block>
-Hello, driver
+<div>
+    <div id="info-about-me">
+        <h3 style="font-size: 30px; position: absolute; left: 45%; top: 0;">Me</h3>
+
+        <div style="position: absolute; top: 20%; font-size: 18px;">
+            <h4>Name: <span th:text="${user.getName()}"></span></h4>
+            <h4>Phone number: <span th:text="${driver.getPhoneNumber()}"></span></h4>
+            <h4>Email: <span th:text="${user.getEmail()}"></span></h4>
+            <h4>Rating: <span th:text="${driver.getDriverRating()}"></span></h4>
+            <!-- TODO: add drives count -->
+        </div>
+    </div>
+    <div id="orders">
+        <h3 class="error-message" style="font-size: 25px; position: relative; left: 33%;" th:if="${errorMessage}" th:text="${errorMessage}"></h3>
+        <h3 style="margin-top: 0; margin-left: 45%; font-size: 30px;">My Orders</h3>
+        <table class="orders-table">
+            <thead>
+            <tr>
+                <th>Booking Date/Time</th>
+                <th>Price ₴</th>
+                <th>Pickup Address</th>
+                <th>Destination Address</th>
+                <th>Journey Distance</th>
+                <th>Payment Type</th>
+                <th style="width: 130px">Order Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(orders)}">
+                <td style="font-weight: bold; font-size: 30px;" colspan="6">
+                    Looks like nobody wants a ride :(
+                </td>
+            </tr>
+            <tr th:each="order: ${orders}">
+                <td th:text="${order.getBookingDatetime()}"></td>
+                <td th:text="${order.getPrice()}"></td>
+                <td th:text="${order.getPickupAddress()}"></td>
+                <td th:text="${order.getDestinationAddress()}"></td>
+                <td th:text="${order.getJourneyDistance()} + ' m'"></td>
+                <td th:text="${order.getPaymentType().show()}"></td>
+                <td>
+                    <a th:href="@{'/driver/orders/' + ${order.getOrderId()}}">
+                        <span id="select-order-btn" style="margin-left: 10px;" th:text="${order.getOrderStatus().show()}"></span>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>

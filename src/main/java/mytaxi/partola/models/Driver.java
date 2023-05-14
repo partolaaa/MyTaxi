@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Driver extends CustomUser {
-    private long driverId;
+    private Long driverId;
     private String licenseNumber;
     private float driverRating;
     private String phoneNumber;

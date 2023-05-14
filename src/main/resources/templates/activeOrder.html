@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Active Order</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/main.js}"></script>
+</head>
+<body onload="loadMain();">
+<th:block th:insert="~{/_menu_logged.html}"></th:block>
+<div id="trip-info-panel">
+    <h3 id="trip-info-title" th:text="${order.getOrderStatus().show()}"></h3>
+
+    <!-- Info about the driver and the trip -->
+    <div id="trip-info">
+        <h4>Driver Name: <span th:text="${driver.getName()}"></span></h4>
+        <h4>Phone Number: <span th:text="${driver.getPhoneNumber()}"></span></h4>
+        <h4>Driver Rating: <span th:text="${driver.getDriverRating()}"></span></h4>
+        <h4>Distance: <span th:with="roundedJourneyDistance=${T(java.lang.Math).round(order.getJourneyDistance()/1000 * 100.0) / 100.0}" th:text="${roundedJourneyDistance}"></span> km</h4>
+        <h4>Class: <span th:text="${order.getCarClass().show()}"></span></h4>
+        <h4>License Plate Number: <span th:text="${car.getLicensePlate()}"></span></h4>
+        <h4>Car Model: <span th:text="${car.getModel()}"></span></h4>
+        <h4>Price: <span style="color: darkorange;" th:text="${order.getPrice()}"></span> ₴</h4>
+    </div>
+</div>
+</body>
+</html>

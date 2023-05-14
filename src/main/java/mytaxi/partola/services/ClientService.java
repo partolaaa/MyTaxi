@@ -8,7 +8,6 @@ import mytaxi.partola.models.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,14 +28,14 @@ public class ClientService {
     }
 
     public boolean clientExistsWithPhoneNumber(Client client) {
-        return clientDAO.getClientByPhoneNumber(client.getPhoneNumber()).isPresent();
+        return clientDAO.findClientByPhoneNumber(client.getPhoneNumber()).isPresent();
     }
 
     public void addBonusesByUserAndOrderPrice(CustomUser customUser, float orderPrice) {
-        Optional<Client> client = clientDAO.getClientByUserId(customUser.getUserId());
+        Optional<Client> client = clientDAO.findClientById(customUser.getUserId());
 
         if (client.isPresent()){
-            List<Order> orders = orderDAO.getAllOrdersByClientEmail(customUser.getEmail());
+            List<Order> orders = orderDAO.findAllOrdersByClientId(client.get().getClientId());
 
             float bonusPercent = (float) (Math.max(Math.min(orders.size()/10, 10), 1) / 100.0); // bonusPercent can't be more than 10%
             float bonusesAmount = orderPrice * bonusPercent + client.get().getBonusAmount();

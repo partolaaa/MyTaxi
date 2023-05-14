@@ -1,6 +1,5 @@
 package mytaxi.partola.dao;
 
-import mytaxi.partola.models.Car;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.models.Driver;
 import mytaxi.partola.models.Role;
@@ -16,18 +15,16 @@ import java.util.Optional;
  */
 @Component
 public class DriverDAO {
-    private final UserDAO userDAO;
     private final JdbcTemplate jdbcTemplate;
 
-    public DriverDAO(UserDAO userDAO, JdbcTemplate jdbcTemplate) {
-        this.userDAO = userDAO;
+    public DriverDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
 
-    public Optional<Driver> getDriverByUser (CustomUser customUser) {
+    public Optional<Driver> findDriverByUser(CustomUser customUser) {
         if (customUser.getRole().equals(Role.ROLE_DRIVER)) {
-            return jdbcTemplate.query("select * from \"Driver\" where driver_id=?",
+            return jdbcTemplate.query("select * from \"User\" u inner join \"Driver\" d on u.user_id = d.driver_id where d.driver_id=?",
                             new Object[]{customUser.getUserId()},
                             new BeanPropertyRowMapper<>(Driver.class))
                     .stream().findAny();
@@ -36,10 +33,17 @@ public class DriverDAO {
         }
     }
 
-    public Optional<Car> getDriverCarByDriver (Driver driver) {
-        return jdbcTemplate.query("select * from \"Car\" where car_id=?",
-                        new Object[]{driver.getCarId()},
-                        new BeanPropertyRowMapper<>(Car.class))
+    public Optional<Driver> findDriverById(long id) {
+        return jdbcTemplate.query("select * from \"User\" u inner join \"Driver\" d on u.user_id = d.driver_id where d.driver_id=?",
+                        new Object[]{id},
+                        new BeanPropertyRowMapper<>(Driver.class))
                 .stream().findAny();
+    }
+
+    public void setBusyStatusById(long id, boolean status) {
+        jdbcTemplate.update(
+                "update \"Driver\" set busy = ? where driver_id = ?",
+                status,
+                id);
     }
 }

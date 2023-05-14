@@ -39,4 +39,11 @@ public class UserDAO {
                         new BeanPropertyRowMapper<>(CustomUser.class))
                 .stream().findAny();
     }
+
+    public Optional<CustomUser> findUserById(long id) {
+        return jdbcTemplate.query("select * from \"User\" where user_id=?",
+                        new Object[]{id},
+                        new BeanPropertyRowMapper<>(CustomUser.class))
+                .stream().findAny();
+    }
 }

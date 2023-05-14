@@ -18,8 +18,9 @@ import javax.validation.constraints.Size;
 public class Client extends CustomUser {
     private long clientId;
     @NotBlank(message = "Phone number is required")
-    @Size(max = 13, message = "Invalid phone number, keep format +380-xxx-xxx-xxxx")
+    @Size(max = 13, message = "Invalid phone number, keep format +380xxxxxxxxxx")
     private String phoneNumber;
     private int rating;
     private float bonusAmount;
+    private boolean hasActiveOrder;
 }

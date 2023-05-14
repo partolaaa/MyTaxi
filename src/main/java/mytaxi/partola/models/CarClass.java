@@ -6,8 +6,7 @@ package mytaxi.partola.models;
  */
 public enum CarClass {
     BUSINESS("BUSINESS"),
-    ECONOMY("ECONOMY"),
-    ;
+    ECONOMY("ECONOMY");
 
     private final String carClass;
 
@@ -17,5 +16,11 @@ public enum CarClass {
 
     public String getValue () {
         return carClass;
+    }
+
+    public String show() {
+        return carClass
+                .substring(0, 1).toUpperCase()
+                + carClass.substring(1).toLowerCase();
     }
 }

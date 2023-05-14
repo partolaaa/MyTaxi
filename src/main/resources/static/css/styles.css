@@ -68,9 +68,10 @@ h2 {
     left: 50%;
     transform: translate(-50%, -50%);
     justify-content: center;
-    width: 600px;
-    height: 350px;
+    min-width: 600px;
+    min-height: 350px;
     border-radius: 20px;
+    overflow-y: auto; /*TODO: do better*/
 }
 
 .register-panel {
@@ -328,4 +329,82 @@ input[type="checkbox"]:checked:before {
 .custom-select select option:focus {
     outline: none;
     border: none;
+}
+
+#select-order-btn {
+    background-color: darkorange;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.current-order-info {
+    background-color: rgba(72, 61, 139, 0.7);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    justify-content: center;
+    width: 600px;
+    height: 350px;
+    border-radius: 20px;
+}
+
+.error-message {
+    color: red;
+    font-family: 'CHAKRA', sans-serif;
+}
+
+#trip-info-title {
+    font-size: 30px;
+    position: absolute;
+    left: 42%;
+    top: 0;
+    color: green;
+    font-family: 'Chakra', sans-serif;
+}
+
+#trip-info {
+    top: 16%;
+    font-size: 18px;
+    color: white;
+    font-family: 'CHAKRA', sans-serif;
+    position: relative;
+    margin-top: 100px;
+    left: 7%;
+    width: 80%;
+}
+
+#update-status-btn {
+    background-color: darkorange;
+    color: white;
+    cursor: pointer;
+    font-family: 'Chakra', sans-serif;
+    font-size: 25px;
+    border-radius: 12px;
+    border: none;
+    position: relative;
+    left: 42%;
+    top: 34%;
+    font-weight: bold;
+    padding: 5px;
+    margin-bottom: 15px;
+}
+
+#trip-info-panel {
+    background-color: rgba(72, 61, 139, 0.7);
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    width: 40%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    margin-top: 200px;
+    min-width: 800px;
 }

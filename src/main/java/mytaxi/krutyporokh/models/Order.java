@@ -23,11 +23,9 @@ public class Order {
     private String bookingDatetime;
 
     @NotBlank(message = "Pickup address cannot be empty")
-    @Size(max = 100, message = "Pickup address must be less than or equal to 100 characters")
     private String pickupAddress;
 
     @NotBlank(message = "Destination address cannot be empty")
-    @Size(max = 100, message = "Destination address must be less than or equal to 100 characters")
     private String destinationAddress;
 
     private double journeyDistance;
