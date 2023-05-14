@@ -1,9 +1,12 @@
 package mytaxi.krutyporokh.dao;
 
 import mytaxi.krutyporokh.models.Order;
+import mytaxi.krutyporokh.models.OrderStatus;
+import mytaxi.partola.dao.CarDAO;
 import mytaxi.partola.dao.UserDAO;
+import mytaxi.partola.models.Car;
 import mytaxi.partola.models.Client;
-import mytaxi.partola.models.CustomUser;
+import mytaxi.partola.models.Driver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +23,13 @@ public class OrderDAO {
 
     private final JdbcTemplate jdbcTemplate;
     private final UserDAO userDAO;
+    private final CarDAO carDAO;
 
     @Autowired
-    public OrderDAO(JdbcTemplate jdbcTemplate, UserDAO userDAO) {
+    public OrderDAO(JdbcTemplate jdbcTemplate, UserDAO userDAO, CarDAO carDAO) {
         this.jdbcTemplate = jdbcTemplate;
         this.userDAO = userDAO;
+        this.carDAO = carDAO;
     }
 
     @Transactional
@@ -58,19 +62,44 @@ public class OrderDAO {
         );
     }
 
-    public List<Order> getAllOrdersByClientEmail(String email) {
-        Optional<CustomUser> currentUser = userDAO.findUserByEmail(email);
-        List<Order> orders = new ArrayList<>();
-
-        if (currentUser.isPresent()) {
-            long clientId = currentUser.get().getUserId();
-
-            orders = jdbcTemplate.query("select * from \"Order\" where client_id = ?",
-                    new Object[]{clientId},
-                    new BeanPropertyRowMapper<>(Order.class));
-        }
-
-        return orders;
+    public List<Order> findAllOrdersByClientId(long clientId) {
+        return jdbcTemplate.query("select * from \"Order\" where client_id = ?",
+                new Object[]{clientId},
+                new BeanPropertyRowMapper<>(Order.class));
     }
 
+    public List<Order> findAllOrdersForDriver(Driver driver) {
+        Car car = carDAO.getCarByDriver(driver).get();
+
+        return jdbcTemplate.query("select  * from \"Order\"\n" +
+                        "where\n" +
+                        "    vehicle_type = ?::vehicle_type\n" +
+                        "    and\n" +
+                        "    car_class = ?::car_class\n" +
+                        "    and\n" +
+                        "    order_status = 'NOT_ACCEPTED'::order_status;",
+                new Object[]{
+                        car.getVehicleType().getValue(),
+                        car.getCarClass().getValue()},
+                new BeanPropertyRowMapper<>(Order.class));
+    }
+
+    public Optional<Order> findOrderById(long id) {
+        return jdbcTemplate.query("select * from \"Order\" where order_id=?",
+                        new Object[]{id},
+                        new BeanPropertyRowMapper<>(Order.class))
+                .stream().findAny();
+    }
+
+    public void setOrderStatus(Order order, OrderStatus orderStatus) {
+        jdbcTemplate.update("update \"Order\" set order_status = ?::order_status where order_id = ?",
+                orderStatus.getValue(),
+                order.getOrderId());
+    }
+
+    public void assignDriver(Driver driver, Order order) {
+        jdbcTemplate.update("update \"Order\" set driver_id = ? where order_id = ?",
+                driver.getDriverId(),
+                order.getOrderId());
+    }
 }

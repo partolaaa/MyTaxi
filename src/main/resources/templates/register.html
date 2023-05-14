@@ -16,21 +16,21 @@
     <form class="login-form" th:action="@{/register}" th:method="POST" th:object="${client}">
       <div style="margin-bottom: 10px;">
         <input th:field="*{name}" class="input-fields" type="text" id="name-input" name="name" placeholder="Username">
-        <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Username Error</div>
+        <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Username Error</div>
       </div>
 
       <div style="margin-bottom: 10px;">
-        <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+        <div class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
         <input class="input-fields" th:field="*{email}" type="text" id="email-input" name="email" placeholder="Email">
       </div>
 
       <div style="margin-bottom: 10px;">
-        <div style="color:red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Number Error</div>
+        <div class="error-message" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Number Error</div>
         <input class="input-fields" th:field="*{phoneNumber}" type="text" id="phone-input" name="phoneNumber" placeholder="Phone number">
       </div>
 
       <div style="margin-bottom: 20px;">
-        <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Pass Error</div>
+        <div class="error-message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Pass Error</div>
         <input class="input-fields" th:field="*{password}" type="password" id="password-input" name="password" placeholder="Password">
       </div>
 

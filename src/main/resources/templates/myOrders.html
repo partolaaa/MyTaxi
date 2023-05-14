@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Order Taxi</title>
+    <title>My Orders</title>
     <link rel="stylesheet" th:href="@{css/styles.css}">
     <script th:src="@{js/main.js}"></script>
 </head>
@@ -13,9 +13,9 @@
         <h3 style="font-size: 30px; position: absolute; left: 45%; top: 0;">Me</h3>
 
         <div style="position: absolute; top: 20%; font-size: 18px;">
-            <h4>Name: <span th:text="${user.getName()}"></span></h4>
+            <h4>Name: <span th:text="${client.getName()}"></span></h4>
             <h4>Phone number: <span th:text="${client.getPhoneNumber()}"></span></h4>
-            <h4>Email: <span th:text="${user.getEmail()}"></span></h4>
+            <h4>Email: <span th:text="${client.getEmail()}"></span></h4>
             <h4>Rating: <span th:text="${client.getRating()}"></span></h4>
             <h4>Bonuses: <span th:with="roundedBonus=${T(java.lang.Math).round(client.getBonusAmount() * 100.0) / 100.0}" th:text="${roundedBonus}"></span> ₴</h4>
         </div>
@@ -26,7 +26,7 @@
             <thead>
             <tr>
                 <th>Booking Date/Time</th>
-                <th>Price</th>
+                <th>Price ₴</th>
                 <th>Pickup Address</th>
                 <th>Destination Address</th>
                 <th>Payment Type</th>
@@ -45,8 +45,25 @@
                 <td th:text="${order.getPrice()}"></td>
                 <td th:text="${order.getPickupAddress()}"></td>
                 <td th:text="${order.getDestinationAddress()}"></td>
-                <td th:text="${order.getPaymentType().getValue()}"></td>
-                <td th:text="${order.getOrderStatus().getValue()}"></td>
+                <td th:text="${order.getPaymentType().show()}"></td>
+                <!--<td th:text="${order.getOrderStatus().show()}"
+                    th:style="${order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED
+                    && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED}
+                    ? 'background-color: green; cursor: pointer; font-weight: bold; border-radius: 10px;' : ''">
+                </td>-->
+
+                <td>
+                    <th:block th:if="${order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED
+                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED}">
+                        <a th:href="@{/order/{id}(id = ${order.getOrderId()})}" th:text="${order.getOrderStatus().show()}"
+                        style="background-color: green; cursor: pointer; font-weight: bold; border-radius: 10px; color: white; padding: 15px;"></a>
+                     </th:block>
+
+                    <th:block th:unless="${order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED
+                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED}">
+                        <span th:text="${order.getOrderStatus().show()}"></span>
+                    </th:block>
+                </td>
             </tr>
             </tbody>
         </table>

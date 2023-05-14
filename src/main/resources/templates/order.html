@@ -10,17 +10,22 @@
 </head>
 <body onload="loadMain();modifyPageAccordingToTheOrderInfo();initMap();">
 <th:block th:insert="~{/_menu_logged.html}"></th:block>
+
 <div id="order-form" class="login-panel" style="top: 500px; left: 50%; height: 70%; width: 90%;min-height: 580px; z-index: 5;">
     <h1 id="h1-login-to-mytaxi">Order</h1>
     <img id="info" style="right: unset" th:src="@{images/info.png}" alt="info"/>
+
+    <!--<div style="color:red" th:object="${order}" th:if="${#fields.hasErrors('pickupAddress')}" th:errors="*{pickupAddress}"></div>-->
     <form class="order-form" th:action="@{/createNewOrder}" th:object="${order}" method="post">
+        <!-- Error in case if client already has active order -->
+        <!-- TODO: Yeah, that's definitely not the best way, needs to reject hasActiveOrder-->
+        <div class="error-message" style="font-size: 25px; font-weight: bold;" th:if="${#fields.hasErrors('orderStatus')}" th:errors="*{orderStatus}"></div>
         <table>
             <!-- Booking datetime field -->
-
             <tr class="form-field">
                 <td><label for="datetime-input" class="input-label">Booking Date/Time:</label></td>
                 <td>
-                    <div style="color:red" th:if="${#fields.hasErrors('bookingDatetime')}" th:errors="*{bookingDatetime}"></div>
+                    <div class="error-message" th:if="${#fields.hasErrors('bookingDatetime')}" th:errors="*{bookingDatetime}"></div>
                     <input class="input-fields" type="datetime-local" id="datetime-input" th:field="*{bookingDatetime}" name="booking_datetime">
                 </td>
             </tr>
@@ -29,7 +34,7 @@
             <tr class="form-field">
                 <td><label for="pickup-input" class="input-label">Pickup Address:</label></td>
                 <td>
-                    <div style="color:red" th:if="${#fields.hasErrors('pickupAddress')}" th:errors="*{pickupAddress}"></div>
+                    <div class="error-message" th:if="${#fields.hasErrors('pickupAddress')}" th:errors="*{pickupAddress}"></div>
                     <input class="input-fields" type="text" id="pickup-input" th:field="*{pickupAddress}" name="pickup_address">
                 </td>
             </tr>
@@ -39,7 +44,7 @@
             <tr class="form-field">
                 <td><label for="destination-input" class="input-label">Destination Address:</label></td>
                 <td>
-                    <div style="color:red" th:if="${#fields.hasErrors('destinationAddress')}" th:errors="*{destinationAddress}"></div>
+                    <div class="error-message" th:if="${#fields.hasErrors('destinationAddress')}" th:errors="*{destinationAddress}"></div>
                     <input class="input-fields" type="text" id="destination-input" th:field="*{destinationAddress}" name="destination_address">
                 </td>
             </tr>
@@ -51,7 +56,7 @@
                         <label for="order-for-another-person" style="color: darkorange; font-family: Chakra, sans-serif;">
                     Order for another person
                         </label>
-                        <input type="checkbox" id="order-for-another-person" name="order-for-another-person" style="cursor: pointer; margin-left: 5px;" th:checked="${#fields.hasErrors('passengerName')} or ${#fields.hasErrors('passengerPhoneNumber')}">
+                        <input type="checkbox" id="order-for-another-person" name="order-for-another-person" class="error-message" th:checked="${#fields.hasErrors('passengerName')} or ${#fields.hasErrors('passengerPhoneNumber')}">
             </div>
                 </td>
             </tr>
@@ -62,7 +67,7 @@
             <tr class="form-field" id="passenger-name-row" th:classappend="${#fields.hasErrors('passengerName')}? 'has-error' : ''" hidden>
                 <td><label for="passenger-name-input" class="input-label">Passenger Name:</label></td>
                 <td>
-                    <div style="color:red" th:if="${#fields.hasErrors('passengerName')}" th:errors="*{passengerName}"></div>
+                    <div class="error-message" th:if="${#fields.hasErrors('passengerName')}" th:errors="*{passengerName}"></div>
                     <input class="input-fields" type="text" id="passenger-name-input" placeholder="Passenger name" th:field="*{passengerName}" name="passenger_name">
                 </td>
             </tr>
@@ -71,7 +76,7 @@
             <tr class="form-field" id="passenger-phone-row" th:classappend="${#fields.hasErrors('passengerPhoneNumber')}? 'has-error' : ''" hidden>
                 <td><label for="passenger-phone-input" class="input-label">Passenger Phone Number:</label></td>
                 <td>
-                    <div style="color:red" th:if="${#fields.hasErrors('passengerPhoneNumber')}" th:errors="*{passengerPhoneNumber}"></div>
+                    <div class="error-message" th:if="${#fields.hasErrors('passengerPhoneNumber')}" th:errors="*{passengerPhoneNumber}"></div>
                     <input class="input-fields" type="text" id="passenger-phone-input" placeholder="Passenger phone number" th:field="*{passengerPhoneNumber}" name="passenger_phone_number">
                 </td>
             </tr>
@@ -82,7 +87,7 @@
             <tr class="form-field">
                 <td><label for="note-input" class="input-label">Notes:</label></td>
                 <td>
-                    <div style="color:red" th:if="${#fields.hasErrors('bookingNotes')}" th:errors="*{bookingNotes}"></div>
+                    <div class="error-message" th:if="${#fields.hasErrors('bookingNotes')}" th:errors="*{bookingNotes}"></div>
                     <input class="input-fields" type="text" id="note-input" th:field="*{bookingNotes}" name="booking_notes" placeholder="Some special request?">
                 </td>
             </tr>
@@ -118,12 +123,12 @@
                 <td>
                     <div class="payment-type">
                         <input type="radio" id="car-class-economy" th:field="*{carClass}" name="car_class" value="ECONOMY"
-                               th:onclick="'handleCarClassSelection(' + ${bonusesAmount} + ', this)'">
+                               th:onclick="'handleCarClassSelection(' + ${client.getBonusAmount()} + ', this)'">
                         <label for="car-class-economy">Economy</label>
                     </div>
                     <div class="payment-type">
                         <input type="radio" id="car-class-business" th:field="*{carClass}" name="car_class" value="BUSINESS"
-                               th:onclick="'handleCarClassSelection(' + ${bonusesAmount} + ', this)'">
+                               th:onclick="'handleCarClassSelection(' + ${client.getBonusAmount()} + ', this)'">
                         <label for="car-class-business">Business</label>
                     </div>
                 </td>
@@ -142,7 +147,7 @@
                 <td><label for="pay-with-bonuses" style="color: darkorange; font-family: Chakra, sans-serif;">Pay with bonuses:</label></td>
                 <td>
                     <input type="checkbox" id="pay-with-bonuses" th:field="*{payWithBonuses}" style="cursor: pointer" name="pay_with_bonuses"
-                           th:onclick="'subtractBonuses(' + ${bonusesAmount} + ')'">
+                           th:onclick="'subtractBonuses(' + ${client.getBonusAmount()} + ')'">
                 </td>
             </tr>
 

@@ -4,23 +4,22 @@ import mytaxi.krutyporokh.dao.OrderDAO;
 import mytaxi.krutyporokh.models.Order;
 import mytaxi.krutyporokh.validation.groups.OrderForAnotherPerson;
 import mytaxi.krutyporokh.validation.groups.OrderForSelf;
+import mytaxi.partola.dao.CarDAO;
 import mytaxi.partola.dao.ClientDAO;
-import mytaxi.partola.dao.UserDAO;
+import mytaxi.partola.dao.DriverDAO;
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
-import mytaxi.partola.security.CustomUserDetails;
+import mytaxi.partola.models.Driver;
 import mytaxi.partola.services.ClientService;
 import mytaxi.partola.services.CustomUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
@@ -30,8 +29,9 @@ import java.util.Set;
 @Controller
 public class OrdersController {
     private final OrderDAO orderDAO;
-    private final UserDAO userDAO;
     private final ClientDAO clientDAO;
+    private final DriverDAO driverDAO;
+    private final CarDAO carDAO;
     private final Validator validator;
     private final ClientService clientService;
     private final CustomUserService customUserService;
@@ -41,10 +41,11 @@ public class OrdersController {
     private String googleMapsAPIKey;
 
     @Autowired
-    public OrdersController(OrderDAO orderDAO, UserDAO userDAO, ClientDAO clientDAO, Validator validator, ClientService clientService, CustomUserService customUserService) {
+    public OrdersController(OrderDAO orderDAO, ClientDAO clientDAO, DriverDAO driverDAO, CarDAO carDAO, Validator validator, ClientService clientService, CustomUserService customUserService) {
         this.orderDAO = orderDAO;
-        this.userDAO = userDAO;
         this.clientDAO = clientDAO;
+        this.driverDAO = driverDAO;
+        this.carDAO = carDAO;
         this.validator = validator;
         this.clientService = clientService;
         this.customUserService = customUserService;
@@ -58,11 +59,10 @@ public class OrdersController {
 
         CustomUser currentUser = customUserService.getCurrentUserFromSession().get();
         model.addAttribute("user", currentUser);
-        Client client = clientDAO.getClientByUserId(currentUser.getUserId()).get();
-        model.addAttribute("bonusesAmount", client.getBonusAmount());
+        Client client = clientDAO.findClientById(currentUser.getUserId()).get();
+        model.addAttribute("client", client);
         return "order";
     }
-
 
     @PostMapping("/createNewOrder")
     public String  createNewOrder(@RequestParam(name = "order-for-another-person", required = false) boolean orderForAnotherPerson,
@@ -85,8 +85,16 @@ public class OrdersController {
                 bindingResult.rejectValue(violation.getPropertyPath().toString(), null, violation.getMessage());
             }
         }
+
         CustomUser currentUser = customUserService.getCurrentUserFromSession().get();
-        Client client = clientDAO.getClientByUserId(currentUser.getUserId()).get();
+        Client client = clientDAO.findClientById(currentUser.getUserId()).get();
+
+        // Check if client already has active orders
+        // TODO: Need to reject hasActiveOrder value instead of orderStatus
+        if (client.isHasActiveOrder()) {
+            bindingResult.rejectValue("orderStatus", null, "You already have an active order.");
+        }
+
 
         //Processing validation errors
         if(bindingResult.hasErrors()){
@@ -94,6 +102,7 @@ public class OrdersController {
             model.addAttribute("googleMapsAPIKey", googleMapsAPIKey);
 
             model.addAttribute("user", currentUser);
+            model.addAttribute("client", client);
             model.addAttribute("bonusesAmount", client.getBonusAmount());
             model.addAttribute("error", bindingResult.getAllErrors());
             return "order";
@@ -102,9 +111,30 @@ public class OrdersController {
         if (order.isPayWithBonuses()) {
             clientService.subtractBonuses(client);
         }
+        clientDAO.setHasActiveOrderStatus(client, true);
         clientService.addBonusesByUserAndOrderPrice(currentUser, order.getPrice());
         orderDAO.createNewOrder(order, client);
 
         return "redirect:/my-orders";
+    }
+
+    @GetMapping("/order/{id}")
+    public String activeOrder(@PathVariable long id,
+                              Model model) {
+        CustomUser currentUser = customUserService.getCurrentUserFromSession().get();
+        Order currentOrder = orderDAO.findOrderById(id).get();
+
+        // If this order is not order of current user, so we don't show it
+        if (currentOrder.getClientId() != currentUser.getUserId()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource.");
+        }
+
+        Driver driver = driverDAO.findDriverById(currentOrder.getDriverId()).get();
+
+        model.addAttribute("user", currentUser);
+        model.addAttribute("driver", driver);
+        model.addAttribute("order", currentOrder);
+        model.addAttribute("car", carDAO.getCarByDriver(driver).get());
+        return "activeOrder";
     }
 }

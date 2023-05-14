@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Current Order</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{/_menu_logged.html}"></th:block>
+<div id="trip-info-panel">
+    <h3 id="trip-info-title" th:text="${order.getOrderStatus().show()}"></h3>
+
+    <!-- Info about the user and the trip -->
+    <div id="trip-info">
+        <h4>Passenger Name: <span th:text="${passengerName}"></span></h4>
+        <h4>Phone number: <span th:text="${client.getPhoneNumber()}"></span></h4>
+        <h4>Passenger Rating: <span th:text="${client.getRating()}"></span></h4>
+        <h4>Pickup Address: <span style="color: darkorange" th:text="${order.getPickupAddress()}"></span></h4>
+        <h4>Destination Address: <span style="color: darkorange" th:text="${order.getDestinationAddress()}"></span></h4>
+        <h4>Distance: <span th:text="${order.getJourneyDistance()}"></span></h4>
+        <h4>Price: <span th:text="${order.getPrice()}"></span> ₴</h4>
+    </div>
+    <form th:action="@{/driver/orders/__${id}__/updateStatus}" th:method="POST">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <input id="update-status-btn" type="submit" th:value="${order.getOrderStatus().show()}"/>
+    </form>
+</div>
+</body>
+</html>
