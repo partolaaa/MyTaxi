@@ -1,0 +1,11 @@
+<div id="trip-info-panel" style="min-height: 400px; z-index: 9; display: none;">
+  <img id="close" style="right: unset" onclick="closeTripRatingMenu();" th:src="@{/images/close.png}" alt="close"/>
+  <h3 id="trip-info-title" style="color: white; left: 38%;" th:text="'Rate This Trip:'"></h3>
+  <div class="rating" style="margin-top: 160px; margin-left: 183px;">
+    <button class="rating-button" onclick="rateTrip(1)">1</button>
+    <button class="rating-button" onclick="rateTrip(2)">2</button>
+    <button class="rating-button" onclick="rateTrip(3)">3</button>
+    <button class="rating-button" onclick="rateTrip(4)">4</button>
+    <button class="rating-button" onclick="rateTrip(5)">5</button>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 package mytaxi.partola.dao;
 
+import mytaxi.krutyporokh.models.Order;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.models.Driver;
 import mytaxi.partola.models.Role;
@@ -7,6 +8,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,5 +47,18 @@ public class DriverDAO {
                 "update \"Driver\" set busy = ? where driver_id = ?",
                 status,
                 id);
+    }
+
+    public void updateRating (Driver driver) {
+        jdbcTemplate.update(
+                "update \"Driver\" " +
+                        "set rating = ?," +
+                        "number_of_ratings = ?," +
+                        "total_ratings = ?" +
+                        " where driver_id = ?",
+                driver.getRating(),
+                driver.getNumberOfRatings(),
+                driver.getTotalRatings(),
+                driver.getDriverId());
     }
 }

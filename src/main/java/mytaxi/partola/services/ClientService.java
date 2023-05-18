@@ -31,6 +31,16 @@ public class ClientService {
         return clientDAO.findClientByPhoneNumber(client.getPhoneNumber()).isPresent();
     }
 
+    public void updateRating(Client client, int rating) {
+        client.setNumberOfRatings(client.getNumberOfRatings() + 1);
+        client.setTotalRatings(client.getTotalRatings() + rating);
+        client.setRating((float)client.getTotalRatings() / client.getNumberOfRatings());
+
+        //System.out.println((float)client.getTotalRatings() / client.getNumberOfRatings());
+
+        clientDAO.updateRating(client);
+    }
+
     public void addBonusesByUserAndOrderPrice(CustomUser customUser, float orderPrice) {
         Optional<Client> client = clientDAO.findClientById(customUser.getUserId());
 

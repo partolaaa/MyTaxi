@@ -32,3 +32,26 @@ function setButtonRedirectOnClick(button, path) {
         };
     }
 }
+
+function rateTrip(rating) {
+    document.getElementById('rating-input').value = rating;
+
+    $.ajax({
+        url: $('#rating-form').attr('action'),
+        type: 'POST',
+        data: $('#rating-form').serialize(),
+        error: function(error) {
+            console.log("An error occurred: " + error);
+        }
+    });
+
+    closeTripRatingMenu();
+}
+
+function showTripRatingMenu () {
+    document.getElementById("trip-info-panel").style.display = "block";
+}
+function closeTripRatingMenu() {
+    document.getElementById("trip-info-panel").style.display = "none";
+}
+

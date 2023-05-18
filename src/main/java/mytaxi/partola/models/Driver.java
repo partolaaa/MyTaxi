@@ -16,8 +16,10 @@ import lombok.ToString;
 public class Driver extends CustomUser {
     private Long driverId;
     private String licenseNumber;
-    private float driverRating;
+    private float rating;
     private String phoneNumber;
     private boolean isBusy;
     private long carId;
+    private int numberOfRatings;
+    private int totalRatings;
 }

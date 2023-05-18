@@ -2,13 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Orders</title>
+    <title>My Finished Orders</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script th:src="@{/js/main.js}"></script>
     <script th:src="@{/js/driver.js}"></script>
 </head>
 <body onload="loadDriver();">
 <!--<th:block th:insert="~{/_menu_logged.html}"></th:block>-->
+
+<th:block th:insert="~{/_rateTrip.html}"></th:block>
 
 <div class="main-header">
     <h1 id="h1-mytaxi">MyTaxi</h1>
@@ -16,41 +19,27 @@
         <form th:action="@{/logout}" th:method="POST">
             <input id="log-out-btn" class="h3-head-buttons" style="background: darkorange" type="submit" value="Logout"/>
         </form>
-        <a href="/driver/finished-orders">
-            <span class="driver-orders-menu-btn" id="finished-orders-btn" th:text="'My finished orders'"></span>
+        <a href="/driver/orders">
+            <span class="driver-orders-menu-btn" id="driver-orders-btn" th:text="'Orders'"></span>
         </a>
         <h3 id="my-cabinet-btn" class="greetings" th:text="'Hello, ' + ${user.getName()}">Template</h3>
     </div>
 </div>
-
 
 <div>
     <div id="info-about-me" style="min-height: 223px;">
         <h3 style="font-size: 30px; position: absolute; left: 45%; top: 0;">Me</h3>
 
         <div style="position: absolute; top: 20%; font-size: 18px;">
-            <h4>Name: <span th:text="${user.getName()}"></span></h4>
+            <h4>Name: <span th:text="${driver.getName()}"></span></h4>
             <h4>Phone number: <span th:text="${driver.getPhoneNumber()}"></span></h4>
-            <h4>Email: <span th:text="${user.getEmail()}"></span></h4>
+            <h4>Email: <span th:text="${driver.getEmail()}"></span></h4>
             <h4>Rating: <span th:with="roundedRating=${T(java.lang.Math).round(driver.getRating() * 100.0) / 100}" th:text="${roundedRating}"></span></h4>
         </div>
     </div>
 
 
-
-
     <div id="orders">
-        <form th:if="${errorMessage}" th:action="@{/driver/orders/__${activeOrder.getOrderId()}__/updateStatus}" method="post">
-        <input th:type="hidden" th:name="continueFlag" th:value="true">
-        <input th:type="hidden" th:name="clientId" th:value="${activeOrder.getClientId()}">
-        <input th:type="hidden" th:name="userId" th:value="${user.getUserId()}">
-            <button type="submit" class="error-message"
-                    style="font-size: 25px; position: relative; left: 33%;cursor: pointer; background: none; border: none;"
-                    th:text="${errorMessage}"></button>
-        </form>
-
-        <!--<a class="error-message" style="font-size: 25px; position: relative; left: 33%;" th:href="@{driver/orders/{id}/updateStatus(id = ${activeOrder.getOrderId()})}"
-           th:if="${errorMessage}" th:text="${errorMessage}"></a>-->
         <h3 style="margin-top: 0; margin-left: 45%; font-size: 30px;">My Orders</h3>
         <table class="orders-table">
             <thead>
@@ -59,16 +48,15 @@
                 <th>Price ₴</th>
                 <th>Pickup Address</th>
                 <th>Destination Address</th>
-                <th>Journey Distance</th>
                 <th>Payment Type</th>
-                <!--<th style="width: 130px">Order Status</th>-->
-                <th style="width: 130px"></th>
+                <th style="width: 170px;">Order Status</th>
             </tr>
             </thead>
             <tbody>
             <tr th:if="${#lists.isEmpty(orders)}">
                 <td style="font-weight: bold; font-size: 30px;" colspan="6">
-                    Looks like nobody wants a ride :(
+                    Oops, looks like you are new here! Go and
+                    <span id="do-please" style="color: darkorange;cursor: pointer;">do</span> some orders :)
                 </td>
             </tr>
             <tr th:each="order: ${orders}">
@@ -76,18 +64,31 @@
                 <td th:text="${order.getPrice()}"></td>
                 <td th:text="${order.getPickupAddress()}"></td>
                 <td th:text="${order.getDestinationAddress()}"></td>
-                <td th:text="${order.getJourneyDistance()} + ' m'"></td>
                 <td th:text="${order.getPaymentType().show()}"></td>
+
+                <!--<td th:text="${order.getOrderStatus().show()}"></td>-->
                 <td>
-                    <a th:href="@{'/driver/orders/' + ${order.getOrderId()}}">
-                        <!--<span id="select-order-btn" style="margin-left: 10px;" th:text="${order.getOrderStatus().show()}"></span>-->
-                        <span id="select-order-btn" style="margin-left: 10px;" th:text="'Accept'"></span>
-                    </a>
+                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED
+                    || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_CLIENT}">
+                        <span id="rate-the-trip" th:text="'Rate this trip'"
+                              th:onclick="'showTripRatingMenu();'"
+                              style="background-color: darkorange; cursor: pointer; font-weight: bold; border-radius: 10px; color: white; padding: 5px;"></span>
+
+                        <form id="rating-form" th:action="@{/rateTheTrip/{id}(id = ${order.getOrderId()})}" th:method="post">
+                            <input type="hidden" id="rating-input" name="rating">
+                        </form>
+                    </th:block>
+
+                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_DRIVER
+                                      || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_ALL}">
+                        <span th:text="${T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED.show()}"></span>
+                    </th:block>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
+
 </body>
 </html>

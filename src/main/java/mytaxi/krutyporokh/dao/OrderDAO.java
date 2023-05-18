@@ -68,6 +68,25 @@ public class OrderDAO {
                 new BeanPropertyRowMapper<>(Order.class));
     }
 
+    public List<Order> findAllFinishedOrdersByDriverId(long id) {
+        return jdbcTemplate.query("SELECT * FROM \"Order\" WHERE driver_id = ? AND (order_status = 'COMPLETED'::order_status " +
+                        "OR order_status = 'RATED_BY_CLIENT'::order_status " +
+                        "OR order_status = 'RATED_BY_DRIVER'::order_status " +
+                        "OR order_status = 'RATED_BY_ALL'::order_status)",
+                new Object[]{id},
+                new BeanPropertyRowMapper<>(Order.class));
+    }
+
+    public Optional<Order> findActiveOrderByDriverId(long id) {
+        return jdbcTemplate.query("select * from \"Order\" where order_status in ('ACCEPTED'::order_status, " +
+                                "'WAITING_FOR_CLIENT'::order_status, " +
+                                "'IN_PROCESS'::order_status) " +
+                                "and driver_id = ?;",
+                        new Object[]{id},
+                        new BeanPropertyRowMapper<>(Order.class))
+                .stream().findAny();
+    }
+
     public List<Order> findAllOrdersForDriver(Driver driver) {
         Car car = carDAO.getCarByDriver(driver).get();
 

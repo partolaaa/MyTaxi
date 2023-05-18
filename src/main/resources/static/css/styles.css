@@ -289,13 +289,38 @@ input[type="checkbox"]:checked:before {
     left: 1%;
     width: 15%;
     min-height: 300px;
-    min-width: 225px;
+    min-width: 228px;
     font-family: 'Chakra', sans-serif;
     color: white;
     background: rgba(72, 61, 139, 0.7);
     border-radius: 20px;
     padding: 25px;
     border: 2px solid darkorange;
+}
+
+
+.driver-orders-menu-btn {
+    margin-right: 10px;
+    font-family: 'Chakra', sans-serif;
+    font-weight: bold;
+    background-color: darkorange;
+    color: white;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.rating-button {
+    background: darkorange;
+    border: none;
+    height: 70px;
+    width: 70px;
+    margin: 5px;
+    font-size: 33px;
+    border-radius: 12px;
+    color: white;
+    font-family: 'CHAKRA', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 #error-container {
@@ -398,7 +423,8 @@ a {
 }
 
 #trip-info-panel {
-    background-color: rgba(72, 61, 139, 0.7);
+    background-color: rgba(72, 61, 139);
+    border: solid 2px darkorange;
     position: absolute;
     top: 30%;
     left: 50%;
@@ -407,4 +433,13 @@ a {
     border-radius: 20px;
     margin-top: 200px;
     min-width: 800px;
+}
+
+#close {
+    right: unset;
+    width: 30px;
+    position: absolute;
+    left: 95%;
+    margin-top: 10px;
+    cursor: pointer;
 }

@@ -20,7 +20,9 @@ public class Client extends CustomUser {
     @NotBlank(message = "Phone number is required")
     @Size(max = 13, message = "Invalid phone number, keep format +380xxxxxxxxxx")
     private String phoneNumber;
-    private int rating;
+    private float rating;
     private float bonusAmount;
     private boolean hasActiveOrder;
+    private int numberOfRatings;
+    private int totalRatings;
 }

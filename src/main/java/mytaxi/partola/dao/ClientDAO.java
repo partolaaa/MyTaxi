@@ -64,4 +64,17 @@ public class ClientDAO {
                 bonusesAmount,
                 clientId);
     }
+
+    public void updateRating (Client client) {
+        jdbcTemplate.update(
+                "update \"Client\" " +
+                        "set rating = ?," +
+                        "number_of_ratings = ?," +
+                        "total_ratings = ?" +
+                        " where client_id = ?",
+                client.getRating(),
+                client.getNumberOfRatings(),
+                client.getTotalRatings(),
+                client.getClientId());
+    }
 }
