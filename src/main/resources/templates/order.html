@@ -17,8 +17,6 @@
 
     <!--<div style="color:red" th:object="${order}" th:if="${#fields.hasErrors('pickupAddress')}" th:errors="*{pickupAddress}"></div>-->
     <form class="order-form" th:action="@{/createNewOrder}" th:object="${order}" method="post">
-        <!-- Error in case if client already has active order -->
-        <!-- TODO: Yeah, that's definitely not the best way, needs to reject hasActiveOrder-->
         <div class="error-message" style="font-size: 25px; font-weight: bold;" th:if="${#fields.hasErrors('orderStatus')}" th:errors="*{orderStatus}"></div>
         <table>
             <!-- Booking datetime field -->

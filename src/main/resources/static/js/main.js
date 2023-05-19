@@ -40,6 +40,21 @@ function rateTrip(rating) {
         url: $('#rating-form').attr('action'),
         type: 'POST',
         data: $('#rating-form').serialize(),
+        success: function(response) {
+            let rateTheTripBtn = document.getElementById("rate-the-trip");
+
+            rateTheTripBtn.onclick = null;
+            rateTheTripBtn.style.background = "none";
+            rateTheTripBtn.style.cursor = "context-menu";
+            rateTheTripBtn.style.color = "darkorange";
+            rateTheTripBtn.innerText = "Thanks for rating!";
+
+            setTimeout(function() {
+                rateTheTripBtn.style.color = "white";
+                rateTheTripBtn.style.fontWeight = "normal";
+                rateTheTripBtn.innerText = "Completed";
+            }, 5000);
+        },
         error: function(error) {
             console.log("An error occurred: " + error);
         }

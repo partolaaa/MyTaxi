@@ -54,7 +54,6 @@ public class DriversController {
 
         if (driver.isBusy()){
             model.addAttribute("errorMessage", "You are already busy with an active order.");
-            // TODO: pass this active order
             model.addAttribute("activeOrder", orderDAO.findActiveOrderByDriverId(driver.getDriverId()).get());
         }
 
@@ -102,6 +101,7 @@ public class DriversController {
                 orderService.updateStatus(order);
                 orderDAO.setOrderStatus(order, order.getOrderStatus());
                 driverDAO.setBusyStatusById(order.getDriverId(), false);
+                clientDAO.setHasActiveOrderStatus(clientDAO.findClientById(clientId).get(), false);
 
                 return "redirect:/driver/orders";
             }
