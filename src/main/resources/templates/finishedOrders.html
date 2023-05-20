@@ -72,7 +72,7 @@
                     || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_CLIENT}">
                         <span id="rate-the-trip" th:text="'Rate this trip'"
                               th:onclick="'showTripRatingMenu();'"
-                              style="background-color: darkorange; cursor: pointer; font-weight: bold; border-radius: 10px; color: white; padding: 5px;"></span>
+                              class="rate-the-trip-btn"></span>
 
                         <form id="rating-form" th:action="@{/rateTheTrip/{id}(id = ${order.getOrderId()})}" th:method="post">
                             <input type="hidden" id="rating-input" name="rating">

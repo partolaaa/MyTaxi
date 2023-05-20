@@ -443,3 +443,12 @@ a {
     margin-top: 10px;
     cursor: pointer;
 }
+
+.rate-the-trip-btn {
+    background-color: darkorange;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 10px;
+    color: white;
+    padding: 10px;
+}
