@@ -97,7 +97,6 @@ public class OrdersController {
         Client client = clientDAO.findClientById(currentUser.getUserId()).get();
 
         // Check if client already has active orders
-        // TODO: Need to reject hasActiveOrder value instead of orderStatus
         if (client.isHasActiveOrder()) {
             bindingResult.rejectValue("orderStatus", null, "You already have an active order.");
         }
@@ -118,9 +117,9 @@ public class OrdersController {
         if (order.isPayWithBonuses()) {
             clientService.subtractBonuses(client);
         }
-        clientDAO.setHasActiveOrderStatus(client, true);
-        clientService.addBonusesByUserAndOrderPrice(currentUser, order.getPrice());
         orderDAO.createNewOrder(order, client);
+        clientService.addBonusesByUserAndOrderPrice(currentUser, order.getPrice());
+        clientDAO.setHasActiveOrderStatus(client, true);
 
         return "redirect:/my-orders";
     }

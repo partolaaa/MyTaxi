@@ -63,7 +63,7 @@ public class OrderDAO {
     }
 
     public List<Order> findAllOrdersByClientId(long clientId) {
-        return jdbcTemplate.query("select * from \"Order\" where client_id = ?",
+        return jdbcTemplate.query("select * from \"order\" where client_id = ?",
                 new Object[]{clientId},
                 new BeanPropertyRowMapper<>(Order.class));
     }
