@@ -63,10 +63,29 @@ function rateTrip(rating) {
     closeTripRatingMenu();
 }
 
-function showTripRatingMenu () {
-    document.getElementById("trip-info-panel").style.display = "block";
+function showTripRatingMenu() {
+    const tripInfoPanel = document.getElementById("trip-info-panel");
+    const overlay = document.getElementById("overlay");
+
+    tripInfoPanel.style.display = "block";
+    overlay.style.display = "block";
+
+    setTimeout(function() {
+        tripInfoPanel.style.opacity = "1";
+        overlay.style.opacity = "1";
+    }, 10);
 }
+
 function closeTripRatingMenu() {
-    document.getElementById("trip-info-panel").style.display = "none";
+    const tripInfoPanel = document.getElementById("trip-info-panel");
+    const overlay = document.getElementById("overlay");
+
+    tripInfoPanel.style.opacity = "0";
+    overlay.style.opacity = "0";
+
+    setTimeout(function() {
+        tripInfoPanel.style.display = "none";
+        overlay.style.display = "none";
+    }, 500);
 }
 
