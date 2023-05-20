@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -63,5 +64,23 @@ public class ClientDAO {
                 "update \"Client\" set bonus_amount = ? where client_id = ?;",
                 bonusesAmount,
                 clientId);
+    }
+
+    public void saveClient(Client client) {
+        jdbcTemplate.update("INSERT INTO \"Client\" (client_id, phone_number," +
+                        " client_rating, has_active_order, bonus_amount) VALUES (?, ?, ?, ?, ?) " +
+                        "ON CONFLICT (client_id) DO UPDATE SET phone_number = excluded.phone_number, " +
+                        "client_rating = excluded.client_rating, has_active_order = excluded.has_active_order, " +
+                        "bonus_amount = excluded.bonus_amount",
+                client.getClientId(),
+                client.getPhoneNumber(),
+                client.getClientRating(),
+                client.isHasActiveOrder(),
+                client.getBonusAmount());
+    }
+
+    public List<Client> getAllClients() {
+        return jdbcTemplate.query("select * from \"Client\" ",
+                new BeanPropertyRowMapper<>(Client.class));
     }
 }

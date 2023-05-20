@@ -31,4 +31,20 @@ public class CustomUserService {
         String currentUserEmail = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         return userDAO.findUserByEmail(currentUserEmail);
     }
+
+    public Optional<CustomUser> getUserById(Long userId){
+        return userDAO.findUserById(userId);
+    }
+
+    public void banUser(Long userId) {
+        userDAO.banUser(userId);
+    }
+
+    public void unbanUser(Long userId) {
+        userDAO.unbanUser(userId);
+    }
+
+    public void deleteUser(Long userId) {
+        userDAO.deleteUser(userId);
+    }
 }

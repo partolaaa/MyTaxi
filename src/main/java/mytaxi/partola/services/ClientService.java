@@ -47,4 +47,12 @@ public class ClientService {
     public void subtractBonuses(Client client) {
         clientDAO.setBonusesByClientId(client.getClientId(), 0);
     }
+
+    public void updateClient(Client client) {
+        clientDAO.saveClient(client);
+    }
+
+    public List<Client> getAllClients() {
+        return clientDAO.getAllClients();
+    }
 }

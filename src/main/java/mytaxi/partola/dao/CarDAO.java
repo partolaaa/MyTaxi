@@ -26,4 +26,27 @@ public class CarDAO {
                         new BeanPropertyRowMapper<>(Car.class))
                 .stream().findAny();
     }
+
+    public void updateCar(Car car) {
+        jdbcTemplate.update(
+                "UPDATE \"Car\" SET license_plate = ?, model = ?, color = ?, car_class = ::car_class, vehicle_type = ::vehicle_type WHERE car_id = ?",
+                car.getLicensePlate(),
+                car.getModel(),
+                car.getColor(),
+                car.getCarClass().name(),
+                car.getVehicleType().name(),
+                car.getCarId()
+        );
+    }
+
+    public void createCar(Car car) {
+        jdbcTemplate.update(
+                "INSERT INTO \"Car\" (license_plate, model, color, car_class, vehicle_type) VALUES (?, ?, ?, ?::car_class, ?::vehicle_type)",
+                car.getLicensePlate(),
+                car.getModel(),
+                car.getColor(),
+                car.getCarClass().toString(),
+                car.getVehicleType().toString()
+        );
+    }
 }

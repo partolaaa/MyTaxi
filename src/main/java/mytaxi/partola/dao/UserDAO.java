@@ -2,6 +2,7 @@ package mytaxi.partola.dao;
 
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
+import mytaxi.partola.models.Driver;
 import mytaxi.partola.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -45,5 +46,28 @@ public class UserDAO {
                         new Object[]{id},
                         new BeanPropertyRowMapper<>(CustomUser.class))
                 .stream().findAny();
+    }
+
+    public void banUser(Long userId) {
+        jdbcTemplate.update("update \"User\" set banned=true where id=?", userId);
+    }
+
+    public void unbanUser(Long userId) {
+        jdbcTemplate.update("update \"User\" set banned=false where id=?", userId);
+    }
+
+    public void deleteUser(Long userId) {
+        jdbcTemplate.update("delete from \"User\" where id=?", userId);
+    }
+
+    public void updateUser(CustomUser user) {
+        jdbcTemplate.update(
+                "UPDATE \"User\" SET name = ?, email = ?, password = ?, banned = ? WHERE id = ?",
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.isBanned(),
+                user.getUserId()
+        );
     }
 }
