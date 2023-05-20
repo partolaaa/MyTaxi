@@ -10,3 +10,4 @@ spring.datasource.password = {password}
 # Spring settings
 spring.mvc.throw-exception-if-no-handler-found = true
 server.error.whitelabel.enabled = false
+server.port={port}
