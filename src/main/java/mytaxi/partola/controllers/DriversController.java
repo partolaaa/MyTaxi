@@ -2,6 +2,7 @@ package mytaxi.partola.controllers;
 
 import mytaxi.krutyporokh.dao.OrderDAO;
 import mytaxi.krutyporokh.models.Order;
+import mytaxi.krutyporokh.models.OrderStatus;
 import mytaxi.krutyporokh.services.OrderService;
 import mytaxi.partola.dao.ClientDAO;
 import mytaxi.partola.dao.DriverDAO;
@@ -27,14 +28,16 @@ public class DriversController {
     private final DriverDAO driverDAO;
     private final OrderDAO orderDAO;
     private final ClientDAO clientDAO;
+    private final UserDAO userDAO;
     private final CustomUserService customUserService;
     private final OrderService orderService;
 
     @Autowired
-    public DriversController(DriverDAO driverDAO, OrderDAO orderDAO, ClientDAO clientDAO, CustomUserService customUserService, OrderService orderService) {
+    public DriversController(DriverDAO driverDAO, OrderDAO orderDAO, ClientDAO clientDAO, UserDAO userDAO, CustomUserService customUserService, OrderService orderService) {
         this.driverDAO = driverDAO;
         this.orderDAO = orderDAO;
         this.clientDAO = clientDAO;
+        this.userDAO = userDAO;
         this.customUserService = customUserService;
         this.orderService = orderService;
     }
@@ -51,13 +54,15 @@ public class DriversController {
 
         if (driver.isBusy()){
             model.addAttribute("errorMessage", "You are already busy with an active order.");
+            model.addAttribute("activeOrder", orderDAO.findActiveOrderByDriverId(driver.getDriverId()).get());
         }
 
         return "driverOrders";
     }
 
     @GetMapping("orders/{id}")
-    public String selectedOrder (@PathVariable long id, Model model) {
+    public String selectedOrder (@PathVariable long id,
+                                 Model model) {
         Order order = orderDAO.findOrderById(id).get();
         orderService.acceptOrder(order, model);
 
@@ -83,8 +88,46 @@ public class DriversController {
         return "selectedByDriverOrder";
     }
     @PostMapping("orders/{id}/updateStatus")
-    public void updateStatus (@PathVariable long id,
-                              @PathVariable String status) {
+    public String updateOrderStatus(@PathVariable Long id,
+                                         @RequestParam(required = false) boolean continueFlag,
+                                         @ModelAttribute("clientId") long clientId,
+                                         @ModelAttribute("userId") long userId,
+                                         @ModelAttribute("passengerName") String passengerName,
+                                         Model model) {
+        Order order = orderDAO.findOrderById(id).get();
+        if (!continueFlag) {
+            // After IN_PROCESS goes COMPLETED so we stop here
+            if (order.getOrderStatus() == OrderStatus.IN_PROCESS) {
+                orderService.updateStatus(order);
+                orderDAO.setOrderStatus(order, order.getOrderStatus());
+                driverDAO.setBusyStatusById(order.getDriverId(), false);
+                clientDAO.setHasActiveOrderStatus(clientDAO.findClientById(clientId).get(), false);
 
+                return "redirect:/driver/orders";
+            }
+
+
+            orderService.updateStatus(order);
+            orderDAO.setOrderStatus(order, order.getOrderStatus());
+        }
+        model.addAttribute("order", order);
+        model.addAttribute(clientDAO.findClientById(clientId).get());
+        model.addAttribute("user", userDAO.findUserById(userId).get());
+
+        return "selectedByDriverOrder";
+    }
+
+    @GetMapping("finished-orders")
+    public String finishedOrders (Model model) {
+        CustomUser customUser = customUserService.getCurrentUserFromSession().get();
+        Driver driver = driverDAO.findDriverById(customUser.getUserId()).get();
+
+        List<Order> orders = orderDAO.findAllFinishedOrdersByDriverId(driver.getDriverId());
+
+        model.addAttribute("user", customUser);
+        model.addAttribute("orders", orders);
+        model.addAttribute(driver);
+
+        return "finishedOrders";
     }
 }

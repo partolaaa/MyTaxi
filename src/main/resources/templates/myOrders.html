@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>My Orders</title>
-    <link rel="stylesheet" th:href="@{css/styles.css}">
-    <script th:src="@{js/main.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
 </head>
 <body onload="loadMain();">
 <th:block th:insert="~{/_menu_logged.html}"></th:block>
+
+<th:block th:insert="~{/_rateTrip.html}"></th:block>
+
 <div>
     <div id="info-about-me">
         <h3 style="font-size: 30px; position: absolute; left: 45%; top: 0;">Me</h3>
@@ -20,6 +24,7 @@
             <h4>Bonuses: <span th:with="roundedBonus=${T(java.lang.Math).round(client.getBonusAmount() * 100.0) / 100.0}" th:text="${roundedBonus}"></span> ₴</h4>
         </div>
     </div>
+
     <div id="orders">
         <h3 style="margin-top: 0; margin-left: 45%; font-size: 30px;">My Orders</h3>
         <table class="orders-table">
@@ -30,7 +35,7 @@
                 <th>Pickup Address</th>
                 <th>Destination Address</th>
                 <th>Payment Type</th>
-                <th>Order Status</th>
+                <th style="width: 170px;">Order Status</th>
             </tr>
             </thead>
             <tbody>
@@ -46,22 +51,37 @@
                 <td th:text="${order.getPickupAddress()}"></td>
                 <td th:text="${order.getDestinationAddress()}"></td>
                 <td th:text="${order.getPaymentType().show()}"></td>
-                <!--<td th:text="${order.getOrderStatus().show()}"
-                    th:style="${order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED
-                    && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED}
-                    ? 'background-color: green; cursor: pointer; font-weight: bold; border-radius: 10px;' : ''">
-                </td>-->
 
                 <td>
                     <th:block th:if="${order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED
-                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED}">
+                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED
+                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_DRIVER
+                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_CLIENT
+                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_ALL}">
                         <a th:href="@{/order/{id}(id = ${order.getOrderId()})}" th:text="${order.getOrderStatus().show()}"
                         style="background-color: green; cursor: pointer; font-weight: bold; border-radius: 10px; color: white; padding: 15px;"></a>
                      </th:block>
 
-                    <th:block th:unless="${order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED
-                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED}">
+                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED
+                                    || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_DRIVER}">
+                        <span id="rate-the-trip" th:text="'Rate this trip'"
+                              th:onclick="'showTripRatingMenu();'"
+                              class="rate-the-trip-btn"></span>
+
+                        <form id="rating-form" th:action="@{/rateTheTrip/{id}(id = ${order.getOrderId()})}" th:method="post">
+                            <input type="hidden" id="rating-input" name="rating">
+                        </form>
+                    </th:block>
+
+                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED}">
                         <span th:text="${order.getOrderStatus().show()}"></span>
+                    </th:block>
+
+                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_ALL
+                                || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_CLIENT}">
+
+                        <span th:text="${T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED.show()}"></span>
+
                     </th:block>
                 </td>
             </tr>

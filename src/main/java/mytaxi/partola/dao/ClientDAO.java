@@ -31,27 +31,27 @@ public class ClientDAO {
         int userId = jdbcTemplate.queryForObject("SELECT currval('user_id_seq')", Integer.class);
 
         jdbcTemplate.update(
-                "INSERT INTO \"Client\" (client_id, phone_number) VALUES (?, ?)",
+                "INSERT INTO \"client\" (client_id, phone_number) VALUES (?, ?)",
                 userId,
                 client.getPhoneNumber());
     }
 
     public void setHasActiveOrderStatus(Client client, boolean status) {
         jdbcTemplate.update(
-                "update \"Client\" set has_active_order = ? where client_id = ?",
+                "update \"client\" set has_active_order = ? where client_id = ?",
                 status,
                 client.getClientId());
     }
 
     public Optional<Client> findClientById(long id) {
-        return jdbcTemplate.query("select * from \"User\" u inner join \"Client\" c on u.user_id = c.client_id where c.client_id=?",
+        return jdbcTemplate.query("select * from \"user\" u inner join \"client\" c on u.user_id = c.client_id where c.client_id=?",
                         new Object[]{id},
                         new BeanPropertyRowMapper<>(Client.class))
                 .stream().findAny();
     }
 
     public Optional<Client> findClientByPhoneNumber(String phoneNumber) {
-        return jdbcTemplate.query("select * from \"User\" u inner join \"Client\" c on u.user_id = c.client_id where c.phone_number=?",
+        return jdbcTemplate.query("select * from \"user\" u inner join \"client\" c on u.user_id = c.client_id where c.phone_number=?",
                         new Object[]{phoneNumber},
                         new BeanPropertyRowMapper<>(Client.class))
                 .stream().findAny();
@@ -61,7 +61,7 @@ public class ClientDAO {
     @Transactional
     public void setBonusesByClientId(long clientId, float bonusesAmount) {
         jdbcTemplate.update(
-                "update \"Client\" set bonus_amount = ? where client_id = ?;",
+                "update \"client\" set bonus_amount = ? where client_id = ?;",
                 bonusesAmount,
                 clientId);
     }
@@ -82,5 +82,18 @@ public class ClientDAO {
     public List<Client> getAllClients() {
         return jdbcTemplate.query("select * from \"Client\" ",
                 new BeanPropertyRowMapper<>(Client.class));
+    }
+
+    public void updateRating (Client client) {
+        jdbcTemplate.update(
+                "update \"client\" " +
+                        "set rating = ?," +
+                        "number_of_ratings = ?," +
+                        "total_ratings = ?" +
+                        " where client_id = ?",
+                client.getRating(),
+                client.getNumberOfRatings(),
+                client.getTotalRatings(),
+                client.getClientId());
     }
 }

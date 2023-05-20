@@ -1,6 +1,7 @@
 package mytaxi.partola.dao;
 
 import mytaxi.partola.models.Car;
+import mytaxi.krutyporokh.models.Order;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.models.Driver;
 import mytaxi.partola.models.Role;
@@ -28,7 +29,7 @@ public class DriverDAO {
 
     public Optional<Driver> findDriverByUser(CustomUser customUser) {
         if (customUser.getRole().equals(Role.ROLE_DRIVER)) {
-            return jdbcTemplate.query("select * from \"User\" u inner join \"Driver\" d on u.user_id = d.driver_id where d.driver_id=?",
+            return jdbcTemplate.query("select * from \"user\" u inner join \"driver\" d on u.user_id = d.driver_id where d.driver_id=?",
                             new Object[]{customUser.getUserId()},
                             new BeanPropertyRowMapper<>(Driver.class))
                     .stream().findAny();
@@ -38,7 +39,7 @@ public class DriverDAO {
     }
 
     public Optional<Driver> findDriverById(long id) {
-        return jdbcTemplate.query("select * from \"User\" u inner join \"Driver\" d on u.user_id = d.driver_id where d.driver_id=?",
+        return jdbcTemplate.query("select * from \"user\" u inner join \"driver\" d on u.user_id = d.driver_id where d.driver_id=?",
                         new Object[]{id},
                         new BeanPropertyRowMapper<>(Driver.class))
                 .stream().findAny();
@@ -46,7 +47,7 @@ public class DriverDAO {
 
     public void setBusyStatusById(long id, boolean status) {
         jdbcTemplate.update(
-                "update \"Driver\" set busy = ? where driver_id = ?",
+                "update \"driver\" set busy = ? where driver_id = ?",
                 status,
                 id);
     }
@@ -80,4 +81,17 @@ public class DriverDAO {
                 driver.getCarId());
     }
 
+
+    public void updateRating (Driver driver) {
+        jdbcTemplate.update(
+                "update \"driver\" " +
+                        "set rating = ?," +
+                        "number_of_ratings = ?," +
+                        "total_ratings = ?" +
+                        " where driver_id = ?",
+                driver.getRating(),
+                driver.getNumberOfRatings(),
+                driver.getTotalRatings(),
+                driver.getDriverId());
+    }
 }

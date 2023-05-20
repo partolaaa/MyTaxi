@@ -21,7 +21,7 @@ public class CarDAO {
     }
 
     public Optional<Car> getCarByDriver(Driver driver) {
-        return jdbcTemplate.query("select * from \"Car\" where car_id=?",
+        return jdbcTemplate.query("select * from \"car\" where car_id=?",
                         new Object[]{driver.getCarId()},
                         new BeanPropertyRowMapper<>(Car.class))
                 .stream().findAny();

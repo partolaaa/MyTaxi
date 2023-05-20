@@ -28,21 +28,21 @@ public class UserDAO {
         customUser.setPassword(passwordEncoder.encode(customUser.getPassword()));
 
         jdbcTemplate.update(
-                "INSERT INTO \"User\" (user_id, name, email, password) VALUES (nextval('user_id_seq'), ?, ?, ?)",
+                "INSERT INTO \"user\" (user_id, name, email, password) VALUES (nextval('user_id_seq'), ?, ?, ?)",
                 customUser.getName(),
                 customUser.getEmail(),
                 customUser.getPassword());
     }
 
     public Optional<CustomUser> findUserByEmail(String email) {
-        return jdbcTemplate.query("select * from \"User\" where email=?",
+        return jdbcTemplate.query("select * from \"user\" where email=?",
                         new Object[]{email},
                         new BeanPropertyRowMapper<>(CustomUser.class))
                 .stream().findAny();
     }
 
     public Optional<CustomUser> findUserById(long id) {
-        return jdbcTemplate.query("select * from \"User\" where user_id=?",
+        return jdbcTemplate.query("select * from \"user\" where user_id=?",
                         new Object[]{id},
                         new BeanPropertyRowMapper<>(CustomUser.class))
                 .stream().findAny();

@@ -38,4 +38,11 @@ public class DriverService {
         driverDAO.createDriver(driver);
         carDAO.createCar(car);
     }
+    public void updateRating(Driver driver, int rating) {
+        driver.setNumberOfRatings(driver.getNumberOfRatings() + 1);
+        driver.setTotalRatings(driver.getTotalRatings() + rating);
+        driver.setRating((float)driver.getTotalRatings() / driver.getNumberOfRatings());
+
+        driverDAO.updateRating(driver);
+    }
 }
