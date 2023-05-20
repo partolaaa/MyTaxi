@@ -311,6 +311,7 @@ input[type="checkbox"]:checked:before {
 
 .rating-button {
     background: darkorange;
+    box-shadow: 0 2px 15px black;
     border: none;
     height: 70px;
     width: 70px;
