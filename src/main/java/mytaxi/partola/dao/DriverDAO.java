@@ -26,7 +26,7 @@ public class DriverDAO {
 
     public Optional<Driver> findDriverByUser(CustomUser customUser) {
         if (customUser.getRole().equals(Role.ROLE_DRIVER)) {
-            return jdbcTemplate.query("select * from \"User\" u inner join \"Driver\" d on u.user_id = d.driver_id where d.driver_id=?",
+            return jdbcTemplate.query("select * from \"user\" u inner join \"driver\" d on u.user_id = d.driver_id where d.driver_id=?",
                             new Object[]{customUser.getUserId()},
                             new BeanPropertyRowMapper<>(Driver.class))
                     .stream().findAny();
@@ -36,7 +36,7 @@ public class DriverDAO {
     }
 
     public Optional<Driver> findDriverById(long id) {
-        return jdbcTemplate.query("select * from \"User\" u inner join \"Driver\" d on u.user_id = d.driver_id where d.driver_id=?",
+        return jdbcTemplate.query("select * from \"user\" u inner join \"driver\" d on u.user_id = d.driver_id where d.driver_id=?",
                         new Object[]{id},
                         new BeanPropertyRowMapper<>(Driver.class))
                 .stream().findAny();
@@ -44,14 +44,14 @@ public class DriverDAO {
 
     public void setBusyStatusById(long id, boolean status) {
         jdbcTemplate.update(
-                "update \"Driver\" set busy = ? where driver_id = ?",
+                "update \"driver\" set busy = ? where driver_id = ?",
                 status,
                 id);
     }
 
     public void updateRating (Driver driver) {
         jdbcTemplate.update(
-                "update \"Driver\" " +
+                "update \"driver\" " +
                         "set rating = ?," +
                         "number_of_ratings = ?," +
                         "total_ratings = ?" +

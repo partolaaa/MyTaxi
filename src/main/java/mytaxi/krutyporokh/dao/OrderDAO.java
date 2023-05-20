@@ -34,7 +34,7 @@ public class OrderDAO {
 
     @Transactional
     public void createNewOrder(Order order, Client client) {
-        String query = "INSERT INTO \"Order\" " +
+        String query = "INSERT INTO \"order\" " +
                 "(client_id, booking_datetime, pickup_address, destination_address, journey_distance, passenger_name, " +
                 "passenger_phone_number, booking_notes, payment_type, car_class, vehicle_type, pay_with_bonuses, price) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?::payment_type, ?::car_class, ?::vehicle_type, ?, ?)";
@@ -69,7 +69,7 @@ public class OrderDAO {
     }
 
     public List<Order> findAllFinishedOrdersByDriverId(long id) {
-        return jdbcTemplate.query("SELECT * FROM \"Order\" WHERE driver_id = ? AND (order_status = 'COMPLETED'::order_status " +
+        return jdbcTemplate.query("SELECT * FROM \"order\" WHERE driver_id = ? AND (order_status = 'COMPLETED'::order_status " +
                         "OR order_status = 'RATED_BY_CLIENT'::order_status " +
                         "OR order_status = 'RATED_BY_DRIVER'::order_status " +
                         "OR order_status = 'RATED_BY_ALL'::order_status)",
@@ -78,7 +78,7 @@ public class OrderDAO {
     }
 
     public Optional<Order> findActiveOrderByDriverId(long id) {
-        return jdbcTemplate.query("select * from \"Order\" where order_status in ('ACCEPTED'::order_status, " +
+        return jdbcTemplate.query("select * from \"order\" where order_status in ('ACCEPTED'::order_status, " +
                                 "'WAITING_FOR_CLIENT'::order_status, " +
                                 "'IN_PROCESS'::order_status) " +
                                 "and driver_id = ?;",
@@ -90,7 +90,7 @@ public class OrderDAO {
     public List<Order> findAllOrdersForDriver(Driver driver) {
         Car car = carDAO.getCarByDriver(driver).get();
 
-        return jdbcTemplate.query("select  * from \"Order\"\n" +
+        return jdbcTemplate.query("select  * from \"order\"\n" +
                         "where\n" +
                         "    vehicle_type = ?::vehicle_type\n" +
                         "    and\n" +
@@ -104,20 +104,20 @@ public class OrderDAO {
     }
 
     public Optional<Order> findOrderById(long id) {
-        return jdbcTemplate.query("select * from \"Order\" where order_id=?",
+        return jdbcTemplate.query("select * from \"order\" where order_id=?",
                         new Object[]{id},
                         new BeanPropertyRowMapper<>(Order.class))
                 .stream().findAny();
     }
 
     public void setOrderStatus(Order order, OrderStatus orderStatus) {
-        jdbcTemplate.update("update \"Order\" set order_status = ?::order_status where order_id = ?",
+        jdbcTemplate.update("update \"order\" set order_status = ?::order_status where order_id = ?",
                 orderStatus.getValue(),
                 order.getOrderId());
     }
 
     public void assignDriver(Driver driver, Order order) {
-        jdbcTemplate.update("update \"Order\" set driver_id = ? where order_id = ?",
+        jdbcTemplate.update("update \"order\" set driver_id = ? where order_id = ?",
                 driver.getDriverId(),
                 order.getOrderId());
     }
