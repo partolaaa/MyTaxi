@@ -68,7 +68,7 @@ public class OrdersController {
         model.addAttribute("user", currentUser);
         Client client = clientDAO.findClientById(currentUser.getUserId()).get();
         model.addAttribute("client", client);
-        return "order";
+        return "client/order";
     }
 
     @PostMapping("/createNewOrder")
@@ -111,7 +111,7 @@ public class OrdersController {
             model.addAttribute("client", client);
             model.addAttribute("bonusesAmount", client.getBonusAmount());
             model.addAttribute("error", bindingResult.getAllErrors());
-            return "order";
+            return "client/order";
         }
         // If user pays with bonuses, we remove them from their account
         if (order.isPayWithBonuses()) {
@@ -141,7 +141,7 @@ public class OrdersController {
         model.addAttribute("driver", driver);
         model.addAttribute("order", currentOrder);
         model.addAttribute("car", carDAO.getCarByDriver(driver).get());
-        return "activeOrder";
+        return "client/activeOrder";
     }
 
     @PostMapping("/rateTheTrip/{id}")

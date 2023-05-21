@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UsersController {
     @GetMapping("/info")
     public String info () {
-        return "/info";
+        return "user/info";
     }
 
 }

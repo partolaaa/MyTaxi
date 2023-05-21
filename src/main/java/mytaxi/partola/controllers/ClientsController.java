@@ -45,6 +45,6 @@ public class ClientsController {
         orderService.sortOrdersForClients(orders);
         model.addAttribute("orders", orders);
 
-        return "myOrders";
+        return "client/myOrders";
     }
 }

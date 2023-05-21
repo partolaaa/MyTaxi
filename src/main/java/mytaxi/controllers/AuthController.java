@@ -33,7 +33,7 @@ public class AuthController {
 
     @GetMapping("register")
     public String register (@ModelAttribute("client") Client client) {
-        return "register";
+        return "auth/register";
     }
 
     @PostMapping("register")
@@ -46,7 +46,7 @@ public class AuthController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("error", bindingResult.getAllErrors());
-            return "register";
+            return "auth/register";
         }
         clientDAO.createClient(client);
         return "redirect:/login";
@@ -54,6 +54,6 @@ public class AuthController {
 
     @GetMapping({"/","/login"})
     public String login() {
-        return "login";
+        return "auth/login";
     }
 }

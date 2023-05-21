@@ -57,7 +57,7 @@ public class DriversController {
             model.addAttribute("activeOrder", orderDAO.findActiveOrderByDriverId(driver.getDriverId()).get());
         }
 
-        return "driverOrders";
+        return "driver/myOrders";
     }
 
     @GetMapping("orders/{id}")
@@ -85,7 +85,7 @@ public class DriversController {
 
 
         model.addAttribute("passengerName", orderService.getPassengerName(order));
-        return "selectedByDriverOrder";
+        return "driver/activeOrder";
     }
     @PostMapping("orders/{id}/updateStatus")
     public String updateOrderStatus(@PathVariable Long id,
@@ -114,7 +114,7 @@ public class DriversController {
         model.addAttribute(clientDAO.findClientById(clientId).get());
         model.addAttribute("user", userDAO.findUserById(userId).get());
 
-        return "selectedByDriverOrder";
+        return "driver/activeOrder";
     }
 
     @GetMapping("finished-orders")
@@ -128,6 +128,6 @@ public class DriversController {
         model.addAttribute("orders", orders);
         model.addAttribute(driver);
 
-        return "finishedOrders";
+        return "driver/finishedOrders";
     }
 }

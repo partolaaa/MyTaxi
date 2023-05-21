@@ -14,7 +14,7 @@
     <h1 id="h1-mytaxi">MyTaxi</h1>
     <div class="header-buttons">
         <form th:action="@{/logout}" th:method="POST">
-            <input id="log-out-btn" class="h3-head-buttons" style="background: darkorange" type="submit" value="Logout"/>
+            <input id="log-out-btn" class="h3-head-buttons" type="submit" value="Logout"/>
         </form>
         <a href="/driver/finished-orders">
             <span class="driver-orders-menu-btn" id="finished-orders-btn" th:text="'My finished orders'"></span>
@@ -49,8 +49,6 @@
                     th:text="${errorMessage}"></button>
         </form>
 
-        <!--<a class="error-message" style="font-size: 25px; position: relative; left: 33%;" th:href="@{driver/orders/{id}/updateStatus(id = ${activeOrder.getOrderId()})}"
-           th:if="${errorMessage}" th:text="${errorMessage}"></a>-->
         <h3 style="margin-top: 0; margin-left: 45%; font-size: 30px;">My Orders</h3>
         <table class="orders-table">
             <thead>
@@ -67,7 +65,7 @@
             </thead>
             <tbody>
             <tr th:if="${#lists.isEmpty(orders)}">
-                <td style="font-weight: bold; font-size: 30px;" colspan="6">
+                <td style="position: relative; left: 5%; font-weight: bold; font-size: 30px;" colspan="6">
                     Looks like nobody wants a ride :(
                 </td>
             </tr>
