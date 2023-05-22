@@ -10,6 +10,8 @@ import mytaxi.partola.models.VehicleType;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,8 +21,8 @@ public class Order {
     private Long driverId;
     private float price;
 
-    @NotBlank(message = "Booking date and time cannot be empty")
-    private String bookingDatetime;
+    //@NotBlank(message = "Booking date and time cannot be empty")
+    private LocalDateTime bookingDatetime;
 
     @NotBlank(message = "Pickup address cannot be empty")
     private String pickupAddress;

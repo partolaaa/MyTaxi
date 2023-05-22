@@ -114,9 +114,7 @@ public class OrdersController {
             return "client/order";
         }
         // If user pays with bonuses, we remove them from their account
-        if (order.isPayWithBonuses()) {
-            clientService.subtractBonuses(client);
-        }
+        clientService.subtractBonuses(client, order);
         orderDAO.createNewOrder(order, client);
         clientService.addBonusesByUserAndOrderPrice(currentUser, order.getPrice());
         clientDAO.setHasActiveOrderStatus(client, true);

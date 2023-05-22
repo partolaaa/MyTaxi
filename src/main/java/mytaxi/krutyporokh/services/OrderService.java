@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,24 +63,12 @@ public class OrderService {
 
     // Sort from newest to old
     public void sortOrdersForClients(List<Order> orders) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        orders.sort((o1, o2) -> {
-            LocalDateTime dt1 = LocalDateTime.parse(o1.getBookingDatetime(), formatter);
-            LocalDateTime dt2 = LocalDateTime.parse(o2.getBookingDatetime(), formatter);
-            return dt2.compareTo(dt1);
-        });
+        orders.sort((o1, o2) -> o2.getBookingDatetime().compareTo(o1.getBookingDatetime()));
     }
 
     // Sort from old to newest, because old orders must be done first
     public void sortOrdersForDrivers(List<Order> orders) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        orders.sort((o1, o2) -> {
-            LocalDateTime dt1 = LocalDateTime.parse(o1.getBookingDatetime(), formatter);
-            LocalDateTime dt2 = LocalDateTime.parse(o2.getBookingDatetime(), formatter);
-            return dt1.compareTo(dt2);
-        });
+        orders.sort(Comparator.comparing(Order::getBookingDatetime));
     }
 
     public String getPassengerName(Order order) {

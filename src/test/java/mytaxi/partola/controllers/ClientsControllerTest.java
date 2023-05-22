@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,10 +35,10 @@ class ClientsControllerTest {
     @Test
     public void myOrdersTest () {
         Order order1 = new Order();
-        order1.setBookingDatetime("19/05/2023 11:45");
+        order1.setBookingDatetime(LocalDateTime.parse("2023-05-25T08:15"));
 
         Order order2 = new Order();
-        order2.setBookingDatetime("18/05/2023 11:45");
+        order2.setBookingDatetime(LocalDateTime.parse("2023-05-24T08:15"));
 
         List<Order> orders = Arrays.asList(order1, order2);
 
@@ -53,10 +54,10 @@ class ClientsControllerTest {
     @Test
     public void driverOrdersTest () {
         Order order1 = new Order();
-        order1.setBookingDatetime("18/05/2023 11:45");
+        order1.setBookingDatetime(LocalDateTime.parse("2023-05-23T08:15"));
 
         Order order2 = new Order();
-        order2.setBookingDatetime("19/05/2023 11:45");
+        order2.setBookingDatetime(LocalDateTime.parse("2023-05-25T08:15"));
 
         Driver driver = new Driver();
         driver.setDriverId(2L);

@@ -15,7 +15,7 @@
     <div id="trip-info">
         <h4>Driver Name: <span th:text="${driver.getName()}"></span></h4>
         <h4>Phone Number: <span th:text="${driver.getPhoneNumber()}"></span></h4>
-        <h4>Driver Rating: <span th:text="${driver.getRating()}"></span></h4>
+        <h4>Driver Rating: <span th:text="${#numbers.formatDecimal(driver.getRating(), 1, 1)}"></span></h4>
         <h4>Distance: <span th:with="roundedJourneyDistance=${T(java.lang.Math).round(order.getJourneyDistance()/1000 * 100.0) / 100.0}" th:text="${roundedJourneyDistance}"></span> km</h4>
         <h4>Class: <span th:text="${order.getCarClass().show()}"></span></h4>
         <h4>License Plate Number: <span th:text="${car.getLicensePlate()}"></span></h4>

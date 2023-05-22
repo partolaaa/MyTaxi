@@ -20,7 +20,7 @@
             <h4>Name: <span th:text="${client.getName()}"></span></h4>
             <h4>Phone number: <span th:text="${client.getPhoneNumber()}"></span></h4>
             <h4>Email: <span th:text="${client.getEmail()}"></span></h4>
-            <h4>Rating: <span th:text="${client.getRating()}"></span></h4>
+            <h4>Rating: <span th:text="${#numbers.formatDecimal(client.getRating(), 1, 1)}"></span></h4>
             <h4>Bonuses: <span th:with="roundedBonus=${T(java.lang.Math).round(client.getBonusAmount() * 100.0) / 100.0}" th:text="${roundedBonus}"></span> ₴</h4>
         </div>
     </div>
@@ -46,7 +46,7 @@
                 </td>
             </tr>
             <tr th:each="order: ${orders}">
-                <td th:text="${order.getBookingDatetime()}"></td>
+                <td th:text="${#temporals.format(order.getBookingDatetime(), 'dd.MM.yyyy HH:mm')}"></td>
                 <td th:text="${order.getPrice()}"></td>
                 <td th:text="${order.getPickupAddress()}"></td>
                 <td th:text="${order.getDestinationAddress()}"></td>

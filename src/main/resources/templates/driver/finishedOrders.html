@@ -60,7 +60,7 @@
                 </td>
             </tr>
             <tr th:each="order: ${orders}">
-                <td th:text="${order.getBookingDatetime()}"></td>
+                <td th:text="${#temporals.format(order.getBookingDatetime(), 'dd.MM.yyyy HH:mm')}"></td>
                 <td th:text="${order.getPrice()}"></td>
                 <td th:text="${order.getPickupAddress()}"></td>
                 <td th:text="${order.getDestinationAddress()}"></td>
