@@ -13,7 +13,6 @@ import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.models.Driver;
 import mytaxi.partola.services.ClientService;
 import mytaxi.partola.services.CustomUserService;
-import mytaxi.partola.services.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -39,14 +38,12 @@ public class OrdersController {
     private final ClientService clientService;
     private final CustomUserService customUserService;
     private final OrderService orderService;
-    private final DriverService driverService;
-
 
     @Value("${googleMapsAPIKey}")
     private String googleMapsAPIKey;
 
     @Autowired
-    public OrdersController(OrderDAO orderDAO, ClientDAO clientDAO, DriverDAO driverDAO, CarDAO carDAO, Validator validator, ClientService clientService, CustomUserService customUserService, OrderService orderService, DriverService driverService) {
+    public OrdersController(OrderDAO orderDAO, ClientDAO clientDAO, DriverDAO driverDAO, CarDAO carDAO, Validator validator, ClientService clientService, CustomUserService customUserService, OrderService orderService) {
         this.orderDAO = orderDAO;
         this.clientDAO = clientDAO;
         this.driverDAO = driverDAO;
@@ -55,7 +52,6 @@ public class OrdersController {
         this.clientService = clientService;
         this.customUserService = customUserService;
         this.orderService = orderService;
-        this.driverService = driverService;
     }
 
     @GetMapping("order")
@@ -99,6 +95,10 @@ public class OrdersController {
         // Check if client already has active orders
         if (client.isHasActiveOrder()) {
             bindingResult.rejectValue("orderStatus", null, "You already have an active order.");
+        }
+
+        if (order.getBookingDatetime() == null) {
+            bindingResult.rejectValue("bookingDatetime", null, "Booking time cannot be empty.");
         }
 
 
