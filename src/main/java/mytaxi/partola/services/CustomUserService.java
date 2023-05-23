@@ -47,4 +47,8 @@ public class CustomUserService {
     public void deleteUser(Long userId) {
         userDAO.deleteUser(userId);
     }
+
+    public CustomUser findUserById (long id) {
+        return userDAO.findUserById(id).get();
+    }
 }

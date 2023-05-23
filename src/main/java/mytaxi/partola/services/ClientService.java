@@ -54,8 +54,18 @@ public class ClientService {
         }
     }
 
-    public void subtractBonuses(Client client) {
-        clientDAO.setBonusesByClientId(client.getClientId(), 0);
+    public void subtractBonuses(Client client, Order order) {
+        if (order.isPayWithBonuses()) {
+            clientDAO.setBonusesByClientId(client.getClientId(), 0);
+        }
+    }
+
+    public Client findClientById(long id) {
+        return clientDAO.findClientById(id).get();
+    }
+
+    public void setHasActiveOrderStatus(Client client, boolean status) {
+        clientDAO.setHasActiveOrderStatus(client, status);
     }
 
     public void updateClient(Client client) {

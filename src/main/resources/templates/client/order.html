@@ -24,7 +24,7 @@
                 <td><label for="datetime-input" class="input-label">Booking Date/Time:</label></td>
                 <td>
                     <div class="error-message" th:if="${#fields.hasErrors('bookingDatetime')}" th:errors="*{bookingDatetime}"></div>
-                    <input class="input-fields" type="datetime-local" id="datetime-input" th:field="*{bookingDatetime}" name="booking_datetime">
+                    <input class="input-fields" type="datetime-local" id="datetime-input" th:field="*{bookingDatetime}" name="booking_datetime" required>
                 </td>
             </tr>
 
@@ -33,7 +33,7 @@
                 <td><label for="pickup-input" class="input-label">Pickup Address:</label></td>
                 <td>
                     <div class="error-message" th:if="${#fields.hasErrors('pickupAddress')}" th:errors="*{pickupAddress}"></div>
-                    <input class="input-fields" type="text" id="pickup-input" th:field="*{pickupAddress}" name="pickup_address">
+                    <input class="input-fields" type="text" id="pickup-input" th:field="*{pickupAddress}" name="pickup_address" required>
                 </td>
             </tr>
 
@@ -43,7 +43,7 @@
                 <td><label for="destination-input" class="input-label">Destination Address:</label></td>
                 <td>
                     <div class="error-message" th:if="${#fields.hasErrors('destinationAddress')}" th:errors="*{destinationAddress}"></div>
-                    <input class="input-fields" type="text" id="destination-input" th:field="*{destinationAddress}" name="destination_address">
+                    <input class="input-fields" type="text" id="destination-input" th:field="*{destinationAddress}" name="destination_address" required>
                 </td>
             </tr>
 
@@ -86,7 +86,7 @@
                 <td><label for="note-input" class="input-label">Notes:</label></td>
                 <td>
                     <div class="error-message" th:if="${#fields.hasErrors('bookingNotes')}" th:errors="*{bookingNotes}"></div>
-                    <input class="input-fields" type="text" id="note-input" th:field="*{bookingNotes}" name="booking_notes" placeholder="Some special request?">
+                    <input class="input-fields" type="text" id="note-input" th:field="*{bookingNotes}" name="booking_notes" placeholder="Some special request?" maxlength="150">
                 </td>
             </tr>
 

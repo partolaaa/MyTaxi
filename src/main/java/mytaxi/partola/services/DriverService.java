@@ -5,6 +5,7 @@ import mytaxi.partola.dao.DriverDAO;
 import mytaxi.partola.dao.UserDAO;
 import mytaxi.partola.models.Car;
 import mytaxi.partola.models.CustomUser;
+import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.models.Driver;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,17 @@ public class DriverService {
         driver.setRating((float)driver.getTotalRatings() / driver.getNumberOfRatings());
 
         driverDAO.updateRating(driver);
+    }
+
+    public Driver findDriverById(long id) {
+        return driverDAO.findDriverById(id).get();
+    }
+
+    public Driver findDriverByUser(CustomUser customUser) {
+        return driverDAO.findDriverByUser(customUser).get();
+    }
+
+    public void setBusyStatusById(long id, boolean status) {
+        driverDAO.setBusyStatusById(id, status);
     }
 }

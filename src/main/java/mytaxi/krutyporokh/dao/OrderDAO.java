@@ -39,11 +39,11 @@ public class OrderDAO {
                 "passenger_phone_number, booking_notes, payment_type, car_class, vehicle_type, pay_with_bonuses, price) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?::payment_type, ?::car_class, ?::vehicle_type, ?, ?)";
 
-        LocalDateTime dateTime = LocalDateTime.parse(order.getBookingDatetime());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        //LocalDateTime dateTime = LocalDateTime.parse(order.getBookingDatetime());
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         // Ser datetime to a prettier format
-        order.setBookingDatetime(dateTime.format(formatter));
+        //order.setBookingDatetime(dateTime.format(formatter));
 
         jdbcTemplate.update(query,
                 client.getClientId(),

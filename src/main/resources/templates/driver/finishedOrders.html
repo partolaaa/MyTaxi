@@ -17,7 +17,7 @@
     <h1 id="h1-mytaxi">MyTaxi</h1>
     <div class="header-buttons">
         <form th:action="@{/logout}" th:method="POST">
-            <input id="log-out-btn" class="h3-head-buttons" style="background: darkorange" type="submit" value="Logout"/>
+            <input id="log-out-btn" class="h3-head-buttons" type="submit" value="Logout"/>
         </form>
         <a href="/driver/orders">
             <span class="driver-orders-menu-btn" id="driver-orders-btn" th:text="'Orders'"></span>
@@ -60,7 +60,7 @@
                 </td>
             </tr>
             <tr th:each="order: ${orders}">
-                <td th:text="${order.getBookingDatetime()}"></td>
+                <td th:text="${#temporals.format(order.getBookingDatetime(), 'dd.MM.yyyy HH:mm')}"></td>
                 <td th:text="${order.getPrice()}"></td>
                 <td th:text="${order.getPickupAddress()}"></td>
                 <td th:text="${order.getDestinationAddress()}"></td>
@@ -70,12 +70,13 @@
                 <td>
                     <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED
                     || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_CLIENT}">
-                        <span id="rate-the-trip" th:text="'Rate this trip'"
-                              th:onclick="'showTripRatingMenu();'"
+                        <span th:id="'rate-the-trip-' + ${order.getOrderId()}" th:text="'Rate this trip'"
+                              th:onclick="'showTripRatingMenu(' + ${order.getOrderId()} +');'"
                               class="rate-the-trip-btn"></span>
 
-                        <form id="rating-form" th:action="@{/rateTheTrip/{id}(id = ${order.getOrderId()})}" th:method="post">
+                        <form id="rating-form" th:action="@{/rateTheTrip}" th:method="post">
                             <input type="hidden" id="rating-input" name="rating">
+                            <input type="hidden" id="order-id" name="id">
                         </form>
                     </th:block>
 

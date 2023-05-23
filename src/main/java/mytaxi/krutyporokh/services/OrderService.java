@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,24 +63,12 @@ public class OrderService {
 
     // Sort from newest to old
     public void sortOrdersForClients(List<Order> orders) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        orders.sort((o1, o2) -> {
-            LocalDateTime dt1 = LocalDateTime.parse(o1.getBookingDatetime(), formatter);
-            LocalDateTime dt2 = LocalDateTime.parse(o2.getBookingDatetime(), formatter);
-            return dt2.compareTo(dt1);
-        });
+        orders.sort((o1, o2) -> o2.getBookingDatetime().compareTo(o1.getBookingDatetime()));
     }
 
     // Sort from old to newest, because old orders must be done first
     public void sortOrdersForDrivers(List<Order> orders) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        orders.sort((o1, o2) -> {
-            LocalDateTime dt1 = LocalDateTime.parse(o1.getBookingDatetime(), formatter);
-            LocalDateTime dt2 = LocalDateTime.parse(o2.getBookingDatetime(), formatter);
-            return dt1.compareTo(dt2);
-        });
+        orders.sort(Comparator.comparing(Order::getBookingDatetime));
     }
 
     public String getPassengerName(Order order) {
@@ -92,11 +81,12 @@ public class OrderService {
 
     public void updateStatus (Order order) {
         order.setOrderStatus(order.getOrderStatus().next());
+        orderDAO.setOrderStatus(order, order.getOrderStatus());
     }
 
     public void rateTrip (long id, int rating) {
         CustomUser customUser = customUserService.getCurrentUserFromSession().get();
-        Order order = orderDAO.findOrderById(id).get();
+        Order order = findOrderById(id);
 
         // If current user is Driver -> rates Client
         if (customUser.getRole().equals(Role.ROLE_DRIVER)) {
@@ -111,7 +101,6 @@ public class OrderService {
         } else if (customUser.getRole().equals(Role.ROLE_CLIENT)) {
             Driver driver = driverDAO.findDriverById(order.getDriverId()).get();
             driverService.updateRating(driver, rating);
-
             if (order.getOrderStatus().equals(OrderStatus.RATED_BY_DRIVER)) {
                 order.setOrderStatus(OrderStatus.RATED_BY_ALL);
             } else if (order.getOrderStatus().equals(OrderStatus.COMPLETED)) {
@@ -120,5 +109,29 @@ public class OrderService {
         }
 
         orderDAO.setOrderStatus(order, order.getOrderStatus());
+    }
+
+    public Order findOrderById (long id) {
+        return orderDAO.findOrderById(id).get();
+    }
+
+    public void createNewOrder( Order order, Client client) {
+        orderDAO.createNewOrder(order, client);
+    }
+
+    public List<Order> findAllOrdersByClientId(long id) {
+        return orderDAO.findAllOrdersByClientId(id);
+    }
+
+    public List<Order> findAllOrdersForDriver(Driver driver) {
+        return orderDAO.findAllOrdersForDriver(driver);
+    }
+
+    public Order findActiveOrderByDriverId(long id) {
+        return orderDAO.findActiveOrderByDriverId(id).get();
+    }
+
+    public List<Order> findAllFinishedOrdersByDriverId(long id) {
+        return orderDAO.findAllFinishedOrdersByDriverId(id);
     }
 }
