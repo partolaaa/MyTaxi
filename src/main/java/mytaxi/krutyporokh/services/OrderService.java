@@ -81,6 +81,7 @@ public class OrderService {
 
     public void updateStatus (Order order) {
         order.setOrderStatus(order.getOrderStatus().next());
+        orderDAO.setOrderStatus(order, order.getOrderStatus());
     }
 
     public void rateTrip (long id, int rating) {
@@ -100,7 +101,6 @@ public class OrderService {
         } else if (customUser.getRole().equals(Role.ROLE_CLIENT)) {
             Driver driver = driverDAO.findDriverById(order.getDriverId()).get();
             driverService.updateRating(driver, rating);
-
             if (order.getOrderStatus().equals(OrderStatus.RATED_BY_DRIVER)) {
                 order.setOrderStatus(OrderStatus.RATED_BY_ALL);
             } else if (order.getOrderStatus().equals(OrderStatus.COMPLETED)) {

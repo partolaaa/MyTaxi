@@ -33,7 +33,8 @@ function setButtonRedirectOnClick(button, path) {
     }
 }
 
-function rateTrip(rating) {
+function rateTrip(id, rating) {
+    document.getElementById('order-id').value = id;
     document.getElementById('rating-input').value = rating;
 
     $.ajax({
@@ -41,7 +42,7 @@ function rateTrip(rating) {
         type: 'POST',
         data: $('#rating-form').serialize(),
         success: function(response) {
-            let rateTheTripBtn = document.getElementById("rate-the-trip");
+            let rateTheTripBtn= document.getElementById("rate-the-trip-" + id);
 
             rateTheTripBtn.onclick = null;
             rateTheTripBtn.style.background = "none";
@@ -63,9 +64,15 @@ function rateTrip(rating) {
     closeTripRatingMenu();
 }
 
-function showTripRatingMenu() {
+function showTripRatingMenu(id) {
     const tripInfoPanel = document.getElementById("trip-info-panel");
     const overlay = document.getElementById("overlay");
+
+    for (let i = 1; i <= 5; i++) {
+        document.getElementById("rating" + i).onclick = function() {
+            rateTrip(id, i);
+        };
+    }
 
     tripInfoPanel.style.display = "block";
     overlay.style.display = "block";

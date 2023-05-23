@@ -142,8 +142,8 @@ public class OrdersController {
         return "client/activeOrder";
     }
 
-    @PostMapping("/rateTheTrip/{id}")
-    public ResponseEntity<?> ratedTrip (@PathVariable long id,
+    @PostMapping("/rateTheTrip")
+    public ResponseEntity<?> ratedTrip (@RequestParam long id,
                                         @RequestParam int rating) {
         orderService.rateTrip(id, rating);
         return ResponseEntity.ok().build();

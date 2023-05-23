@@ -99,7 +99,6 @@ public class DriversController {
             // After IN_PROCESS goes COMPLETED so we stop here
             if (order.getOrderStatus() == OrderStatus.IN_PROCESS) {
                 orderService.updateStatus(order);
-                orderDAO.setOrderStatus(order, order.getOrderStatus());
                 driverDAO.setBusyStatusById(order.getDriverId(), false);
                 clientDAO.setHasActiveOrderStatus(clientDAO.findClientById(clientId).get(), false);
 
@@ -108,7 +107,6 @@ public class DriversController {
 
 
             orderService.updateStatus(order);
-            orderDAO.setOrderStatus(order, order.getOrderStatus());
         }
         model.addAttribute("order", order);
         model.addAttribute(clientDAO.findClientById(clientId).get());

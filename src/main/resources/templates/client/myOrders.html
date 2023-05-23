@@ -10,8 +10,6 @@
 <body onload="loadMain();">
 <th:block th:insert="~{/_menu_logged.html}"></th:block>
 
-<th:block th:insert="~{/_rateTrip.html}"></th:block>
-
 <div>
     <div id="info-about-me">
         <h3 style="font-size: 30px; position: absolute; left: 45%; top: 0;">Me</h3>
@@ -46,6 +44,7 @@
                 </td>
             </tr>
             <tr th:each="order: ${orders}">
+                <th:block th:insert="~{/_rateTrip.html}"></th:block>
                 <td th:text="${#temporals.format(order.getBookingDatetime(), 'dd.MM.yyyy HH:mm')}"></td>
                 <td th:text="${order.getPrice()}"></td>
                 <td th:text="${order.getPickupAddress()}"></td>
@@ -64,12 +63,13 @@
 
                     <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED
                                     || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_DRIVER}">
-                        <span id="rate-the-trip" th:text="'Rate this trip'"
-                              th:onclick="'showTripRatingMenu();'"
+                        <span th:id="'rate-the-trip-' + ${order.getOrderId()}" th:text="'Rate this trip'"
+                              th:onclick="'showTripRatingMenu(' + ${order.getOrderId()} +');'"
                               class="rate-the-trip-btn"></span>
 
-                        <form id="rating-form" th:action="@{/rateTheTrip/{id}(id = ${order.getOrderId()})}" th:method="post">
+                        <form id="rating-form" th:action="@{/rateTheTrip}" th:method="post">
                             <input type="hidden" id="rating-input" name="rating">
+                            <input type="hidden" id="order-id" name="id">
                         </form>
                     </th:block>
 
