@@ -1,15 +1,13 @@
 package mytaxi.partola.controllers;
 
-import mytaxi.krutyporokh.dao.OrderDAO;
 import mytaxi.krutyporokh.models.Order;
 import mytaxi.krutyporokh.models.OrderStatus;
 import mytaxi.krutyporokh.services.OrderService;
-import mytaxi.partola.dao.ClientDAO;
-import mytaxi.partola.dao.DriverDAO;
-import mytaxi.partola.dao.UserDAO;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.models.Driver;
+import mytaxi.partola.services.ClientService;
 import mytaxi.partola.services.CustomUserService;
+import mytaxi.partola.services.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,36 +23,32 @@ import java.util.List;
 @RequestMapping("/driver")
 public class DriversController {
 
-    private final DriverDAO driverDAO;
-    private final OrderDAO orderDAO;
-    private final ClientDAO clientDAO;
-    private final UserDAO userDAO;
     private final CustomUserService customUserService;
     private final OrderService orderService;
+    private final DriverService driverService;
+    private final ClientService clientService;
 
     @Autowired
-    public DriversController(DriverDAO driverDAO, OrderDAO orderDAO, ClientDAO clientDAO, UserDAO userDAO, CustomUserService customUserService, OrderService orderService) {
-        this.driverDAO = driverDAO;
-        this.orderDAO = orderDAO;
-        this.clientDAO = clientDAO;
-        this.userDAO = userDAO;
+    public DriversController(CustomUserService customUserService, OrderService orderService, DriverService driverService, ClientService clientService) {
         this.customUserService = customUserService;
         this.orderService = orderService;
+        this.driverService = driverService;
+        this.clientService = clientService;
     }
     @GetMapping("/orders")
     public String driverPage (Model model) {
         CustomUser customUser = customUserService.getCurrentUserFromSession().get();
         model.addAttribute("user", customUser);
 
-        Driver driver = driverDAO.findDriverByUser(customUser).get();
+        Driver driver = driverService.findDriverByUser(customUser);
         model.addAttribute("driver", driver);
-        List<Order> orders = orderDAO.findAllOrdersForDriver(driver);
+        List<Order> orders = orderService.findAllOrdersForDriver(driver);
         orderService.sortOrdersForDrivers(orders);
         model.addAttribute("orders", orders);
 
         if (driver.isBusy()){
             model.addAttribute("errorMessage", "You are already busy with an active order.");
-            model.addAttribute("activeOrder", orderDAO.findActiveOrderByDriverId(driver.getDriverId()).get());
+            model.addAttribute("activeOrder", orderService.findActiveOrderByDriverId(driver.getDriverId()));
         }
 
         return "driver/myOrders";
@@ -63,17 +57,17 @@ public class DriversController {
     @GetMapping("orders/{id}")
     public String selectedOrder (@PathVariable long id,
                                  Model model) {
-        Order order = orderDAO.findOrderById(id).get();
+        Order order = orderService.findOrderById(id);
         orderService.acceptOrder(order, model);
 
         CustomUser customUser = customUserService.getCurrentUserFromSession().get();
         model.addAttribute("user", customUser);
 
         if (model.containsAttribute("errorMessage")) {
-            Driver driver = driverDAO.findDriverByUser(customUser).get();
+            Driver driver = driverService.findDriverByUser(customUser);
             model.addAttribute("driver", driver);
 
-            List<Order> orders = orderDAO.findAllOrdersForDriver(driver);
+            List<Order> orders = orderService.findAllOrdersForDriver(driver);
             orderService.sortOrdersForDrivers(orders);
 
             model.addAttribute("orders", orders);
@@ -81,7 +75,7 @@ public class DriversController {
         }
 
         model.addAttribute("order", order);
-        model.addAttribute("client", clientDAO.findClientById(order.getClientId()).get());
+        model.addAttribute("client", clientService.findClientById(order.getClientId()));
 
 
         model.addAttribute("passengerName", orderService.getPassengerName(order));
@@ -94,13 +88,13 @@ public class DriversController {
                                          @ModelAttribute("userId") long userId,
                                          @ModelAttribute("passengerName") String passengerName,
                                          Model model) {
-        Order order = orderDAO.findOrderById(id).get();
+        Order order = orderService.findOrderById(id);
         if (!continueFlag) {
             // After IN_PROCESS goes COMPLETED so we stop here
             if (order.getOrderStatus() == OrderStatus.IN_PROCESS) {
                 orderService.updateStatus(order);
-                driverDAO.setBusyStatusById(order.getDriverId(), false);
-                clientDAO.setHasActiveOrderStatus(clientDAO.findClientById(clientId).get(), false);
+                driverService.setBusyStatusById(order.getDriverId(), false);
+                clientService.setHasActiveOrderStatus(clientService.findClientById(clientId), false);
 
                 return "redirect:/driver/orders";
             }
@@ -109,8 +103,8 @@ public class DriversController {
             orderService.updateStatus(order);
         }
         model.addAttribute("order", order);
-        model.addAttribute(clientDAO.findClientById(clientId).get());
-        model.addAttribute("user", userDAO.findUserById(userId).get());
+        model.addAttribute(clientService.findClientById(clientId));
+        model.addAttribute("user", customUserService.findUserById(userId));
 
         return "driver/activeOrder";
     }
@@ -118,9 +112,9 @@ public class DriversController {
     @GetMapping("finished-orders")
     public String finishedOrders (Model model) {
         CustomUser customUser = customUserService.getCurrentUserFromSession().get();
-        Driver driver = driverDAO.findDriverById(customUser.getUserId()).get();
+        Driver driver = driverService.findDriverById(customUser.getUserId());
 
-        List<Order> orders = orderDAO.findAllFinishedOrdersByDriverId(driver.getDriverId());
+        List<Order> orders = orderService.findAllFinishedOrdersByDriverId(driver.getDriverId());
 
         model.addAttribute("user", customUser);
         model.addAttribute("orders", orders);

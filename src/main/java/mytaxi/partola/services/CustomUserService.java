@@ -31,4 +31,8 @@ public class CustomUserService {
         String currentUserEmail = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         return userDAO.findUserByEmail(currentUserEmail);
     }
+
+    public CustomUser findUserById (long id) {
+        return userDAO.findUserById(id).get();
+    }
 }

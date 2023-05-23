@@ -1,11 +1,10 @@
 package mytaxi.partola.controllers;
 
-import mytaxi.krutyporokh.dao.OrderDAO;
 import mytaxi.krutyporokh.models.Order;
 import mytaxi.krutyporokh.services.OrderService;
-import mytaxi.partola.dao.ClientDAO;
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
+import mytaxi.partola.services.ClientService;
 import mytaxi.partola.services.CustomUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,27 +20,25 @@ import java.util.List;
 @Controller
 public class ClientsController {
 
-    private final OrderDAO orderDAO;
-    private final ClientDAO clientDAO;
     private final CustomUserService customUserService;
     private final OrderService orderService;
+    private final ClientService clientService;
 
     @Autowired
-    public ClientsController(OrderDAO orderDAO, ClientDAO clientDAO, CustomUserService customUserService, OrderService orderService) {
-        this.orderDAO = orderDAO;
-        this.clientDAO = clientDAO;
+    public ClientsController(CustomUserService customUserService, OrderService orderService, ClientService clientService) {
         this.customUserService = customUserService;
         this.orderService = orderService;
+        this.clientService = clientService;
     }
 
     @GetMapping("/my-orders")
     public String myOrders (Model model) {
         CustomUser currentUser = customUserService.getCurrentUserFromSession().get();
         model.addAttribute("user", currentUser);
-        Client client = clientDAO.findClientById(currentUser.getUserId()).get();
+        Client client = clientService.findClientById(currentUser.getUserId());
         model.addAttribute("client", client);
 
-        List<Order> orders = orderDAO.findAllOrdersByClientId(client.getClientId());
+        List<Order> orders = orderService.findAllOrdersByClientId(client.getClientId());
         orderService.sortOrdersForClients(orders);
         model.addAttribute("orders", orders);
 

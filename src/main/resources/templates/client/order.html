@@ -86,7 +86,7 @@
                 <td><label for="note-input" class="input-label">Notes:</label></td>
                 <td>
                     <div class="error-message" th:if="${#fields.hasErrors('bookingNotes')}" th:errors="*{bookingNotes}"></div>
-                    <input class="input-fields" type="text" id="note-input" th:field="*{bookingNotes}" name="booking_notes" placeholder="Some special request?">
+                    <input class="input-fields" type="text" id="note-input" th:field="*{bookingNotes}" name="booking_notes" placeholder="Some special request?" maxlength="150">
                 </td>
             </tr>
 

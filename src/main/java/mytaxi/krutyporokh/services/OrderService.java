@@ -86,7 +86,7 @@ public class OrderService {
 
     public void rateTrip (long id, int rating) {
         CustomUser customUser = customUserService.getCurrentUserFromSession().get();
-        Order order = orderDAO.findOrderById(id).get();
+        Order order = findOrderById(id);
 
         // If current user is Driver -> rates Client
         if (customUser.getRole().equals(Role.ROLE_DRIVER)) {
@@ -109,5 +109,29 @@ public class OrderService {
         }
 
         orderDAO.setOrderStatus(order, order.getOrderStatus());
+    }
+
+    public Order findOrderById (long id) {
+        return orderDAO.findOrderById(id).get();
+    }
+
+    public void createNewOrder( Order order, Client client) {
+        orderDAO.createNewOrder(order, client);
+    }
+
+    public List<Order> findAllOrdersByClientId(long id) {
+        return orderDAO.findAllOrdersByClientId(id);
+    }
+
+    public List<Order> findAllOrdersForDriver(Driver driver) {
+        return orderDAO.findAllOrdersForDriver(driver);
+    }
+
+    public Order findActiveOrderByDriverId(long id) {
+        return orderDAO.findActiveOrderByDriverId(id).get();
+    }
+
+    public List<Order> findAllFinishedOrdersByDriverId(long id) {
+        return orderDAO.findAllFinishedOrdersByDriverId(id);
     }
 }
