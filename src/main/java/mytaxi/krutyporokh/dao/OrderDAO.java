@@ -110,10 +110,10 @@ public class OrderDAO {
                 .stream().findAny();
     }
 
-    public void setOrderStatus(Order order, OrderStatus orderStatus) {
+    public void setOrderStatus(long id, OrderStatus orderStatus) {
         jdbcTemplate.update("update \"order\" set order_status = ?::order_status where order_id = ?",
                 orderStatus.getValue(),
-                order.getOrderId());
+                id);
     }
 
     public void assignDriver(Driver driver, Order order) {

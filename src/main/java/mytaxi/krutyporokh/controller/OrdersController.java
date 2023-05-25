@@ -142,4 +142,10 @@ public class OrdersController {
         orderService.rateTrip(id, rating);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("{id}/cancel")
+    public ResponseEntity<?> cancelOrder (@PathVariable long id) {
+        orderService.cancelOrder(id);
+        return ResponseEntity.ok().build();
+    }
 }

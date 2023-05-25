@@ -57,7 +57,7 @@ public class OrderService {
         driverDAO.setBusyStatusById(driver.getDriverId(), true);
         order.setDriverId(driver.getDriverId());
 
-        orderDAO.setOrderStatus(order, OrderStatus.ACCEPTED);
+        orderDAO.setOrderStatus(order.getOrderId(), OrderStatus.ACCEPTED);
         orderDAO.assignDriver(driver, order);
     }
 
@@ -81,7 +81,7 @@ public class OrderService {
 
     public void updateStatus (Order order) {
         order.setOrderStatus(order.getOrderStatus().next());
-        orderDAO.setOrderStatus(order, order.getOrderStatus());
+        orderDAO.setOrderStatus(order.getOrderId(), order.getOrderStatus());
     }
 
     public void rateTrip (long id, int rating) {
@@ -108,7 +108,7 @@ public class OrderService {
             }
         }
 
-        orderDAO.setOrderStatus(order, order.getOrderStatus());
+        orderDAO.setOrderStatus(order.getOrderId(), order.getOrderStatus());
     }
 
     public Order findOrderById (long id) {
@@ -133,5 +133,9 @@ public class OrderService {
 
     public List<Order> findAllFinishedOrdersByDriverId(long id) {
         return orderDAO.findAllFinishedOrdersByDriverId(id);
+    }
+
+    public void cancelOrder(long id) {
+        orderDAO.setOrderStatus(id, OrderStatus.CANCELLED);
     }
 }

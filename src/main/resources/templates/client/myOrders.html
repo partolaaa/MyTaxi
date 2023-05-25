@@ -52,21 +52,26 @@
                 <td th:text="${order.getPaymentType().show()}"></td>
 
                 <td>
-                    <th:block th:if="${order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED
+                    <!--<th:block th:if="${order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED
                         && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED
+                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).CANCELLED
                         && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_DRIVER
                         && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_CLIENT
-                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_ALL}">
+                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_ALL}">-->
+                        <th:block th:if="${
+                        order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).ACCEPTED
+                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).WAITING_FOR_CLIENT
+                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).IN_PROCESS}">
                         <a th:href="@{/order/{id}(id = ${order.getOrderId()})}" th:text="${order.getOrderStatus().show()}"
                         style="background-color: green; cursor: pointer; font-weight: bold; border-radius: 10px; color: white; padding: 15px;"></a>
                      </th:block>
 
                     <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED
                                     || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_DRIVER}">
-                        <span th:id="'rate-the-trip-' + ${order.getOrderId()}" th:text="'Rate this trip'"
+                        <span th:id="'rate-the-trip-' + ${order.getOrderId()}"
+                              th:text="'Rate this trip'"
                               th:onclick="'showTripRatingMenu(' + ${order.getOrderId()} +');'"
                               class="rate-the-trip-btn"></span>
-
                         <form id="rating-form" th:action="@{/rateTheTrip}" th:method="post">
                             <input type="hidden" id="rating-input" name="rating">
                             <input type="hidden" id="order-id" name="id">
@@ -74,14 +79,21 @@
                     </th:block>
 
                     <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED}">
-                        <span th:text="${order.getOrderStatus().show()}"></span>
+                        <form id="cancel-form" th:action="@{/{id}/cancel(id = ${order.getOrderId()})}" th:method="post">
+                            <span th:id="'cancel-' + ${order.getOrderId()}"
+                                  th:onclick="'cancelTrip(' + ${order.getOrderId()} + ');'"
+                                  th:text="'Cancel'"
+                                  style="background-color: darkred; cursor: pointer; font-weight: bold; border-radius: 10px; color: white; padding: 15px;"></span>
+                        </form>
                     </th:block>
 
                     <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_ALL
                                 || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_CLIENT}">
-
                         <span th:text="${T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED.show()}"></span>
+                    </th:block>
 
+                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).CANCELLED}">
+                        <span th:text="${order.getOrderStatus().show()}"></span>
                     </th:block>
                 </td>
             </tr>
