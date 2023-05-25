@@ -13,8 +13,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,28 +20,19 @@ import java.util.Optional;
 public class OrderDAO {
 
     private final JdbcTemplate jdbcTemplate;
-    private final UserDAO userDAO;
     private final CarDAO carDAO;
 
     @Autowired
-    public OrderDAO(JdbcTemplate jdbcTemplate, UserDAO userDAO, CarDAO carDAO) {
+    public OrderDAO(JdbcTemplate jdbcTemplate, CarDAO carDAO) {
         this.jdbcTemplate = jdbcTemplate;
-        this.userDAO = userDAO;
         this.carDAO = carDAO;
     }
 
-    @Transactional
     public void createNewOrder(Order order, Client client) {
         String query = "INSERT INTO \"order\" " +
                 "(client_id, booking_datetime, pickup_address, destination_address, journey_distance, passenger_name, " +
                 "passenger_phone_number, booking_notes, payment_type, car_class, vehicle_type, pay_with_bonuses, price) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?::payment_type, ?::car_class, ?::vehicle_type, ?, ?)";
-
-        //LocalDateTime dateTime = LocalDateTime.parse(order.getBookingDatetime());
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        // Ser datetime to a prettier format
-        //order.setBookingDatetime(dateTime.format(formatter));
 
         jdbcTemplate.update(query,
                 client.getClientId(),
@@ -64,6 +53,13 @@ public class OrderDAO {
 
     public List<Order> findAllOrdersByClientId(long clientId) {
         return jdbcTemplate.query("select * from \"order\" where client_id = ?",
+                new Object[]{clientId},
+                new BeanPropertyRowMapper<>(Order.class));
+    }
+
+    // For correct calculating bonus percent, because cancelled orders were not finished
+    public List<Order> findFinishedOrdersByClientId(long clientId) {
+        return jdbcTemplate.query("select * from \"order\" where client_id = ? and order_status != 'CANCELLED'::order_status",
                 new Object[]{clientId},
                 new BeanPropertyRowMapper<>(Order.class));
     }

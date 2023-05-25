@@ -1,6 +1,7 @@
 package mytaxi.partola.dao;
 
 import mytaxi.partola.models.Client;
+import mytaxi.partola.services.CustomUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,16 +17,15 @@ import java.util.Optional;
 @Component
 public class ClientDAO {
     private final JdbcTemplate jdbcTemplate;
-    private final UserDAO userDAO;
+    private final CustomUserService customUserService;
     @Autowired
-    public ClientDAO(JdbcTemplate jdbcTemplate, UserDAO userDAO) {
+    public ClientDAO(JdbcTemplate jdbcTemplate, CustomUserService customUserService) {
         this.jdbcTemplate = jdbcTemplate;
-        this.userDAO = userDAO;
+        this.customUserService = customUserService;
     }
 
-    @Transactional
     public void createClient(Client client) {
-        userDAO.createUser(client);
+        customUserService.createUser(client);
 
         int userId = jdbcTemplate.queryForObject("SELECT currval('user_id_seq')", Integer.class);
 

@@ -2,7 +2,8 @@ package mytaxi.partola.controllers;
 
 import mytaxi.krutyporokh.dao.OrderDAO;
 import mytaxi.krutyporokh.models.Order;
-import mytaxi.krutyporokh.services.OrderService;
+import mytaxi.krutyporokh.services.OrderSortingService;
+import mytaxi.krutyporokh.services.OrderStatusService;
 import mytaxi.partola.models.Driver;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -27,7 +28,7 @@ class ClientsControllerTest {
     private ClientsController clientsController;
 
     @MockBean
-    private OrderService orderService;
+    private OrderSortingService orderSortingService;
 
     @MockBean
     private OrderDAO orderDAO;
@@ -45,7 +46,7 @@ class ClientsControllerTest {
         Mockito.when(orderDAO.findAllOrdersByClientId(1)).thenReturn(orders);
 
         List<Order> sortedOrders = orderDAO.findAllOrdersByClientId(1);
-        orderService.sortOrdersForClients(sortedOrders);
+        orderSortingService.sortOrdersForClients(sortedOrders);
 
         System.out.println(sortedOrders);
         assertEquals(Arrays.asList(order1, order2), sortedOrders);
@@ -69,7 +70,7 @@ class ClientsControllerTest {
 
 
         List<Order> sortedOrders = orderDAO.findAllOrdersForDriver(driver);
-        orderService.sortOrdersForDrivers(sortedOrders);
+        orderSortingService.sortOrdersForDrivers(sortedOrders);
 
         System.out.println(sortedOrders);
         assertEquals(Arrays.asList(order1, order2), sortedOrders);
