@@ -1,7 +1,9 @@
 package mytaxi.krutyporokh.controller;
 
 import mytaxi.krutyporokh.models.Order;
-import mytaxi.krutyporokh.services.OrderService;
+import mytaxi.krutyporokh.services.OrderManagementService;
+import mytaxi.krutyporokh.services.OrderRatingService;
+import mytaxi.krutyporokh.services.OrderStatusService;
 import mytaxi.krutyporokh.validation.groups.OrderForAnotherPerson;
 import mytaxi.krutyporokh.validation.groups.OrderForSelf;
 import mytaxi.partola.models.Client;
@@ -31,7 +33,9 @@ public class OrdersController {
     private final Validator validator;
     private final ClientService clientService;
     private final CustomUserService customUserService;
-    private final OrderService orderService;
+    private final OrderManagementService orderManagementService;
+    private final OrderStatusService orderStatusService;
+    private final OrderRatingService orderRatingService;
     private final DriverService driverService;
     private final CarService carService;
 
@@ -39,11 +43,13 @@ public class OrdersController {
     private String googleMapsAPIKey;
 
     @Autowired
-    public OrdersController(Validator validator, ClientService clientService, CustomUserService customUserService, OrderService orderService, DriverService driverService, CarService carService) {
+    public OrdersController(Validator validator, ClientService clientService, CustomUserService customUserService, OrderManagementService orderManagementService, OrderStatusService orderStatusService, OrderRatingService orderRatingService, DriverService driverService, CarService carService) {
         this.validator = validator;
         this.clientService = clientService;
         this.customUserService = customUserService;
-        this.orderService = orderService;
+        this.orderManagementService = orderManagementService;
+        this.orderStatusService = orderStatusService;
+        this.orderRatingService = orderRatingService;
         this.driverService = driverService;
         this.carService = carService;
     }
@@ -108,8 +114,8 @@ public class OrdersController {
             return "client/order";
         }
         // If user pays with bonuses, we remove them from their account
-        clientService.subtractBonuses(client, order);
-        orderService.createNewOrder(order, client);
+        clientService.subtractAllBonuses(client.getClientId(), order);
+        orderManagementService.createNewOrder(order, client);
         clientService.addBonusesByUserAndOrderPrice(currentUser, order.getPrice());
         clientService.setHasActiveOrderStatus(client, true);
 
@@ -120,7 +126,7 @@ public class OrdersController {
     public String activeOrder(@PathVariable long id,
                               Model model) {
         CustomUser currentUser = customUserService.getCurrentUserFromSession().get();
-        Order currentOrder = orderService.findOrderById(id);
+        Order currentOrder = orderManagementService.findOrderById(id);
 
         // If this order is not order of current user, so we don't show it
         if (currentOrder.getClientId() != currentUser.getUserId()) {
@@ -139,7 +145,15 @@ public class OrdersController {
     @PostMapping("/rateTheTrip")
     public ResponseEntity<?> ratedTrip (@RequestParam long id,
                                         @RequestParam int rating) {
-        orderService.rateTrip(id, rating);
+        orderRatingService.rateTrip(id, rating);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("{id}/cancel")
+    public ResponseEntity<?> cancelOrder (@PathVariable long id) {
+        orderStatusService.cancelOrder(id);
+        orderStatusService.subtractBonusesIfOrderWasCancelled(id);
+        clientService.setHasActiveOrderStatus(clientService.findClientById(orderManagementService.findOrderById(id).getClientId()), false);
         return ResponseEntity.ok().build();
     }
 }

@@ -2,7 +2,9 @@ package mytaxi.partola.controllers;
 
 import mytaxi.krutyporokh.models.Order;
 import mytaxi.krutyporokh.models.OrderStatus;
-import mytaxi.krutyporokh.services.OrderService;
+import mytaxi.krutyporokh.services.OrderManagementService;
+import mytaxi.krutyporokh.services.OrderSortingService;
+import mytaxi.krutyporokh.services.OrderStatusService;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.models.Driver;
 import mytaxi.partola.services.ClientService;
@@ -24,14 +26,18 @@ import java.util.List;
 public class DriversController {
 
     private final CustomUserService customUserService;
-    private final OrderService orderService;
+    private final OrderManagementService orderManagementService;
+    private final OrderSortingService orderSortingService;
+    private final OrderStatusService orderStatusService;
     private final DriverService driverService;
     private final ClientService clientService;
 
     @Autowired
-    public DriversController(CustomUserService customUserService, OrderService orderService, DriverService driverService, ClientService clientService) {
+    public DriversController(CustomUserService customUserService, OrderManagementService orderManagementService, OrderSortingService orderSortingService, OrderStatusService orderStatusService, DriverService driverService, ClientService clientService) {
         this.customUserService = customUserService;
-        this.orderService = orderService;
+        this.orderManagementService = orderManagementService;
+        this.orderSortingService = orderSortingService;
+        this.orderStatusService = orderStatusService;
         this.driverService = driverService;
         this.clientService = clientService;
     }
@@ -42,13 +48,13 @@ public class DriversController {
 
         Driver driver = driverService.findDriverByUser(customUser);
         model.addAttribute("driver", driver);
-        List<Order> orders = orderService.findAllOrdersForDriver(driver);
-        orderService.sortOrdersForDrivers(orders);
+        List<Order> orders = orderManagementService.findAllOrdersForDriver(driver);
+        orderSortingService.sortOrdersForDrivers(orders);
         model.addAttribute("orders", orders);
 
         if (driver.isBusy()){
             model.addAttribute("errorMessage", "You are already busy with an active order.");
-            model.addAttribute("activeOrder", orderService.findActiveOrderByDriverId(driver.getDriverId()));
+            model.addAttribute("activeOrder", orderManagementService.findActiveOrderByDriverId(driver.getDriverId()));
         }
 
         return "driver/myOrders";
@@ -57,8 +63,8 @@ public class DriversController {
     @GetMapping("orders/{id}")
     public String selectedOrder (@PathVariable long id,
                                  Model model) {
-        Order order = orderService.findOrderById(id);
-        orderService.acceptOrder(order, model);
+        Order order = orderManagementService.findOrderById(id);
+        orderStatusService.acceptOrder(order, model);
 
         CustomUser customUser = customUserService.getCurrentUserFromSession().get();
         model.addAttribute("user", customUser);
@@ -67,8 +73,8 @@ public class DriversController {
             Driver driver = driverService.findDriverByUser(customUser);
             model.addAttribute("driver", driver);
 
-            List<Order> orders = orderService.findAllOrdersForDriver(driver);
-            orderService.sortOrdersForDrivers(orders);
+            List<Order> orders = orderManagementService.findAllOrdersForDriver(driver);
+            orderSortingService.sortOrdersForDrivers(orders);
 
             model.addAttribute("orders", orders);
             return "redirect:/driver/orders";
@@ -78,7 +84,7 @@ public class DriversController {
         model.addAttribute("client", clientService.findClientById(order.getClientId()));
 
 
-        model.addAttribute("passengerName", orderService.getPassengerName(order));
+        model.addAttribute("passengerName", orderManagementService.getPassengerName(order));
         return "driver/activeOrder";
     }
     @PostMapping("orders/{id}/updateStatus")
@@ -88,11 +94,11 @@ public class DriversController {
                                          @ModelAttribute("userId") long userId,
                                          @ModelAttribute("passengerName") String passengerName,
                                          Model model) {
-        Order order = orderService.findOrderById(id);
+        Order order = orderManagementService.findOrderById(id);
         if (!continueFlag) {
             // After IN_PROCESS goes COMPLETED so we stop here
             if (order.getOrderStatus() == OrderStatus.IN_PROCESS) {
-                orderService.updateStatus(order);
+                orderStatusService.updateStatus(order);
                 driverService.setBusyStatusById(order.getDriverId(), false);
                 clientService.setHasActiveOrderStatus(clientService.findClientById(clientId), false);
 
@@ -100,7 +106,7 @@ public class DriversController {
             }
 
 
-            orderService.updateStatus(order);
+            orderStatusService.updateStatus(order);
         }
         model.addAttribute("order", order);
         model.addAttribute(clientService.findClientById(clientId));
@@ -114,7 +120,7 @@ public class DriversController {
         CustomUser customUser = customUserService.getCurrentUserFromSession().get();
         Driver driver = driverService.findDriverById(customUser.getUserId());
 
-        List<Order> orders = orderService.findAllFinishedOrdersByDriverId(driver.getDriverId());
+        List<Order> orders = orderManagementService.findAllFinishedOrdersByDriverId(driver.getDriverId());
 
         model.addAttribute("user", customUser);
         model.addAttribute("orders", orders);

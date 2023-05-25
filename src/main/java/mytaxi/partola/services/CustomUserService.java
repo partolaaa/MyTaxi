@@ -51,4 +51,7 @@ public class CustomUserService {
     public CustomUser findUserById (long id) {
         return userDAO.findUserById(id).get();
     }
+    public void createUser (CustomUser customUser) {
+        userDAO.createUser(customUser);
+    }
 }

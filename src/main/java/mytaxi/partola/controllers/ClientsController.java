@@ -1,7 +1,8 @@
 package mytaxi.partola.controllers;
 
 import mytaxi.krutyporokh.models.Order;
-import mytaxi.krutyporokh.services.OrderService;
+import mytaxi.krutyporokh.services.OrderManagementService;
+import mytaxi.krutyporokh.services.OrderSortingService;
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.services.ClientService;
@@ -21,13 +22,15 @@ import java.util.List;
 public class ClientsController {
 
     private final CustomUserService customUserService;
-    private final OrderService orderService;
+    private final OrderSortingService orderSortingService;
+    private final OrderManagementService orderManagementService;
     private final ClientService clientService;
 
     @Autowired
-    public ClientsController(CustomUserService customUserService, OrderService orderService, ClientService clientService) {
+    public ClientsController(CustomUserService customUserService, OrderSortingService orderSortingService, OrderManagementService orderManagementService, ClientService clientService) {
         this.customUserService = customUserService;
-        this.orderService = orderService;
+        this.orderSortingService = orderSortingService;
+        this.orderManagementService = orderManagementService;
         this.clientService = clientService;
     }
 
@@ -38,8 +41,8 @@ public class ClientsController {
         Client client = clientService.findClientById(currentUser.getUserId());
         model.addAttribute("client", client);
 
-        List<Order> orders = orderService.findAllOrdersByClientId(client.getClientId());
-        orderService.sortOrdersForClients(orders);
+        List<Order> orders = orderManagementService.findAllOrdersByClientId(client.getClientId());
+        orderSortingService.sortOrdersForClients(orders);
         model.addAttribute("orders", orders);
 
         return "client/myOrders";

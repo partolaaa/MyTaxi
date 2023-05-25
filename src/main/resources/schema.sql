@@ -57,7 +57,7 @@ create table if not exists "driver"(
 create type payment_type as enum ('CASH', 'CARD');
 
 -- Define order statuses
-create type order_status as enum ('NOT_ACCEPTED', 'ACCEPTED', 'WAITING_FOR_CLIENT', 'IN_PROCESS', 'COMPLETED', 'RATED_BY_CLIENT', 'RATED_BY_DRIVER', 'RATED_BY_ALL');
+create type order_status as enum ('NOT_ACCEPTED', 'ACCEPTED', 'CANCELLED', 'WAITING_FOR_CLIENT', 'IN_PROCESS', 'COMPLETED', 'RATED_BY_CLIENT', 'RATED_BY_DRIVER', 'RATED_BY_ALL');
 
 -- Define the order table
 create table if not exists "order"(

@@ -1,12 +1,14 @@
 package mytaxi.partola.services;
 
-import mytaxi.krutyporokh.dao.OrderDAO;
 import mytaxi.krutyporokh.models.Order;
+import mytaxi.krutyporokh.services.OrderManagementService;
+import mytaxi.krutyporokh.services.OrderStatusService;
 import mytaxi.partola.dao.ClientDAO;
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +21,12 @@ import java.util.Optional;
 public class ClientService {
 
     private final ClientDAO clientDAO;
-    private final OrderDAO orderDAO;
+    private final OrderManagementService orderManagementService;
 
     @Autowired
-    public ClientService(ClientDAO clientDAO, OrderDAO orderDAO) {
+    public ClientService(ClientDAO clientDAO, OrderManagementService orderManagementService) {
         this.clientDAO = clientDAO;
-        this.orderDAO = orderDAO;
+        this.orderManagementService = orderManagementService;
     }
 
     public boolean clientExistsWithPhoneNumber(Client client) {
@@ -36,8 +38,6 @@ public class ClientService {
         client.setTotalRatings(client.getTotalRatings() + rating);
         client.setRating((float)client.getTotalRatings() / client.getNumberOfRatings());
 
-        //System.out.println((float)client.getTotalRatings() / client.getNumberOfRatings());
-
         clientDAO.updateRating(client);
     }
 
@@ -45,7 +45,7 @@ public class ClientService {
         Optional<Client> client = clientDAO.findClientById(customUser.getUserId());
 
         if (client.isPresent()){
-            List<Order> orders = orderDAO.findAllOrdersByClientId(client.get().getClientId());
+            List<Order> orders = orderManagementService.findFinishedOrdersByClientId(client.get().getClientId());
 
             float bonusPercent = (float) (Math.max(Math.min(orders.size()/10, 10), 1) / 100.0); // bonusPercent can't be more than 10%
             float bonusesAmount = orderPrice * bonusPercent + client.get().getBonusAmount();
@@ -54,9 +54,9 @@ public class ClientService {
         }
     }
 
-    public void subtractBonuses(Client client, Order order) {
+    public void subtractAllBonuses(long id, Order order) {
         if (order.isPayWithBonuses()) {
-            clientDAO.setBonusesByClientId(client.getClientId(), 0);
+            clientDAO.setBonusesByClientId(id, 0);
         }
     }
 
@@ -66,6 +66,10 @@ public class ClientService {
 
     public void setHasActiveOrderStatus(Client client, boolean status) {
         clientDAO.setHasActiveOrderStatus(client, status);
+    }
+
+    public void subtractSomeBonuses(long id, float currentBonusesAmount, float subtractBonusesAmount) {
+        clientDAO.setBonusesByClientId(id, currentBonusesAmount - subtractBonusesAmount);
     }
 
     public void updateClient(Client client) {

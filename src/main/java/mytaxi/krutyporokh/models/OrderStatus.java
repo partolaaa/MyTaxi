@@ -3,6 +3,8 @@ package mytaxi.krutyporokh.models;
 public enum OrderStatus {
     NOT_ACCEPTED("NOT_ACCEPTED"),
     ACCEPTED("ACCEPTED"),
+
+    CANCELLED("CANCELLED"),
     WAITING_FOR_CLIENT("WAITING_FOR_CLIENT"),
     IN_PROCESS("IN_PROCESS"),
     COMPLETED("COMPLETED"),

@@ -96,3 +96,28 @@ function closeTripRatingMenu() {
     }, 500);
 }
 
+function cancelTrip(id) {
+    $.ajax({
+        url: $('#cancel-form').attr('action'),
+        type: 'POST',
+        data: $('#cancel-form').serialize(),
+        success: function(response) {
+            let rateTheTripBtn= document.getElementById("cancel-" + id);
+
+            rateTheTripBtn.onclick = null;
+            rateTheTripBtn.style.background = "none";
+            rateTheTripBtn.style.cursor = "context-menu";
+            rateTheTripBtn.style.color = "darkorange";
+            rateTheTripBtn.innerText = "Order cancelled";
+
+            setTimeout(function() {
+                rateTheTripBtn.style.color = "white";
+                rateTheTripBtn.style.fontWeight = "normal";
+                rateTheTripBtn.innerText = "Cancelled";
+            }, 5000);
+        },
+        error: function(error) {
+            console.log("An error occurred: " + error);
+        }
+    });
+}
