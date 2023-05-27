@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Information</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/main.js}"></script>
 </head>
 <body>
+<th:block th:if="${isLogged}" th:insert="~{/_menu_logged.html}"></th:block>
+<th:block th:unless="${isLogged}" th:insert="~{/_menu.html}"></th:block>
+
 
 </body>
 </html>

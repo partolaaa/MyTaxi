@@ -5,6 +5,8 @@ import mytaxi.partola.dao.UserDAO;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,14 @@ public class CustomUserService {
     public Optional<CustomUser> getCurrentUserFromSession () {
         String currentUserEmail = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         return userDAO.findUserByEmail(currentUserEmail);
+    }
+
+
+    public boolean isLoggedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return authentication != null && authentication.isAuthenticated() &&
+                !(authentication instanceof AnonymousAuthenticationToken);
     }
 
     public CustomUser findUserById (long id) {

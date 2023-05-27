@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     public SecurityConfig(@Lazy CustomUserDetailsService customUserDetailsService) {
@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/fonts/**", "/images/**").permitAll()
-                .antMatchers("/login", "/register", "/error").permitAll()
+                .antMatchers("/login", "/register", "/error", "/info").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/driver/**").hasRole("DRIVER")
                 .anyRequest().authenticated() // assuming all other requests need to be authenticated
