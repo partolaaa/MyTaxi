@@ -60,10 +60,10 @@ public class DriversController {
         return "driver/myOrders";
     }
 
-    @GetMapping("orders/{id}")
-    public String selectedOrder (@PathVariable long id,
+    @GetMapping("orders/{hash}")
+    public String selectedOrder (@PathVariable String hash,
                                  Model model) {
-        Order order = orderManagementService.findOrderById(id);
+        Order order = orderManagementService.findOrderByHash(hash);
         orderStatusService.acceptOrder(order, model);
 
         CustomUser customUser = customUserService.getCurrentUserFromSession().get();
@@ -87,14 +87,14 @@ public class DriversController {
         model.addAttribute("passengerName", orderManagementService.getPassengerName(order));
         return "driver/activeOrder";
     }
-    @PostMapping("orders/{id}/updateStatus")
-    public String updateOrderStatus(@PathVariable Long id,
+    @PostMapping("orders/{hash}/updateStatus")
+    public String updateOrderStatus(@PathVariable String hash,
                                          @RequestParam(required = false) boolean continueFlag,
                                          @ModelAttribute("clientId") long clientId,
                                          @ModelAttribute("userId") long userId,
                                          @ModelAttribute("passengerName") String passengerName,
                                          Model model) {
-        Order order = orderManagementService.findOrderById(id);
+        Order order = orderManagementService.findOrderByHash(hash);
         if (!continueFlag) {
             // After IN_PROCESS goes COMPLETED so we stop here
             if (order.getOrderStatus() == OrderStatus.IN_PROCESS) {

@@ -33,8 +33,8 @@ function setButtonRedirectOnClick(button, path) {
     }
 }
 
-function rateTrip(id, rating) {
-    document.getElementById('order-id').value = id;
+function rateTrip(hash, rating) {
+    document.getElementById('order-hash').value = hash;
     document.getElementById('rating-input').value = rating;
 
     $.ajax({
@@ -42,7 +42,7 @@ function rateTrip(id, rating) {
         type: 'POST',
         data: $('#rating-form').serialize(),
         success: function(response) {
-            let rateTheTripBtn= document.getElementById("rate-the-trip-" + id);
+            let rateTheTripBtn= document.getElementById("rate-the-trip-" + hash);
 
             rateTheTripBtn.onclick = null;
             rateTheTripBtn.style.background = "none";
@@ -64,13 +64,14 @@ function rateTrip(id, rating) {
     closeTripRatingMenu();
 }
 
-function showTripRatingMenu(id) {
+function showTripRatingMenu(element) {
+    let hash = element.getAttribute('data-hash');
     const tripInfoPanel = document.getElementById("trip-info-panel");
     const overlay = document.getElementById("overlay");
 
     for (let i = 1; i <= 5; i++) {
         document.getElementById("rating" + i).onclick = function() {
-            rateTrip(id, i);
+            rateTrip(hash, i);
         };
     }
 
@@ -96,13 +97,14 @@ function closeTripRatingMenu() {
     }, 500);
 }
 
-function cancelTrip(id) {
+function cancelTrip(element) {
+    let hash = element.getAttribute('data-hash');
     $.ajax({
         url: $('#cancel-form').attr('action'),
         type: 'POST',
         data: $('#cancel-form').serialize(),
         success: function(response) {
-            let rateTheTripBtn= document.getElementById("cancel-" + id);
+            let rateTheTripBtn= document.getElementById("cancel-" + hash);
 
             rateTheTripBtn.onclick = null;
             rateTheTripBtn.style.background = "none";

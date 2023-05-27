@@ -49,5 +49,6 @@ public class Order {
     private boolean payWithBonuses;
 
     private OrderStatus orderStatus;
+    private String hash;
 }
 

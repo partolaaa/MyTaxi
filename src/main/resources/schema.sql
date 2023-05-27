@@ -76,5 +76,20 @@ create table if not exists "order"(
     car_class car_class not null,                               -- Car class
     vehicle_type vehicle_type not null,                         -- Vehicle type
     price decimal(10,2) not null,                               -- Price
-    order_status order_status not null default 'NOT_ACCEPTED'::order_status  -- Order status
+    order_status order_status not null default 'NOT_ACCEPTED'::order_status,  -- Order status
+    hash varchar(8) not null
 );
+
+-- Function for hashing order_id
+CREATE OR REPLACE FUNCTION create_hash() RETURNS TRIGGER AS $$
+BEGIN
+    NEW.hash := substring(md5(NEW.order_id::text) from 1 for 12);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER insert_hash_trigger
+    BEFORE INSERT ON "order"
+    FOR EACH ROW
+EXECUTE FUNCTION create_hash();
+

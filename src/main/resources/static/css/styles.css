@@ -1,14 +1,36 @@
 @font-face {
     font-family: "Chakra";
     src: url("../fonts/Chakra.ttf") format("truetype");
-    /* You can add additional font formats here if needed */
 }
 body {
-    background: #1F1B30 url('../images/dublin-background.svg') no-repeat;
+    background: #1F1B30 url('../images/dublin-background.svg') no-repeat fixed;
     background-size: cover;
     height: 800px;
     overflow: auto;
 }
+
+::-webkit-scrollbar {
+    width: 13px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(72, 61, 139, 0.7);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(83, 61, 167);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 140, 0);
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
 #h1-mytaxi {
     margin-left: 40px;
     cursor: pointer;
@@ -83,7 +105,7 @@ h2 {
     min-width: 600px;
     min-height: 350px;
     border-radius: 20px;
-    overflow-y: auto; /*TODO: do better*/
+    overflow-y: auto;
 }
 
 .register-panel {
@@ -501,4 +523,30 @@ a {
     border-radius: 10px;
     color: white;
     padding: 10px;
+}
+
+.info-text {
+    font-family: 'CHAKRA', sans-serif;
+    color: white;
+    text-align: left;
+}
+
+.global-info {
+    max-width: 900px;
+}
+
+.info-title {
+    text-align: center;
+}
+
+.global-info-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 85px);
 }

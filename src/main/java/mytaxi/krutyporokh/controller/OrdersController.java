@@ -114,7 +114,7 @@ public class OrdersController {
             return "client/order";
         }
         // If user pays with bonuses, we remove them from their account
-        clientService.subtractAllBonuses(client.getClientId(), order);
+        clientService.subtractBonuses(client.getClientId(), order);
         orderManagementService.createNewOrder(order, client);
         clientService.addBonusesByUserAndOrderPrice(currentUser, order.getPrice());
         clientService.setHasActiveOrderStatus(client, true);
@@ -122,11 +122,11 @@ public class OrdersController {
         return "redirect:/my-orders";
     }
 
-    @GetMapping("/order/{id}")
-    public String activeOrder(@PathVariable long id,
+    @GetMapping("/order/{hash}")
+    public String activeOrder(@PathVariable String hash,
                               Model model) {
         CustomUser currentUser = customUserService.getCurrentUserFromSession().get();
-        Order currentOrder = orderManagementService.findOrderById(id);
+        Order currentOrder = orderManagementService.findOrderByHash(hash);
 
         // If this order is not order of current user, so we don't show it
         if (currentOrder.getClientId() != currentUser.getUserId()) {
@@ -143,17 +143,17 @@ public class OrdersController {
     }
 
     @PostMapping("/rateTheTrip")
-    public ResponseEntity<?> ratedTrip (@RequestParam long id,
+    public ResponseEntity<?> ratedTrip (@RequestParam String hash,
                                         @RequestParam int rating) {
-        orderRatingService.rateTrip(id, rating);
+        orderRatingService.rateTrip(hash, rating);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("{id}/cancel")
-    public ResponseEntity<?> cancelOrder (@PathVariable long id) {
-        orderStatusService.cancelOrder(id);
-        orderStatusService.subtractBonusesIfOrderWasCancelled(id);
-        clientService.setHasActiveOrderStatus(clientService.findClientById(orderManagementService.findOrderById(id).getClientId()), false);
+    @PostMapping("{hash}/cancel")
+    public ResponseEntity<?> cancelOrder (@PathVariable String hash) {
+        orderStatusService.cancelOrder(hash);
+        orderStatusService.subtractBonusesIfOrderWasCancelled(hash);
+        clientService.setHasActiveOrderStatus(clientService.findClientById(orderManagementService.findOrderByHash(hash).getClientId()), false);
         return ResponseEntity.ok().build();
     }
 }

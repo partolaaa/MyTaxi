@@ -7,7 +7,6 @@ import mytaxi.partola.models.Driver;
 import mytaxi.partola.services.CustomUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 /**
@@ -29,8 +28,13 @@ public class OrderManagementService {
         return orderDAO.findOrderById(id).get();
     }
 
+    public Order findOrderByHash (String hash) {
+        return orderDAO.findOrderByHash(hash).get();
+    }
+
     public void createNewOrder( Order order, Client client) {
         orderDAO.createNewOrder(order, client);
+
     }
 
     public List<Order> findAllOrdersByClientId(long id) {

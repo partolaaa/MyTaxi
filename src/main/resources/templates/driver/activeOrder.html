@@ -25,7 +25,7 @@
         <h4>Distance: <span th:text="${order.getJourneyDistance()}"></span></h4>
         <h4>Price: <span th:text="${order.getPrice()}"></span> ₴</h4>
     </div>
-    <form th:action="@{/driver/orders/__${id}__/updateStatus}" th:method="POST">
+    <form th:action="@{/driver/orders/__${hash}__/updateStatus}" th:method="POST">
         <input type="hidden" th:name="passengerName" th:value="${passengerName}">
         <input type="hidden" th:name="clientId" th:value="${client.getClientId()}">
         <input type="hidden" th:name="userId" th:value="${user.getUserId()}">

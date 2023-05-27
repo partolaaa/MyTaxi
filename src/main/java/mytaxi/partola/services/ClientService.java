@@ -2,13 +2,11 @@ package mytaxi.partola.services;
 
 import mytaxi.krutyporokh.models.Order;
 import mytaxi.krutyporokh.services.OrderManagementService;
-import mytaxi.krutyporokh.services.OrderStatusService;
 import mytaxi.partola.dao.ClientDAO;
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,9 +52,18 @@ public class ClientService {
         }
     }
 
-    public void subtractAllBonuses(long id, Order order) {
+    public void subtractBonuses(long id, Order order) {
+        Client client = findClientById(id);
+        float bonusesAmount = client.getBonusAmount();
+        float orderPrice = order.getPrice();
+
+
         if (order.isPayWithBonuses()) {
-            clientDAO.setBonusesByClientId(id, 0);
+            if (orderPrice >= bonusesAmount) {
+                clientDAO.setBonusesByClientId(id, 0);
+            } else {
+                clientDAO.setBonusesByClientId(id, orderPrice - bonusesAmount);
+            }
         }
     }
 
