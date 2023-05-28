@@ -60,11 +60,15 @@ public class DriversController {
         return "driver/myOrders";
     }
 
-    @GetMapping("orders/{id}")
-    public String selectedOrder (@PathVariable long id,
-                                 Model model) {
-        Order order = orderManagementService.findOrderById(id);
-        orderStatusService.acceptOrder(order, model);
+    @GetMapping("orders/{hash}")
+    public String acceptOrder (@PathVariable String hash,
+                               @RequestParam(required = false) Boolean accept,
+                               Model model) {
+        Order order = orderManagementService.findOrderByHash(hash);
+
+        if (Boolean.TRUE.equals(accept)) {
+            orderStatusService.acceptOrder(order, model);
+        }
 
         CustomUser customUser = customUserService.getCurrentUserFromSession().get();
         model.addAttribute("user", customUser);
@@ -83,18 +87,19 @@ public class DriversController {
         model.addAttribute("order", order);
         model.addAttribute("client", clientService.findClientById(order.getClientId()));
 
-
         model.addAttribute("passengerName", orderManagementService.getPassengerName(order));
+        model.addAttribute("passengerPhoneNumber", orderManagementService.getPassengerPhoneNumber(order));
         return "driver/activeOrder";
     }
-    @PostMapping("orders/{id}/updateStatus")
-    public String updateOrderStatus(@PathVariable Long id,
+
+    @PostMapping("orders/{hash}/updateStatus")
+    public String updateOrderStatus(@PathVariable String hash,
                                          @RequestParam(required = false) boolean continueFlag,
                                          @ModelAttribute("clientId") long clientId,
                                          @ModelAttribute("userId") long userId,
                                          @ModelAttribute("passengerName") String passengerName,
                                          Model model) {
-        Order order = orderManagementService.findOrderById(id);
+        Order order = orderManagementService.findOrderByHash(hash);
         if (!continueFlag) {
             // After IN_PROCESS goes COMPLETED so we stop here
             if (order.getOrderStatus() == OrderStatus.IN_PROCESS) {
@@ -105,14 +110,16 @@ public class DriversController {
                 return "redirect:/driver/orders";
             }
 
-
             orderStatusService.updateStatus(order);
+        } else {
+            model.addAttribute("passengerName", orderManagementService.getPassengerName(order));
+            model.addAttribute("passengerPhoneNumber", orderManagementService.getPassengerPhoneNumber(order));
         }
         model.addAttribute("order", order);
         model.addAttribute(clientService.findClientById(clientId));
         model.addAttribute("user", customUserService.findUserById(userId));
 
-        return "driver/activeOrder";
+        return "redirect:/driver/orders/" + hash;
     }
 
     @GetMapping("finished-orders")

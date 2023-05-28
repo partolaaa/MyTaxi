@@ -33,9 +33,9 @@ public class OrderRatingService {
         this.orderDAO = orderDAO;
     }
 
-    public void rateTrip (long id, int rating) {
+    public void rateTrip (String hash, int rating) {
         CustomUser customUser = customUserService.getCurrentUserFromSession().get();
-        Order order = orderManagementService.findOrderById(id);
+        Order order = orderManagementService.findOrderByHash(hash);
 
         // If current user is Driver -> rates Client
         if (customUser.getRole().equals(Role.ROLE_DRIVER)) {
@@ -57,6 +57,6 @@ public class OrderRatingService {
             }
         }
 
-        orderDAO.setOrderStatus(order.getOrderId(), order.getOrderStatus());
+        orderDAO.setOrderStatus(hash, order.getOrderStatus());
     }
 }

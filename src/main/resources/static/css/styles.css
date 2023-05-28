@@ -1,14 +1,36 @@
 @font-face {
     font-family: "Chakra";
     src: url("../fonts/Chakra.ttf") format("truetype");
-    /* You can add additional font formats here if needed */
 }
 body {
-    background: #1F1B30 url('../images/dublin-background.svg') no-repeat;
+    background: #1F1B30 url('../images/dublin-background.svg') no-repeat fixed;
     background-size: cover;
     height: 800px;
     overflow: auto;
 }
+
+::-webkit-scrollbar {
+    width: 13px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(72, 61, 139, 0.7);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(83, 61, 167);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 140, 0);
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
 #h1-mytaxi {
     margin-left: 40px;
     cursor: pointer;
@@ -73,27 +95,29 @@ h2 {
     align-items: center;
 }
 
-.login-panel {
+.panel {
     background-color: rgba(72, 61, 139, 0.7);
-    position: absolute;
+    position: relative;
     top: 50%;
     left: 50%;
+    width: 30%;
     transform: translate(-50%, -50%);
     justify-content: center;
     min-width: 600px;
-    min-height: 350px;
+    min-height: 330px;
     border-radius: 20px;
-    overflow-y: auto; /*TODO: do better*/
+    overflow-y: auto;
 }
 
-.register-panel {
+.login-panel {
     background-color: rgba(72, 61, 139, 0.7);
     position: relative;
     margin: 0 auto;
     top: 20%;
-    padding: 20px;
+    display: flex;
+    justify-content: center;
     width: 600px;
-    min-height: 400px;
+    min-height: 430px;
     border-radius: 20px;
     z-index: 1;
 }
@@ -206,6 +230,11 @@ h2 {
     position: absolute;
     right: 0;
     margin: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+#info:hover {
+    transform: scale(1.2) rotate(360deg);
 }
 
 .estimated-price {
@@ -215,6 +244,7 @@ h2 {
 
 
 input[type="checkbox"] {
+    position: relative;
     appearance: none;
     border: 2px solid darkorange;
     width: 18px;
@@ -223,7 +253,7 @@ input[type="checkbox"] {
     outline: none;
     margin-left: 10px;
     vertical-align: middle;
-    position: relative;
+    cursor: pointer;
 }
 
 input[type="checkbox"]:checked:before {
@@ -360,7 +390,6 @@ input[type="checkbox"]:checked:before {
 
 .rating-button {
     background: darkorange;
-    /*box-shadow: 0 2px 15px black;*/
     border: none;
     height: 70px;
     width: 70px;
@@ -371,6 +400,12 @@ input[type="checkbox"]:checked:before {
     font-family: 'CHAKRA', sans-serif;
     font-weight: bold;
     cursor: pointer;
+}
+
+.rating {
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
 }
 
 #error-container {
@@ -438,21 +473,26 @@ a {
 
 #trip-info-title {
     font-size: 30px;
-    position: absolute;
-    left: 42%;
+    position: relative;
+    text-align: center;
     top: 0;
     color: green;
     font-family: 'Chakra', sans-serif;
 }
 
+.rate-the-trip-title {
+    font-size: 30px;
+    text-align: center;
+    top: 0;
+    color: white;
+    font-family: 'Chakra', sans-serif;
+}
+
 #trip-info {
-    top: 16%;
     font-size: 18px;
     color: white;
     font-family: 'CHAKRA', sans-serif;
-    position: relative;
-    margin-top: 100px;
-    left: 7%;
+    margin-left: 5%;
     width: 80%;
 }
 
@@ -464,9 +504,6 @@ a {
     font-size: 25px;
     border-radius: 12px;
     border: none;
-    position: relative;
-    left: 42%;
-    top: 34%;
     font-weight: bold;
     padding: 5px;
     margin-bottom: 15px;
@@ -485,6 +522,53 @@ a {
     min-width: 800px;
 }
 
+.rate-the-trip-panel {
+    border: solid 2px darkorange;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    width: 40%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    margin-top: 200px;
+    min-width: 800px;
+    min-height: 400px;
+    z-index: 9;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+}
+
+#overlay {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+}
+
+.update-status-form {
+    display: flex;
+    justify-content: center;
+}
+
+.cancel {
+    background-color: darkred;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 10px;
+    color: white;
+    padding: 10px;
+}
+
 #close {
     right: unset;
     width: 30px;
@@ -501,4 +585,37 @@ a {
     border-radius: 10px;
     color: white;
     padding: 10px;
+}
+
+.info-text {
+    font-family: 'CHAKRA', sans-serif;
+    color: white;
+    text-align: left;
+}
+
+.global-info {
+    max-width: 900px;
+    background-color: rgba(72, 61, 139, 0.7);
+    border-radius: 20px;
+    padding: 15px;
+    border: 2px solid darkorange;
+    color: darkorange;
+}
+
+.info-title {
+    text-align: center;
+    color: darkorange;
+    text-decoration: underline;
+}
+
+.global-info-wrapper {
+    position: relative;
+    top: 40%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 85px);
 }

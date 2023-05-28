@@ -8,7 +8,6 @@
     <script th:src="@{/js/driver.js}"></script>
 </head>
 <body onload="loadDriver();">
-<!--<th:block th:insert="~{/_menu_logged.html}"></th:block>-->
 
 <div class="main-header">
     <h1 id="h1-mytaxi">MyTaxi</h1>
@@ -40,7 +39,7 @@
 
 
     <div id="orders">
-        <form th:if="${errorMessage}" th:action="@{/driver/orders/__${activeOrder.getOrderId()}__/updateStatus}" method="post">
+        <form th:if="${errorMessage}" th:action="@{/driver/orders/__${activeOrder.getHash()}__/updateStatus}" method="post">
         <input th:type="hidden" th:name="continueFlag" th:value="true">
         <input th:type="hidden" th:name="clientId" th:value="${activeOrder.getClientId()}">
         <input th:type="hidden" th:name="userId" th:value="${user.getUserId()}">
@@ -77,8 +76,7 @@
                 <td th:text="${order.getJourneyDistance()} + ' m'"></td>
                 <td th:text="${order.getPaymentType().show()}"></td>
                 <td>
-                    <a th:href="@{'/driver/orders/' + ${order.getOrderId()}}">
-                        <!--<span id="select-order-btn" style="margin-left: 10px;" th:text="${order.getOrderStatus().show()}"></span>-->
+                    <a th:href="@{'/driver/orders/' + ${order.getHash()} + '?accept=true'}">
                         <span id="select-order-btn" style="margin-left: 10px;" th:text="'Accept'"></span>
                     </a>
                 </td>

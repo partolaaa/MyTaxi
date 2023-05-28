@@ -42,18 +42,15 @@ public class OrderStatusService {
 
     public void updateStatus (Order order) {
         order.setOrderStatus(order.getOrderStatus().next());
-        orderDAO.setOrderStatus(order.getOrderId(), order.getOrderStatus());
+        orderDAO.setOrderStatus(order.getHash(), order.getOrderStatus());
     }
 
-    public void cancelOrder(long id) {
-        orderDAO.setOrderStatus(id, OrderStatus.CANCELLED);
+    public void cancelOrder(String hash) {
+        orderDAO.setOrderStatus(hash, OrderStatus.CANCELLED);
     }
 
-    public void subtractBonusesIfOrderWasCancelled(long id) {
-        Order order = orderManagementService.findOrderById(id);
-
-        // If bonuses were used, we don't subtract anything
-        if (order.isPayWithBonuses()) return;
+    public void subtractBonusesIfOrderWasCancelled(String hash) {
+        Order order = orderManagementService.findOrderByHash(hash);
 
         float orderPrice = order.getPrice();
         Client client = clientService.findClientById(order.getClientId());
@@ -80,7 +77,7 @@ public class OrderStatusService {
         driverService.setBusyStatusById(driver.getDriverId(), true);
         order.setDriverId(driver.getDriverId());
 
-        orderDAO.setOrderStatus(order.getOrderId(), OrderStatus.ACCEPTED);
+        orderDAO.setOrderStatus(order.getHash(), OrderStatus.ACCEPTED);
         orderDAO.assignDriver(driver, order);
     }
 }

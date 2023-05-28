@@ -3,8 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <title>Information</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/main.js}"></script>
 </head>
-<body>
+<body onload="loadMain();">
+<th:block th:if="${isLogged}" th:insert="~{/_menu_logged.html}"></th:block>
+<th:block th:unless="${isLogged}" th:insert="~{/_menu.html}"></th:block>
+<div class="global-info-wrapper">
+    <div class="global-info">
+        <div>
+            <h2 class="info-title">Welcome</h2>
+            <div class="info-text">
+                <ul>
+                    <li>Welcome to MyTaxi! We're delighted to see you here :)</li>
+                </ul>
+            </div>
+        </div>
 
+        <div>
+            <h2 class="info-title">Account & Privacy</h2>
+            <div class="info-text">
+                <ul>
+                    <li>By registering on our platform, you consent to the storage and further processing of your data.</li>
+
+                    <li>To log into your account, please enter your email and password.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="info-title">Fares & Payment Methods</h2>
+            <div class="info-text">
+                <ul>
+                    <li>The economy class taxi fare is 15 hryvnia per kilometer.</li>
+
+                    <li>The business class fare is 30 hryvnia per kilometer.</li>
+
+                    <li>You can also choose your payment type: by card or cash.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="info-title">Booking & Vehicle Options</h2>
+            <div  class="info-text">
+                <ul>
+                    <li>At the moment, our taxi service offers the following types of vehicles: SEDAN, HATCHBACK, MINIVAN, and MINIBUS.</li>
+
+                    <li>You can order a taxi for another person by specifying that you're not booking for yourself and providing the contact details of the person for whom you're booking the taxi, so the driver can contact them.</li>
+
+                    <li>You can have a maximum of 1 active booking.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="info-title">Bonus Program</h2>
+            <div  class="info-text">
+                <ul>
+                    <li>When ordering a taxi, you earn bonuses: 1 bonus = 1 hryvnia. The bonus percentage depends on the number of rides. The maximum bonus percentage from an order is 10% = 100 rides. Once you have taken 100 rides with our taxi service, you will receive a 10% bonus on each subsequent ride. Initially, your bonus percentage is 1%. For every ten rides, you receive an additional 1% in bonuses.</li>
+
+                    <li>When booking, you can pay for the ride with earned bonuses. When paying for a ride with bonuses, you spend all bonuses, so be careful when choosing a ride to pay for! For example, if you have 10 bonuses and the ride costs 100 hryvnia, you will have to pay 90 hryvnia. If the ride costs 100 hryvnia, and you have 100 bonuses, your ride is FREE :)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="info-title">Order Cancellation & Bonus Terms</h2>
+            <div  class="info-text">
+                <ul>
+                    <li>You can cancel the order before the driver has accepted it. In case of order cancellation, you won't earn bonuses for the ride, as it didn't take place. HOWEVER: if you indicated during the order that you wanted to pay with bonuses, after the order is canceled, your bonuses WILL BE LOST.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="info-title">After the Ride</h2>
+            <div  class="info-text">
+                <ul>
+                    <li>After placing an order, you can see its status in your personal account. If the order has been accepted, you can go to the active order page to see the details about the driver and the car.</li>
+
+                    <li>After completing the order, you can leave a review about the ride with a rating from 1 to 5. The driver won't see your rating.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="info-title">Personal Account Details</h2>
+            <div  class="info-text">
+                <ul>
+                    <li>In your personal account, you can also see your information: contact details, bonuses, rating.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

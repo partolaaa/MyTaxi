@@ -65,6 +65,7 @@ create table if not exists "order"(
     client_id int references "client"(client_id) on delete set null, -- Client ID
     driver_id int references "driver"(driver_id) on delete set null, -- Driver ID
     booking_datetime timestamp not null,                        -- Booking datetime
+    order_creation_datetime timestamp not null,                 -- Order creation datetime
     pickup_address varchar(400) not null,                       -- Pickup address
     destination_address varchar(400) not null,                  -- Destination address
     journey_distance decimal(10,2) not null,                    -- Journey distance
@@ -76,5 +77,35 @@ create table if not exists "order"(
     car_class car_class not null,                               -- Car class
     vehicle_type vehicle_type not null,                         -- Vehicle type
     price decimal(10,2) not null,                               -- Price
-    order_status order_status not null default 'NOT_ACCEPTED'::order_status  -- Order status
+    order_status order_status not null default 'NOT_ACCEPTED'::order_status,  -- Order status
+    hash varchar(12) not null
 );
+
+-- Trigger for hashing order_id
+CREATE OR REPLACE FUNCTION create_hash() RETURNS TRIGGER AS $$
+BEGIN
+    NEW.hash := substring(md5(NEW.order_id::text) from 1 for 12);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER insert_hash_trigger
+    BEFORE INSERT ON "order"
+    FOR EACH ROW
+EXECUTE FUNCTION create_hash();
+
+-- Trigger for setting order_creation_datetime
+CREATE OR REPLACE FUNCTION set_order_creation_datetime()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    NEW.order_creation_datetime = NOW();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER set_order_creation_datetime_trigger
+    BEFORE INSERT ON "order"
+    FOR EACH ROW
+EXECUTE FUNCTION set_order_creation_datetime();
+

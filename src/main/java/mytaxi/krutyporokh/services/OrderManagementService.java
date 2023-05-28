@@ -7,7 +7,6 @@ import mytaxi.partola.models.Driver;
 import mytaxi.partola.services.CustomUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 /**
@@ -25,8 +24,8 @@ public class OrderManagementService {
         this.customUserService = customUserService;
     }
 
-    public Order findOrderById (long id) {
-        return orderDAO.findOrderById(id).get();
+    public Order findOrderByHash (String hash) {
+        return orderDAO.findOrderByHash(hash).get();
     }
 
     public void createNewOrder( Order order, Client client) {
@@ -57,6 +56,14 @@ public class OrderManagementService {
             return customUserService.findUserById(order.getClientId()).getName();
         } else {
             return order.getPassengerName();
+        }
+    }
+
+    public String getPassengerPhoneNumber(Order order) {
+        if (order.getPassengerPhoneNumber().equals("") || order.getPassengerPhoneNumber() == null) {
+            return customUserService.findUserById(order.getClientId()).getName();
+        } else {
+            return order.getPassengerPhoneNumber();
         }
     }
 }

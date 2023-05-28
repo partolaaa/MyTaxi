@@ -106,10 +106,17 @@ public class OrderDAO {
                 .stream().findAny();
     }
 
-    public void setOrderStatus(long id, OrderStatus orderStatus) {
-        jdbcTemplate.update("update \"order\" set order_status = ?::order_status where order_id = ?",
+    public Optional<Order> findOrderByHash(String hash) {
+        return jdbcTemplate.query("select * from \"order\" where hash=?",
+                        new Object[]{hash},
+                        new BeanPropertyRowMapper<>(Order.class))
+                .stream().findAny();
+    }
+
+    public void setOrderStatus(String hash, OrderStatus orderStatus) {
+        jdbcTemplate.update("update \"order\" set order_status = ?::order_status where hash = ?",
                 orderStatus.getValue(),
-                id);
+                hash);
     }
 
     public void assignDriver(Driver driver, Order order) {
