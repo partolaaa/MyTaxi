@@ -24,6 +24,7 @@ public class Order {
 
     //@NotBlank(message = "Booking date and time cannot be empty")
     private LocalDateTime bookingDatetime;
+    private LocalDateTime orderCreationDatetime;
 
     @NotBlank(message = "Pickup address cannot be empty")
     private String pickupAddress;

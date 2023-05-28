@@ -52,9 +52,6 @@ public class OrderStatusService {
     public void subtractBonusesIfOrderWasCancelled(String hash) {
         Order order = orderManagementService.findOrderByHash(hash);
 
-        // If bonuses were used, we don't subtract anything
-        if (!order.isPayWithBonuses()) return;
-
         float orderPrice = order.getPrice();
         Client client = clientService.findClientById(order.getClientId());
 

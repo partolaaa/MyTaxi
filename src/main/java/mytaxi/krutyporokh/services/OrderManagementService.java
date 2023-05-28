@@ -24,17 +24,12 @@ public class OrderManagementService {
         this.customUserService = customUserService;
     }
 
-    public Order findOrderById (long id) {
-        return orderDAO.findOrderById(id).get();
-    }
-
     public Order findOrderByHash (String hash) {
         return orderDAO.findOrderByHash(hash).get();
     }
 
     public void createNewOrder( Order order, Client client) {
         orderDAO.createNewOrder(order, client);
-
     }
 
     public List<Order> findAllOrdersByClientId(long id) {
