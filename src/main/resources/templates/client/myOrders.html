@@ -74,7 +74,7 @@
 
                     <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED}">
                         <form id="cancel-form" th:action="@{/{hash}/cancel(hash = ${order.getHash()})}" th:method="post">
-                            <span th:id="'cancel-' + ${order.getHash()}"
+                            <span class="cancel" th:id="'cancel-' + ${order.getHash()}"
                                   th:data-hash="${order.getHash()}"
                                   th:onclick="'cancelTrip(this);'"
                                   th:text="'Cancel'"

@@ -17,7 +17,7 @@
     <!-- Info about the user and the trip -->
     <div id="trip-info">
         <h4>Passenger Name: <span th:text="${passengerName}"></span></h4>
-        <h4>Phone number: <span th:text="${client.getPhoneNumber()}"></span></h4>
+        <h4>Phone number: <span th:text="${passengerPhoneNumber}"></span></h4>
         <h4>Passenger Rating: <span th:text="${#numbers.formatDecimal(client.getRating(), 1, 1)}"></span></h4>
         <h4>Message: <span th:text="${order.getBookingNotes()}"></span></h4>
         <h4>Pickup Address: <span style="color: darkorange" th:text="${order.getPickupAddress()}"></span></h4>
@@ -25,8 +25,9 @@
         <h4>Distance: <span th:text="${order.getJourneyDistance()}"></span></h4>
         <h4>Price: <span th:text="${order.getPrice()}"></span> ₴</h4>
     </div>
-    <form th:action="@{/driver/orders/__${hash}__/updateStatus}" th:method="POST">
+    <form class="update-status-form" th:action="@{/driver/orders/__${hash}__/updateStatus}" th:method="POST">
         <input type="hidden" th:name="passengerName" th:value="${passengerName}">
+        <input type="hidden" th:name="passengerPhoneNumber" th:value="${passengerPhoneNumber}">
         <input type="hidden" th:name="clientId" th:value="${client.getClientId()}">
         <input type="hidden" th:name="userId" th:value="${user.getUserId()}">
         <input id="update-status-btn" type="submit" th:value="${order.getOrderStatus().next().show()}"/>

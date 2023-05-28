@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <script th:src="@{/js/main.js}"></script>
 </head>
-<body>
+<body onload="loadMain();">
 <th:block th:if="${isLogged}" th:insert="~{/_menu_logged.html}"></th:block>
 <th:block th:unless="${isLogged}" th:insert="~{/_menu.html}"></th:block>
 <div class="global-info-wrapper">
@@ -21,7 +21,7 @@
         </div>
 
         <div>
-            <h2 class="info-title">Account and Privacy</h2>
+            <h2 class="info-title">Account & Privacy</h2>
             <div class="info-text">
                 <ul>
                     <li>By registering on our platform, you consent to the storage and further processing of your data.</li>
@@ -32,7 +32,7 @@
         </div>
 
         <div>
-            <h2 class="info-title">Fares and Payment Methods</h2>
+            <h2 class="info-title">Fares & Payment Methods</h2>
             <div class="info-text">
                 <ul>
                     <li>The economy class taxi fare is 15 hryvnia per kilometer.</li>
@@ -45,7 +45,7 @@
         </div>
 
         <div>
-            <h2 class="info-title">Booking and Vehicle Options</h2>
+            <h2 class="info-title">Booking & Vehicle Options</h2>
             <div  class="info-text">
                 <ul>
                     <li>At the moment, our taxi service offers the following types of vehicles: SEDAN, HATCHBACK, MINIVAN, and MINIBUS.</li>
@@ -69,7 +69,7 @@
         </div>
 
         <div>
-            <h2 class="info-title">Order Cancellation and Bonus Terms</h2>
+            <h2 class="info-title">Order Cancellation & Bonus Terms</h2>
             <div  class="info-text">
                 <ul>
                     <li>You can cancel the order before the driver has accepted it. In case of order cancellation, you won't earn bonuses for the ride, as it didn't take place. HOWEVER: if you indicated during the order that you wanted to pay with bonuses, after the order is canceled, your bonuses WILL BE LOST.</li>

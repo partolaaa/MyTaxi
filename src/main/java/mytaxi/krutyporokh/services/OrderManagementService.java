@@ -58,4 +58,12 @@ public class OrderManagementService {
             return order.getPassengerName();
         }
     }
+
+    public String getPassengerPhoneNumber(Order order) {
+        if (order.getPassengerPhoneNumber().equals("") || order.getPassengerPhoneNumber() == null) {
+            return customUserService.findUserById(order.getClientId()).getName();
+        } else {
+            return order.getPassengerPhoneNumber();
+        }
+    }
 }
