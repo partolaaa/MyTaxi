@@ -54,33 +54,39 @@ public class DriverDAO {
 
 
     public List<Driver> getAllDrivers() {
-        return jdbcTemplate.query("select * from \"Driver\"",
+        return jdbcTemplate.query("select * from \"user\" u inner join \"driver\" d on u.user_id = d.driver_id",
                 new BeanPropertyRowMapper<>(Driver.class));
     }
 
     public void updateDriver(Driver driver) {
-
         jdbcTemplate.update(
-                "UPDATE \"Driver\" SET license_number = ?, driver_rating = ?, phone_number = ?, busy = ? WHERE driver_id = ?",
+                "UPDATE \"driver\" SET license_number = ?, rating = ?, phone_number = ?, busy = ?, car_id = ?, number_of_ratings = ?, total_ratings = ? WHERE driver_id = ?",
                 driver.getLicenseNumber(),
-                driver.getDriverRating(),
+                driver.getRating(),
                 driver.getPhoneNumber(),
                 driver.isBusy(),
+                driver.getCarId(),
+                driver.getNumberOfRatings(),
+                driver.getTotalRatings(),
                 driver.getDriverId()
         );
     }
 
     public void createDriver(Driver driver) {
-        jdbcTemplate.update(
-                "INSERT INTO \"Driver\" (driver_id, license_number, driver_rating, phone_number, busy, car_id) VALUES (?, ?, ?, ?, ?, ?)",
-                driver.getDriverId(),
-                driver.getLicenseNumber(),
-                driver.getDriverRating(),
-                driver.getPhoneNumber(),
-                driver.isBusy(),
-                driver.getCarId());
-    }
 
+        long userId = jdbcTemplate.queryForObject("SELECT currval('user_id_seq')", Long.class);
+        long carId = jdbcTemplate.queryForObject("SELECT currval('car_id_seq')", Long.class);
+
+        jdbcTemplate.update(
+                "INSERT INTO \"driver\" (driver_id, license_number, phone_number, car_id) VALUES (?, ?, ?, ?)",
+                userId,
+                driver.getLicenseNumber(),
+                driver.getPhoneNumber(),
+                carId
+        );
+
+        jdbcTemplate.update("UPDATE \"user\" SET role='ROLE_DRIVER' WHERE user_id=?", userId);
+    }
 
     public void updateRating (Driver driver) {
         jdbcTemplate.update(

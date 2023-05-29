@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit client</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script th:src="@{/js/main.js}"></script>
+</head>
+<body onload="loadMain();">
+<th:block th:insert="~{/_menu_logged.html}"></th:block>
+
+
+<!-- Form for updating a client -->
+
+<form th:action="@{/admin/edit-client}" th:object="${customUser}" method="post" style="position:relative; top:20%">
+  <h3>User Information:</h3>
+  <div class="form-group">
+    <label for="name">Name:</label>
+    <input type="text" id="name" th:field="*{customUser.name}" placeholder="Enter name" required>
+  </div>
+  <div class="form-group">
+    <label for="email">Email:</label>
+    <input type="email" id="email" th:field="*{customUser.email}" placeholder="Enter email" required>
+  </div>
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input type="password" id="password" th:field="*{customUser.password}" placeholder="Enter password" required>
+  </div>
+
+  <button type="submit">Update</button>
+</form>
+
+
+<form th:action="@{/admin/delete-user}" th:object="${customUser}" method="post">
+  <input type="hidden" th:name="id" th:value="*{customUser.userId}">
+  <button type="submit">Delete account</button>
+</form>
+
+<form th:action="@{/admin/ban-user}" th:object="${customUser}" method="post">
+  <input type="hidden" th:name="id" th:value="*{customUser.userId}">
+  <button type="submit" th:if="${customUser.banned == false}">Ban account</button>
+  <button type="submit" th:if="${customUser.banned == true}">Unban account</button>
+</form>
+
+</body>
+</html>

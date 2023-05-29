@@ -1,8 +1,9 @@
 package mytaxi.partola.services;
 
-import mytaxi.partola.dao.ClientDAO;
+import mytaxi.krutyporokh.models.UserDriverCarForm;
 import mytaxi.partola.dao.UserDAO;
 import mytaxi.partola.models.CustomUser;
+import mytaxi.partola.models.Driver;
 import mytaxi.partola.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -63,5 +64,14 @@ public class CustomUserService {
     }
     public void createUser (CustomUser customUser) {
         userDAO.createUser(customUser);
+    }
+
+    public void updateUser(CustomUser customUser) {
+        userDAO.updateUser(customUser);
+    }
+
+    public void toggleUserBan(long id) {
+        CustomUser customUser = findUserById(id);
+        userDAO.toggleUserBan(id, !customUser.isBanned());
     }
 }

@@ -1,9 +1,8 @@
 package mytaxi.krutyporokh.controller;
 
-import mytaxi.partola.models.Car;
-import mytaxi.partola.models.Client;
+import mytaxi.krutyporokh.models.UserDriverCarForm;
+import mytaxi.krutyporokh.services.UserDriverCarFormService;
 import mytaxi.partola.models.CustomUser;
-import mytaxi.partola.models.Driver;
 import mytaxi.partola.services.ClientService;
 import mytaxi.partola.services.CustomUserService;
 import mytaxi.partola.services.DriverService;
@@ -12,97 +11,82 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @Controller
 @RequestMapping("/admin")
 public class AdminsController {
     private final CustomUserService customUserService;
+
+    private final UserDriverCarFormService formService;
     private final DriverService driverService;
     private final ClientService clientService;
+
     @Autowired
-    public AdminsController(CustomUserService customUserService, DriverService driverService, ClientService clientService) {
+    public AdminsController(CustomUserService customUserService, UserDriverCarFormService formService, DriverService driverService, ClientService clientService) {
         this.customUserService = customUserService;
+        this.formService = formService;
         this.driverService = driverService;
         this.clientService = clientService;
     }
 
-    @PostMapping("/ban-user/{user-id}")
-    public String banUser(@PathVariable("user-id") Long userId){
-        customUserService.banUser(userId);
-        return "redirect:/admin/users";
-    }
-
-    @PostMapping("/unban-user/{user-id}")
-    public String unbanUser(@PathVariable("user-id") Long userId){
-        customUserService.unbanUser(userId);
-        return "redirect:/admin-users";
-    }
-
-    @GetMapping("/delete-user/{user-id}")
-    public String deleteUser(@PathVariable("user-id") Long userId) {
-        customUserService.deleteUser(userId);
-        return "redirect:/admin-users";
-    }
-
-    @GetMapping("/edit-client/{user-id}")
-    public String showEditClientForm(@PathVariable("user-id") Long userId,
-                                     Model model){
-        Optional<CustomUser> client = customUserService.getUserById(userId);
-        model.addAttribute("client", client);
-        return "edit-client";
-    }
-
-    @PostMapping("/edit-client")
-    public String editClient(@ModelAttribute("client") Client client){
-        clientService.updateClient(client);
-        return "redirect:/admin/clients";
-    }
-
-    @GetMapping("/edit-driver/{user-id}")
-    public String showEditDriverForm(@PathVariable("user-id") Long userId,
-                                     Model model){
-        Optional<CustomUser> driver = customUserService.getUserById(userId);
-        model.addAttribute("driver", driver);
-        return "edit-driver";
+    @GetMapping("/edit-driver-form/{id}")
+    public String editDriverForm(@PathVariable("id") long id,  Model model){
+        CustomUser userFromSession = customUserService.getCurrentUserFromSession().get();
+        model.addAttribute("user", userFromSession);
+        model.addAttribute("userDriverCarForm", formService.fillForm(id));
+        return "admin/editDriverForm";
     }
 
     @PostMapping("/edit-driver")
-    public String editDriver(@ModelAttribute("driver") Driver driver,
-                             @ModelAttribute("user") CustomUser user,
-                             @ModelAttribute("car") Car car){
-        driverService.updateDriver(driver, user, car);
-        return "redirect:/admin/drivers";
+    public String editDriver(@ModelAttribute("userDriverCarForm") UserDriverCarForm userDriverCarForm){
+        driverService.updateDriver(userDriverCarForm);
+        return "redirect:/admin";
     }
 
-    @GetMapping("/create-driver")
-    public String showCreateDriverForm(Model model){
-        model.addAttribute("user", new CustomUser());
-        model.addAttribute("driver", new Driver());
-        model.addAttribute("car", new Car());
-        return "create-driver";
+    @GetMapping("/edit-client-form/{id}")
+    public String editClientForm(@PathVariable("id") long id,  Model model){
+        CustomUser userFromSession = customUserService.getCurrentUserFromSession().get();
+        model.addAttribute("user", userFromSession);
+        model.addAttribute("customUser", customUserService.findUserById(id));
+        return "admin/editDriverForm";
     }
 
-    @PostMapping("/create-driver")
-    public String createDriver(@ModelAttribute("user") CustomUser user,
-                               @ModelAttribute("driver") Driver driver,
-                               @ModelAttribute("car") Car car){
-        driverService.createDriver(user,driver,car);
-        return "redirect:/admin/drivers";
-    }
-    @GetMapping("/clients")
-    public String allClients(Model model){
-        model.addAttribute("clients", clientService.getAllClients());
-        return "clients";
+    @PostMapping("/edit-driver")
+    public String editClient(@ModelAttribute("customUser") CustomUser user){
+        customUserService.updateUser(user);
+        return "redirect:/admin";
     }
 
-    @GetMapping("/drivers")
-    public String allDrivers(Model model){
-        model.addAttribute("drivers", driverService.getAllDrivers());
-        return "drivers";
+    @PostMapping("/delete-user")
+    public String deleteUser(@RequestParam("id") long id){
+        customUserService.deleteUser(id);
+        return "redirect:/admin";
     }
+    @GetMapping("/create-new-driver-form")
+    public String createNewDriverForm(Model model){
+        model.addAttribute("user", customUserService.getCurrentUserFromSession().get());
+        model.addAttribute("userDriverCarForm", new UserDriverCarForm());
+        return "admin/newDriverForm";
+    }
+    @PostMapping("/create-new-driver")
+    public String createNewDriver(@ModelAttribute("userDriverCarForm") UserDriverCarForm userDriverCarForm
+                               ){
+        driverService.createDriver(userDriverCarForm);
+        return "redirect:/admin";
+    }
+
+
+    @PostMapping("/ban-user")
+    public String banUser(@RequestParam("id") long id){
+        customUserService.toggleUserBan(id);
+        return "redirect:/admin";
+    }
+
     @GetMapping("")
-    public String showUserAccounts(){
-        return "admin";
+    public String showAdminPage(Model model){
+        model.addAttribute("user", customUserService.getCurrentUserFromSession().get());
+        model.addAttribute("clients", clientService.getAllClients());
+        model.addAttribute("drivers", driverService.getAllDrivers());
+
+        return "admin/admin";
     }
 }

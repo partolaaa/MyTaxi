@@ -28,7 +28,7 @@ public class ClientDAO {
     public void createClient(Client client) {
         customUserService.createUser(client);
 
-        int userId = jdbcTemplate.queryForObject("SELECT currval('user_id_seq')", Integer.class);
+        long userId = jdbcTemplate.queryForObject("SELECT currval('user_id_seq')", Long.class);
 
         jdbcTemplate.update(
                 "INSERT INTO \"client\" (client_id, phone_number) VALUES (?, ?)",
@@ -67,20 +67,20 @@ public class ClientDAO {
     }
 
     public void saveClient(Client client) {
-        jdbcTemplate.update("INSERT INTO \"Client\" (client_id, phone_number," +
-                        " client_rating, has_active_order, bonus_amount) VALUES (?, ?, ?, ?, ?) " +
-                        "ON CONFLICT (client_id) DO UPDATE SET phone_number = excluded.phone_number, " +
-                        "client_rating = excluded.client_rating, has_active_order = excluded.has_active_order, " +
-                        "bonus_amount = excluded.bonus_amount",
+        jdbcTemplate.update("INSERT INTO \"client\" (client_id, phone_number, client_rating, has_active_order, bonus_amount, number_of_ratings, total_ratings) VALUES (?, ?, ?, ?, ?, ?, ?) " +
+                        "ON CONFLICT (client_id) DO UPDATE SET phone_number = excluded.phone_number, client_rating = excluded.client_rating, has_active_order = excluded.has_active_order, bonus_amount = excluded.bonus_amount, number_of_ratings = excluded.number_of_ratings, total_ratings = excluded.total_ratings",
                 client.getClientId(),
                 client.getPhoneNumber(),
-                client.getClientRating(),
+                client.getRating(),
                 client.isHasActiveOrder(),
-                client.getBonusAmount());
+                client.getBonusAmount(),
+                client.getNumberOfRatings(),
+                client.getTotalRatings());
     }
 
+
     public List<Client> getAllClients() {
-        return jdbcTemplate.query("select * from \"Client\" ",
+        return jdbcTemplate.query("select * from \"user\" u inner join \"client\" c on u.user_id = c.client_id",
                 new BeanPropertyRowMapper<>(Client.class));
     }
 

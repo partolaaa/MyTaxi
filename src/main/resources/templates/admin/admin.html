@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+</head>
+<body onload="loadMain();">
+<th:block th:insert="~{/_menu_logged.html}"></th:block>
+
+
+    <div id="info-about-me">
+        <h3 style="font-size: 30px; position: absolute; left: 45%; top: 0;">Me</h3>
+
+        <div style="position: absolute; top: 20%; font-size: 18px;">
+            <h4>Name: <span th:text="${user.getName()}"></span></h4>
+            <h4>Email: <span th:text="${user.getEmail()}"></span></h4>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <tr>
+                <th colspan="3" class="table-title">Clients</th>
+            </tr>
+            <tr>
+                <td class="table-title">Name</td>
+                <td class="table-title">Email</td>
+                <td class="table-title">Banned</td>
+            </tr>
+            <tr th:each="client: ${clients}">
+                <td th:text="${client.getName()}"></td>
+                <td th:text="${client.getEmail()}"></td>
+                <td th:text="${client.isBanned()}"></td>
+            </tr>
+        </table>
+         <table>
+        <tr>
+            <th colspan="4" class="table-title">Drivers</th>
+            <th>
+                <a th:href="@{admin/create-new-driver-form}" class="create-new-driver-button">Create new driver</a>
+            </th>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>Email</td>
+            <td>Banned</td>
+            <td>License number</td>
+        </tr>
+             <tr th:each="driver: ${drivers}">
+                 <td><a th:href="@{/admin/edit-driver-form/{id}(id = ${driver.driverId})}">[[${driver.getName()}]]</a></td>
+                 <td th:text="${driver.getEmail()}"></td>
+                 <td th:text="${driver.isBanned()}"></td>
+                 <td th:text="${driver.getLicenseNumber()}"></td>
+             </tr>
+
+         </table>
+    </div>
+
+
+</body>
+</html>

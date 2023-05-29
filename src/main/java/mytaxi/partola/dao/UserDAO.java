@@ -1,9 +1,6 @@
 package mytaxi.partola.dao;
 
-import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
-import mytaxi.partola.models.Driver;
-import mytaxi.partola.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,25 +46,33 @@ public class UserDAO {
     }
 
     public void banUser(Long userId) {
-        jdbcTemplate.update("update \"User\" set banned=true where id=?", userId);
+        jdbcTemplate.update("update \"user\" set banned=true where id=?", userId);
     }
 
     public void unbanUser(Long userId) {
-        jdbcTemplate.update("update \"User\" set banned=false where id=?", userId);
+        jdbcTemplate.update("update \"user\" set banned=false where id=?", userId);
     }
 
     public void deleteUser(Long userId) {
-        jdbcTemplate.update("delete from \"User\" where id=?", userId);
+        jdbcTemplate.update("delete from \"user\" where user_id=?", userId);
     }
 
     public void updateUser(CustomUser user) {
         jdbcTemplate.update(
-                "UPDATE \"User\" SET name = ?, email = ?, password = ?, banned = ? WHERE id = ?",
+                "UPDATE \"user\" SET name = ?, email = ?, password = ?, banned = ? WHERE user_id = ?",
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
                 user.isBanned(),
                 user.getUserId()
+        );
+    }
+
+    public void toggleUserBan(long id, boolean banStatus) {
+        jdbcTemplate.update(
+                "UPDATE \"user\" SET banned = ? WHERE user_id = ?",
+                banStatus,
+                id
         );
     }
 }

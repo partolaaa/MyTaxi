@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -34,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login", "/register", "/error", "/info").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/driver/**").hasRole("DRIVER")
+                .antMatchers("/order/**", "/my-orders").hasRole("CLIENT")
                 .anyRequest().authenticated() // assuming all other requests need to be authenticated
                 .and()
                 .formLogin().loginPage("/login")
@@ -50,11 +52,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure (AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService)
-                .passwordEncoder(getPasswordEncoder());
+                .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
 
     @Bean
     public PasswordEncoder getPasswordEncoder () {
-        return new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
     }
+
 }
