@@ -2,6 +2,7 @@ package mytaxi.krutyporokh.controller;
 
 import mytaxi.krutyporokh.models.UserDriverCarForm;
 import mytaxi.krutyporokh.services.UserDriverCarFormService;
+import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.services.ClientService;
 import mytaxi.partola.services.CustomUserService;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin")
 public class AdminsController {
     private final CustomUserService customUserService;
-
     private final UserDriverCarFormService formService;
     private final DriverService driverService;
     private final ClientService clientService;
@@ -50,9 +50,9 @@ public class AdminsController {
         return "admin/editDriverForm";
     }
 
-    @PostMapping("/edit-driver")
-    public String editClient(@ModelAttribute("customUser") CustomUser user){
-        customUserService.updateUser(user);
+    @PostMapping("/edit-client")
+    public String editClient(@ModelAttribute("client") Client client){
+        clientService.updateClient(client);
         return "redirect:/admin";
     }
 

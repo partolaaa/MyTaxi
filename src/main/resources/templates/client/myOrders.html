@@ -56,7 +56,7 @@
                         && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).WAITING_FOR_CLIENT
                         && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).IN_PROCESS}">
                         <a th:href="@{/order/{hash}(hash = ${order.getHash()})}" th:text="${order.getOrderStatus().show()}"
-                        style="background-color: green; cursor: pointer; font-weight: bold; border-radius: 10px; color: white; padding: 15px;"></a>
+                        class="accepted"></a>
                      </th:block>
 
                     <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED
@@ -77,8 +77,7 @@
                             <span class="cancel" th:id="'cancel-' + ${order.getHash()}"
                                   th:data-hash="${order.getHash()}"
                                   th:onclick="'cancelTrip(this);'"
-                                  th:text="'Cancel'"
-                                  style="background-color: darkred; cursor: pointer; font-weight: bold; border-radius: 10px; color: white; padding: 15px;"></span>
+                                  th:text="'Cancel'"></span>
                         </form>
                     </th:block>
 

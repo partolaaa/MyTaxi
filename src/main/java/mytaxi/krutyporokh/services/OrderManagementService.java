@@ -2,6 +2,7 @@ package mytaxi.krutyporokh.services;
 
 import mytaxi.krutyporokh.dao.OrderDAO;
 import mytaxi.krutyporokh.models.Order;
+import mytaxi.partola.dao.ClientDAO;
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.Driver;
 import mytaxi.partola.services.CustomUserService;
@@ -18,10 +19,13 @@ public class OrderManagementService {
     private final OrderDAO orderDAO;
     private final CustomUserService customUserService;
 
+    private final ClientDAO clientDAO;
+
     @Autowired
-    public OrderManagementService(OrderDAO orderDAO, CustomUserService customUserService) {
+    public OrderManagementService(OrderDAO orderDAO, CustomUserService customUserService, ClientDAO clientDAO) {
         this.orderDAO = orderDAO;
         this.customUserService = customUserService;
+        this.clientDAO = clientDAO;
     }
 
     public Order findOrderByHash (String hash) {
@@ -61,7 +65,7 @@ public class OrderManagementService {
 
     public String getPassengerPhoneNumber(Order order) {
         if (order.getPassengerPhoneNumber().equals("") || order.getPassengerPhoneNumber() == null) {
-            return customUserService.findUserById(order.getClientId()).getName();
+            return clientDAO.findClientById(order.getClientId()).get().getPhoneNumber();
         } else {
             return order.getPassengerPhoneNumber();
         }
