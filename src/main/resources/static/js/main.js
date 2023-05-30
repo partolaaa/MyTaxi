@@ -104,8 +104,9 @@ function cancelTrip(element) {
         type: 'POST',
         data: $('#cancel-form').serialize(),
         success: function(response) {
-            let rateTheTripBtn= document.getElementById("cancel-" + hash);
-
+            let rateTheTripBtn = document.getElementById("cancel-" + hash);
+            let bonuses = document.getElementById("bonuses");
+            bonuses.innerText = response.toFixed(1);
             rateTheTripBtn.onclick = null;
             rateTheTripBtn.style.background = "none";
             rateTheTripBtn.style.cursor = "context-menu";

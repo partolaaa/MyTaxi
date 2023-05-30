@@ -150,10 +150,10 @@ public class OrdersController {
     }
 
     @PostMapping("{hash}/cancel")
-    public ResponseEntity<?> cancelOrder (@PathVariable String hash) {
+    public ResponseEntity<Float> cancelOrder (@PathVariable String hash) {
         orderStatusService.cancelOrder(hash);
-        orderStatusService.subtractBonusesIfOrderWasCancelled(hash);
+        float resultBonusesAmount = orderStatusService.subtractBonusesIfOrderWasCancelled(hash);
         clientService.setHasActiveOrderStatus(clientService.findClientById(orderManagementService.findOrderByHash(hash).getClientId()), false);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(resultBonusesAmount);
     }
 }

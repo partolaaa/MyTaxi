@@ -19,7 +19,7 @@
             <h4>Phone number: <span th:text="${client.getPhoneNumber()}"></span></h4>
             <h4>Email: <span th:text="${client.getEmail()}"></span></h4>
             <h4>Rating: <span th:text="${#numbers.formatDecimal(client.getRating(), 1, 1)}"></span></h4>
-            <h4>Bonuses: <span th:with="roundedBonus=${T(java.lang.Math).round(client.getBonusAmount() * 100.0) / 100.0}" th:text="${roundedBonus}"></span> ₴</h4>
+            <h4>Bonuses: <span id="bonuses" th:with="roundedBonus=${T(java.lang.Math).round(client.getBonusAmount() * 100.0) / 100.0}" th:text="${roundedBonus}"></span> ₴</h4>
         </div>
     </div>
 

@@ -49,7 +49,7 @@ public class OrderStatusService {
         orderDAO.setOrderStatus(hash, OrderStatus.CANCELLED);
     }
 
-    public void subtractBonusesIfOrderWasCancelled(String hash) {
+    public float subtractBonusesIfOrderWasCancelled(String hash) {
         Order order = orderManagementService.findOrderByHash(hash);
 
         float orderPrice = order.getPrice();
@@ -62,6 +62,8 @@ public class OrderStatusService {
         float subtractBonusesAmount = orderPrice * bonusPercent;
 
         clientService.subtractSomeBonuses(order.getClientId(), client.getBonusAmount(), subtractBonusesAmount);
+
+        return client.getBonusAmount() - subtractBonusesAmount;
     }
 
     public void acceptOrder (Order order, Model model) {
