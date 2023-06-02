@@ -12,80 +12,79 @@
 
 
 <!-- Form for updating a driver -->
+<div class="panel" style="top: 78%">
+<form th:action="@{/admin/edit-driver}" th:object="${userDriverCarForm}" method="post" class="create-driver-form">
+        <h3>User Information:</h3>
+        <div class="form-group">
+            <label class="input-label" for="name">Name:</label>
+            <input class="input-fields" style="width: 50%" type="text" id="name" th:field="*{customUser.name}" placeholder="Enter name" required>
+        </div>
+        <div class="form-group">
+            <label class="input-label" for="email">Email:</label>
+            <input class="input-fields" style="width: 50%" type="email" id="email" th:field="*{customUser.email}" placeholder="Enter email" required>
+        </div>
+        <div class="form-group">
+            <label class="input-label" for="password">Password:</label>
+            <input class="input-fields" style="width: 50%" type="password" id="password" th:field="*{customUser.password}" placeholder="Enter password" required>
+        </div>
 
-<form th:action="@{/admin/edit-driver}" th:object="${userDriverCarForm}" method="post" style="position:relative; top:20%">
-    <h3>User Information:</h3>
-    <div class="form-group">
-        <label for="name">Name:</label>
-        <input type="text" id="name" th:field="*{customUser.name}" placeholder="Enter name" required>
-    </div>
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" th:field="*{customUser.email}" placeholder="Enter email" required>
-    </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" th:field="*{customUser.password}" placeholder="Enter password" required>
-    </div>
+        <h3>Driver Information:</h3>
+        <div class="form-group">
+            <label class="input-label" for="licenseNumber">License Number:</label>
+            <input class="input-fields" style="width: 50%" type="text" id="licenseNumber" th:field="*{driver.licenseNumber}" placeholder="Enter license number" required>
+        </div>
+        <div class="form-group">
+            <label class="input-label" for="phoneNumber">Phone Number:</label>
+            <input class="input-fields" style="width: 50%" type="text" id="phoneNumber" th:field="*{driver.phoneNumber}" placeholder="Enter phone number" required>
+        </div>
 
-    <h3>Driver Information:</h3>
-    <div class="form-group">
-        <label for="licenseNumber">License Number:</label>
-        <input type="text" id="licenseNumber" th:field="*{driver.licenseNumber}" placeholder="Enter license number" required>
-    </div>
-    <div class="form-group">
-        <label for="phoneNumber">Phone Number:</label>
-        <input type="text" id="phoneNumber" th:field="*{driver.phoneNumber}" placeholder="Enter phone number" required>
-    </div>
+        <!-- Form for updating a car -->
+        <h3>Car Information:</h3>
+        <div class="form-group">
+            <label class="input-label" for="licensePlate">License Plate:</label>
+            <input class="input-fields" style="width: 50%" type="text" id="licensePlate" th:field="*{car.licensePlate}" placeholder="Enter license plate" required>
+        </div>
+        <div class="form-group">
+            <label class="input-label" for="model">Model:</label>
+            <input class="input-fields" style="width: 50%" type="text" id="model" th:field="*{car.model}" placeholder="Enter car model" required>
+        </div>
+        <div class="form-group">
+            <label class="input-label" for="color">Color:</label>
+            <input class="input-fields" style="width: 50%" type="text" id="color" th:field="*{car.color}" placeholder="Enter car color" required>
+        </div>
+        <div class="form-group">
+            <label class="input-label" for="carClass">Car Class:</label>
+            <select class="custom-select" id="carClass" th:field="*{car.carClass}" required>
+                <option value="ECONOMY">Economy</option>
+                <option value="BUSINESS">Business</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="input-label" for="vehicleType">Vehicle Type:</label>
+            <select class="custom-select" id="vehicleType" th:field="*{car.vehicleType}" required>
+                <option value="SEDAN">Sedan</option>
+                <option value="HATCHBACK">Hatchback</option>
+                <option value="MINIVAN">Minivan</option>
+                <option value="MINIBUS">Minibus</option>
+            </select>
+        </div>
+        <button style="margin-top: 30px; margin-left: 13px" type="submit" class="login-submit">Update</button>
+        <input type="hidden" th:field="*{car.carId}">
+        <input type="hidden" th:field="*{driver.driverId}">
+        <input type="hidden" th:field="*{customUser.userId}">
+    </form>
 
-    <!-- Form for updating a car -->
-    <h3>Car Information:</h3>
-    <div class="form-group">
-        <label for="licensePlate">License Plate:</label>
-        <input type="text" id="licensePlate" th:field="*{car.licensePlate}" placeholder="Enter license plate" required>
+    <div style="position: relative; text-align: center">
+        <form th:action="@{/admin/delete-user}" th:object="${userDriverCarForm}" method="post">
+            <input type="hidden" th:name="id" th:value="*{customUser.userId}">
+            <button type="submit" class="delete-acc-button">Delete account</button>
+        </form>
+        <form th:action="@{/admin/ban-user}" th:object="${userDriverCarForm}" method="post">
+            <input type="hidden" th:name="id" th:value="*{customUser.userId}">
+            <button type="submit" class="ban-acc-button" th:if="${userDriverCarForm.customUser.banned == false}">Ban account</button>
+            <button type="submit" class="unban-acc-button" th:if="${userDriverCarForm.customUser.banned == true}">Unban account</button>
+        </form>
     </div>
-    <div class="form-group">
-        <label for="model">Model:</label>
-        <input type="text" id="model" th:field="*{car.model}" placeholder="Enter car model" required>
-    </div>
-    <div class="form-group">
-        <label for="color">Color:</label>
-        <input type="text" id="color" th:field="*{car.color}" placeholder="Enter car color" required>
-    </div>
-    <div class="form-group">
-        <label for="carClass">Car Class:</label>
-        <select id="carClass" th:field="*{car.carClass}" required>
-            <option value="ECONOMY">Economy</option>
-            <option value="BUSINESS">Business</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="vehicleType">Vehicle Type:</label>
-        <select id="vehicleType" th:field="*{car.vehicleType}" required>
-            <option value="SEDAN">Sedan</option>
-            <option value="HATCHBACK">Hatchback</option>
-            <option value="MINIVAN">Minivan</option>
-            <option value="MINIBUS">Minibus</option>
-        </select>
-    </div>
-    <button type="submit">Update</button>
-    <input type="hidden" th:field="*{car.carId}">
-    <input type="hidden" th:field="*{driver.driverId}">
-    <input type="hidden" th:field="*{customUser.userId}">
-</form>
-
-<form th:action="@{/admin/delete-user}" th:object="${userDriverCarForm}" method="post">
-    <input type="hidden" th:name="id" th:value="*{customUser.userId}">
-    <button type="submit">Delete account</button>
-</form>
-
-<form th:action="@{/admin/ban-user}" th:object="${userDriverCarForm}" method="post">
-    <input type="hidden" th:name="id" th:value="*{customUser.userId}">
-    <button type="submit" th:if="${userDriverCarForm.customUser.banned == false}">Ban account</button>
-    <button type="submit" th:if="${userDriverCarForm.customUser.banned == true}">Unban account</button>
-</form>
-
-
-
+</div>
 </body>
 </html>

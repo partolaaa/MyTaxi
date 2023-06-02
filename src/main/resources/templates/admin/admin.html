@@ -11,7 +11,7 @@
 <th:block th:insert="~{/_menu_logged.html}"></th:block>
 
 
-    <div id="info-about-me">
+    <div id="info-about-me" style="min-height: 122px">
         <h3 style="font-size: 30px; position: absolute; left: 45%; top: 0;">Me</h3>
 
         <div style="position: absolute; top: 20%; font-size: 18px;">
@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="table-container">
+    <div class="table-container" style="top: 37%">
         <table>
             <tr>
                 <th colspan="3" class="table-title">Clients</th>
@@ -33,32 +33,31 @@
             <tr th:each="client: ${clients}">
                 <td th:text="${client.getName()}"></td>
                 <td th:text="${client.getEmail()}"></td>
-                <td th:text="${client.isBanned()}"></td>
+                <td th:classappend="${client.isBanned() ? 'banned' : 'not-banned'}"
+                    th:text="${client.isBanned() ? 'Yes' : 'No'}"></td>
             </tr>
         </table>
+
          <table>
-        <tr>
-            <th colspan="4" class="table-title">Drivers</th>
-            <th>
-                <a th:href="@{admin/create-new-driver-form}" class="create-new-driver-button">Create new driver</a>
-            </th>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>Email</td>
-            <td>Banned</td>
-            <td>License number</td>
-        </tr>
+             <tr>
+                 <th colspan="4" class="table-title">Drivers</th>
+             </tr>
+            <tr>
+                <td>Name</td>
+                <td>Email</td>
+                <td>Banned</td>
+                <td>License number</td>
+            </tr>
              <tr th:each="driver: ${drivers}">
-                 <td><a th:href="@{/admin/edit-driver-form/{id}(id = ${driver.driverId})}">[[${driver.getName()}]]</a></td>
+                 <td><a class="driver-link" th:href="@{/admin/edit-driver-form/{id}(id = ${driver.driverId})}">[[${driver.getName()}]]</a></td>
                  <td th:text="${driver.getEmail()}"></td>
-                 <td th:text="${driver.isBanned()}"></td>
+                 <td th:classappend="${driver.isBanned() ? 'banned' : 'not-banned'}"
+                     th:text="${driver.isBanned() ? 'Yes' : 'No'}"></td>
                  <td th:text="${driver.getLicenseNumber()}"></td>
              </tr>
 
          </table>
+        <a th:href="@{admin/create-new-driver-form}" class="create-new-driver-button">Create new driver</a>
     </div>
-
-
 </body>
 </html>
