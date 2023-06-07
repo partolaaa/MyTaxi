@@ -581,9 +581,8 @@ a {
 .table-container {
     text-align: center;
     position: relative;
-    top: 29%;
-    left: 55%;
-    transform: translate(-50%, -50%);
+    top: 25%;
+    left: 25%;
     font-family: 'Chakra', sans-serif;
     color: white;
     padding: 20px;
