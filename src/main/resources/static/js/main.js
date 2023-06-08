@@ -124,3 +124,32 @@ function cancelTrip(element) {
         }
     });
 }
+
+function subscribe() {
+    let socket = new SockJS('/websocket');
+    let stompClient = Stomp.over(socket);
+    stompClient.connect({}, function(frame) {
+        stompClient.subscribe('/topic/orderStatus/' + orderHash, function(order){
+            let status = JSON.parse(order.body).orderStatus;
+
+            switch (status) {
+                case "WAITING_FOR_CLIENT":
+                    status = "Waiting for client";
+                    break;
+                case "ACCEPTED":
+                    status = "Accepted";
+                    break;
+                case "IN_PROCESS":
+                    status = "In process";
+                    break;
+                case "COMPLETED":
+                    status = "Completed";
+                    break;
+                default:
+                    status = "Unknown";
+            }
+            document.getElementById("trip-info-title").innerText = status;
+        });
+    });
+}
+

@@ -5,8 +5,10 @@
     <title>Active Order</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <script th:src="@{/js/main.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
-<body onload="loadMain();">
+<body onload="loadMain();subscribe();">
 <th:block th:insert="~{/_menu_logged.html}"></th:block>
 <div id="trip-info-panel">
     <h3 id="trip-info-title" th:text="${order.getOrderStatus().show()}"></h3>
@@ -22,6 +24,11 @@
         <h4>Car Model: <span th:text="${car.getModel()}"></span></h4>
         <h4>Price: <span style="color: darkorange;" th:text="${order.getPrice()}"></span> ₴</h4>
     </div>
+
+    <script th:inline="javascript">
+        const orderHash = [[${order.hash}]];
+        //console.log(orderHash)
+    </script>
 </div>
 </body>
 </html>

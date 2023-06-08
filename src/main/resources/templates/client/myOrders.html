@@ -5,6 +5,8 @@
     <title>My Orders</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script th:src="@{/js/main.js}"></script>
 </head>
 <body onload="loadMain();">
@@ -53,8 +55,8 @@
 
                 <td>
                         <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).ACCEPTED
-                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).WAITING_FOR_CLIENT
-                        && order.getOrderStatus() != T(mytaxi.krutyporokh.models.OrderStatus).IN_PROCESS}">
+                        || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).WAITING_FOR_CLIENT
+                        || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).IN_PROCESS}">
                         <a th:href="@{/order/{hash}(hash = ${order.getHash()})}" th:text="${order.getOrderStatus().show()}"
                         class="accepted"></a>
                      </th:block>

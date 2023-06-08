@@ -9,6 +9,8 @@ import mytaxi.partola.services.DriverService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 import java.util.Collections;
 import static org.mockito.Mockito.*;
 /**
@@ -23,6 +25,7 @@ class OrderStatusServiceTest {
     private OrderManagementService orderManagementService;
     private ClientService clientService;
     private DriverService driverService;
+    private SimpMessagingTemplate messagingTemplate;
 
     @BeforeEach
     void setup() {
@@ -31,7 +34,7 @@ class OrderStatusServiceTest {
         customUserService = Mockito.mock(CustomUserService.class);
         clientService = Mockito.mock(ClientService.class);
         orderDAO = Mockito.mock(OrderDAO.class);
-        orderStatusService = new OrderStatusService(orderDAO, customUserService, orderManagementService, clientService, driverService);
+        orderStatusService = new OrderStatusService(orderDAO, customUserService, orderManagementService, clientService, driverService, messagingTemplate);
     }
 
     @Test

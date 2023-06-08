@@ -9,6 +9,7 @@ import mytaxi.partola.services.ClientService;
 import mytaxi.partola.services.CustomUserService;
 import mytaxi.partola.services.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -23,17 +24,20 @@ public class OrderStatusService {
     private final ClientService clientService;
     private final DriverService driverService;
 
+    private final SimpMessagingTemplate messagingTemplate;
+
     @Autowired
-    public OrderStatusService(OrderDAO orderDAO, CustomUserService customUserService, OrderManagementService orderManagementService, ClientService clientService, DriverService driverService) {
+    public OrderStatusService(OrderDAO orderDAO, CustomUserService customUserService, OrderManagementService orderManagementService, ClientService clientService, DriverService driverService, SimpMessagingTemplate messagingTemplate) {
         this.orderDAO = orderDAO;
         this.customUserService = customUserService;
         this.orderManagementService = orderManagementService;
         this.clientService = clientService;
         this.driverService = driverService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public String getPassengerName(Order order) {
-        if (order.getPassengerName().equals("") || order.getPassengerName() == null) {
+        if (order.getPassengerName().equals("")) {
             return customUserService.findUserById(order.getClientId()).getName();
         } else {
             return order.getPassengerName();
@@ -43,6 +47,8 @@ public class OrderStatusService {
     public void updateStatus (Order order) {
         order.setOrderStatus(order.getOrderStatus().next());
         orderDAO.setOrderStatus(order.getHash(), order.getOrderStatus());
+
+        messagingTemplate.convertAndSend("/topic/orderStatus/" + order.getHash(), order);
     }
 
     public void cancelOrder(String hash) {
