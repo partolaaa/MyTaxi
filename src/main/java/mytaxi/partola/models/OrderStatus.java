@@ -1,4 +1,4 @@
-package mytaxi.krutyporokh.models;
+package mytaxi.partola.models;
 
 public enum OrderStatus {
     NOT_ACCEPTED("NOT_ACCEPTED"),

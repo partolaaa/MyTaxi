@@ -1,7 +1,6 @@
 package mytaxi.partola.services;
 
-import mytaxi.krutyporokh.models.Order;
-import mytaxi.krutyporokh.services.OrderManagementService;
+import mytaxi.partola.models.Order;
 import mytaxi.partola.dao.ClientDAO;
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;

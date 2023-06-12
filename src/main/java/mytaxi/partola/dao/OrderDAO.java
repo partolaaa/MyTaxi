@@ -1,9 +1,7 @@
-package mytaxi.krutyporokh.dao;
+package mytaxi.partola.dao;
 
-import mytaxi.krutyporokh.models.Order;
-import mytaxi.krutyporokh.models.OrderStatus;
-import mytaxi.partola.dao.CarDAO;
-import mytaxi.partola.dao.UserDAO;
+import mytaxi.partola.models.Order;
+import mytaxi.partola.models.OrderStatus;
 import mytaxi.partola.models.Car;
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.Driver;
@@ -11,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;

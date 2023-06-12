@@ -1,9 +1,8 @@
 package mytaxi.partola.controllers;
 
-import mytaxi.krutyporokh.dao.OrderDAO;
-import mytaxi.krutyporokh.models.Order;
-import mytaxi.krutyporokh.services.OrderSortingService;
-import mytaxi.krutyporokh.services.OrderStatusService;
+import mytaxi.partola.dao.OrderDAO;
+import mytaxi.partola.models.Order;
+import mytaxi.partola.services.OrderSortingService;
 import mytaxi.partola.models.Driver;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

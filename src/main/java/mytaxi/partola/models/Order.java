@@ -1,15 +1,11 @@
-package mytaxi.krutyporokh.models;
+package mytaxi.partola.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mytaxi.krutyporokh.validation.groups.OrderForAnotherPerson;
-import mytaxi.partola.models.CarClass;
-import mytaxi.partola.models.PaymentType;
-import mytaxi.partola.models.VehicleType;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 

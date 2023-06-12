@@ -1,6 +1,6 @@
-package mytaxi.krutyporokh.services;
+package mytaxi.partola.services;
 
-import mytaxi.krutyporokh.models.Order;
+import mytaxi.partola.models.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;

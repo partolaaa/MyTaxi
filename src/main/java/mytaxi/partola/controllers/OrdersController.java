@@ -1,9 +1,9 @@
-package mytaxi.krutyporokh.controller;
+package mytaxi.partola.controllers;
 
-import mytaxi.krutyporokh.models.Order;
-import mytaxi.krutyporokh.services.OrderManagementService;
-import mytaxi.krutyporokh.services.OrderRatingService;
-import mytaxi.krutyporokh.services.OrderStatusService;
+import mytaxi.partola.models.Order;
+import mytaxi.partola.services.OrderManagementService;
+import mytaxi.partola.services.OrderRatingService;
+import mytaxi.partola.services.OrderStatusService;
 import mytaxi.krutyporokh.validation.groups.OrderForAnotherPerson;
 import mytaxi.krutyporokh.validation.groups.OrderForSelf;
 import mytaxi.partola.models.Client;

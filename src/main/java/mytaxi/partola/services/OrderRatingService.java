@@ -1,15 +1,12 @@
-package mytaxi.krutyporokh.services;
+package mytaxi.partola.services;
 
-import mytaxi.krutyporokh.dao.OrderDAO;
-import mytaxi.krutyporokh.models.Order;
-import mytaxi.krutyporokh.models.OrderStatus;
+import mytaxi.partola.dao.OrderDAO;
+import mytaxi.partola.models.Order;
+import mytaxi.partola.models.OrderStatus;
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.models.Driver;
 import mytaxi.partola.models.Role;
-import mytaxi.partola.services.ClientService;
-import mytaxi.partola.services.CustomUserService;
-import mytaxi.partola.services.DriverService;
 import org.springframework.stereotype.Service;
 
 /**

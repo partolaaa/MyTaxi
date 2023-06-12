@@ -1,8 +1,8 @@
 package mytaxi.partola.controllers;
 
-import mytaxi.krutyporokh.models.Order;
-import mytaxi.krutyporokh.services.OrderManagementService;
-import mytaxi.krutyporokh.services.OrderSortingService;
+import mytaxi.partola.models.Order;
+import mytaxi.partola.services.OrderManagementService;
+import mytaxi.partola.services.OrderSortingService;
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.services.ClientService;

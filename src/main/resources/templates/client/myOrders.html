@@ -54,15 +54,15 @@
                 <td th:text="${order.getPaymentType().show()}"></td>
 
                 <td>
-                        <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).ACCEPTED
-                        || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).WAITING_FOR_CLIENT
-                        || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).IN_PROCESS}">
+                        <th:block th:if="${order.getOrderStatus() == T(mytaxi.partola.models.OrderStatus).ACCEPTED
+                        || order.getOrderStatus() == T(mytaxi.partola.models.OrderStatus).WAITING_FOR_CLIENT
+                        || order.getOrderStatus() == T(mytaxi.partola.models.OrderStatus).IN_PROCESS}">
                         <a th:href="@{/order/{hash}(hash = ${order.getHash()})}" th:text="${order.getOrderStatus().show()}"
                         class="accepted"></a>
                      </th:block>
 
-                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED
-                                    || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_DRIVER}">
+                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.partola.models.OrderStatus).COMPLETED
+                                    || order.getOrderStatus() == T(mytaxi.partola.models.OrderStatus).RATED_BY_DRIVER}">
                         <span th:id="'rate-the-trip-' + ${order.getHash()}"
                               th:data-hash="${order.getHash()}"
                               th:text="'Rate this trip'"
@@ -74,7 +74,7 @@
                         </form>
                     </th:block>
 
-                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).NOT_ACCEPTED}">
+                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.partola.models.OrderStatus).NOT_ACCEPTED}">
                         <form id="cancel-form" th:action="@{/{hash}/cancel(hash = ${order.getHash()})}" th:method="post">
                             <span class="cancel" th:id="'cancel-' + ${order.getHash()}"
                                   th:data-hash="${order.getHash()}"
@@ -83,12 +83,12 @@
                         </form>
                     </th:block>
 
-                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_ALL
-                                || order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).RATED_BY_CLIENT}">
-                        <span th:text="${T(mytaxi.krutyporokh.models.OrderStatus).COMPLETED.show()}"></span>
+                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.partola.models.OrderStatus).RATED_BY_ALL
+                                || order.getOrderStatus() == T(mytaxi.partola.models.OrderStatus).RATED_BY_CLIENT}">
+                        <span th:text="${T(mytaxi.partola.models.OrderStatus).COMPLETED.show()}"></span>
                     </th:block>
 
-                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.krutyporokh.models.OrderStatus).CANCELLED}">
+                    <th:block th:if="${order.getOrderStatus() == T(mytaxi.partola.models.OrderStatus).CANCELLED}">
                         <span th:text="${order.getOrderStatus().show()}"></span>
                     </th:block>
                 </td>

@@ -1,11 +1,9 @@
 package mytaxi.krutyporokh.services;
 
-import mytaxi.krutyporokh.dao.OrderDAO;
-import mytaxi.krutyporokh.models.Order;
+import mytaxi.partola.dao.OrderDAO;
+import mytaxi.partola.models.Order;
 import mytaxi.partola.models.Client;
-import mytaxi.partola.services.ClientService;
-import mytaxi.partola.services.CustomUserService;
-import mytaxi.partola.services.DriverService;
+import mytaxi.partola.services.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;

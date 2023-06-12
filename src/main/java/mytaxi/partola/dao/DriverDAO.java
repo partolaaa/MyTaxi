@@ -1,7 +1,5 @@
 package mytaxi.partola.dao;
 
-import mytaxi.partola.models.Car;
-import mytaxi.krutyporokh.models.Order;
 import mytaxi.partola.models.CustomUser;
 import mytaxi.partola.models.Driver;
 import mytaxi.partola.models.Role;

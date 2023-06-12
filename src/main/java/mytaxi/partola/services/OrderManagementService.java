@@ -1,7 +1,7 @@
-package mytaxi.krutyporokh.services;
+package mytaxi.partola.services;
 
-import mytaxi.krutyporokh.dao.OrderDAO;
-import mytaxi.krutyporokh.models.Order;
+import mytaxi.partola.dao.OrderDAO;
+import mytaxi.partola.models.Order;
 import mytaxi.partola.dao.ClientDAO;
 import mytaxi.partola.models.Client;
 import mytaxi.partola.models.Driver;
