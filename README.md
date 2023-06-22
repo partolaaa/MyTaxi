@@ -17,4 +17,4 @@ Admin's home page:
 ![image](https://github.com/partolaaa/MyTaxi/assets/108837885/3df13a6f-08fc-4f24-849c-705388f4c75f)
 
 
-And a few more pages, such as order tracking pages for the driver and customer, a driver page for tracking all completed orders, and pages for editing driver data.
+And a few more pages, such as order tracking pages for the driver and customer, a driver page for tracking all completed orders, pages for editing driver data and general information page.
