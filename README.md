@@ -4,8 +4,11 @@
 Login page:
 ![image](https://github.com/partolaaa/MyTaxi/assets/108837885/cb62acc8-f3fc-4dbd-94ed-630bf66a5936)
 
-Main client's page:
+Order page:
 ![image](https://github.com/partolaaa/MyTaxi/assets/108837885/e9bc2874-991d-4ef4-a4e1-3482d8e98322)
+
+Filled order page:
+![image](https://github.com/partolaaa/MyTaxi/assets/108837885/75e2fe07-9a40-4e02-9215-ebd788b0b289)
 
 Client's home page:
 ![image](https://github.com/partolaaa/MyTaxi/assets/108837885/b0cddb2a-2954-43b3-8c26-3d2b7c1063f6)
